@@ -28,10 +28,6 @@
                                 <p>Uploaded by {{ photo.user.username }}</p>
                             </div>
                         </div>
-                        <div class="interaction-buttons">
-                            <button id="like-button" onclick="likePhoto('{{ photo.filename }}')">Like</button>
-                            <span id="like-count-{{ photo.id }}">0 Likes</span>
-                        </div><br>
                         {% if current_user == photo.user %}
                             <form class="delete-form" action="{{ url_for('delete_photo', filename=photo.filename) }}" method="POST">
                                 <button class="delete-button" type="submit">Delete</button>
@@ -71,24 +67,6 @@
     <input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
 
     <script>
-
-function likePhoto(filename) {
-    function likePhoto(filename, photoId) {
-    fetch("{{ url_for('like_photo', filename=filename) }}", {
-        method: 'POST'
-    })
-    .then(response => response.json())
-    .then(data => {
-        const likeCountElement = document.getElementById(`like-count-${photoId}`);
-
-        if (data.success) {
-            const newLikeCount = data.likeCount;
-            likeCountElement.textContent = `${newLikeCount} Like${newLikeCount !== 1 ? 's' : ''}`;
-        }
-    });
-}
-
-
         function handleImageUpload(input) {
             if (input.files && input.files[0]) {
                 var formData = new FormData();
