@@ -1,0 +1,316 @@
+/* dashboard.css */
+.navbar {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-bottom: 2px solid gold;
+}
+
+.username {
+    color: gold;
+    cursor: pointer; /* Add cursor pointer on hover */
+}
+
+.logout-button {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s; /* Add transition effect for color change */
+}
+
+.logout-button:hover {
+    color: lightgray; /* Change color on hover */
+}
+
+.dashboard-content {
+    padding: 20px;
+}
+
+.back-button {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s; /* Add transition effect for color change */
+}
+
+
+.back-button:hover {
+    color: lightgray; /* Change color on hover */
+}
+
+.profile-content {
+    padding: 40px;
+}
+
+.profile-photo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-photo img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid gold;
+}
+
+.profile-photo input[type="file"] {
+    display: block;
+    margin-top: 10px;
+    color: gold;
+}
+
+.profile-section {
+    margin-bottom: 20px;
+}
+
+.profile-section label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: gold;
+}
+
+.profile-section input[type="text"],
+.profile-section input[type="email"],
+.profile-section input[type="password"],
+.profile-section textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid gold;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
+}
+
+.save-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.save-button:hover {
+    background-color: #0056b3;
+}
+
+/* dashboard.css */
+/* ... Your other styles ... */
+
+.upload-button {
+    display: block;
+    margin: 0 auto;
+}
+
+/* dashboard.css */
+.uploaded-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; /* Add some margin for spacing */
+}
+
+.uploaded-image {
+    max-width: 100%; /* Ensure the image doesn't exceed container width */
+    margin-bottom: 10px; /* Add spacing between photos */
+}
+
+/* Add these styles to your dashboard.css */
+.photo-box {
+    background-color: black;
+    width: 470px;
+    height: 380px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.uploaded-image {
+    width: 390px;  /* Set the desired width */
+    height: 230px; /* Set the desired height */
+}
+
+.delete-form {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+}
+
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 3px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
+.flash-messages {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 22%;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+.flash-message {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* ... your existing CSS styles ... */
+
+.navbar {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-bottom: 2px solid gold;
+    position: relative; /* Add position relative */
+}
+
+/* Position the comment box */
+#comment-form {
+    position: fixed;
+    top: 10%;
+    right: 0;
+    transform: translateY(10px);
+    background-color: #222;
+    padding: 10px;
+    padding-right: 50px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+#comment-form label {
+    color: gold;
+    margin-bottom: 5px;
+}
+
+#comment-form textarea {
+    padding: 10px;
+    border: 2px solid gold;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    resize: vertical;
+    margin-bottom: 5px;
+}
+
+#comment-form button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#comment-form button:hover {
+    background-color: #0056b3;
+}
+
+/* ... Other CSS rules ... */
+
+
+#comments {
+    position: fixed;
+    background-color: #333;
+    color: green;
+    top: 25%;
+    right: 0;
+    transform: translateY(10px);
+    background-color: #222;
+    padding-right: 200px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    width: 200px; /* Adjust the width as needed */
+    max-width: 100%; /* To ensure responsiveness */
+}
+
+/* Update the existing .comment class */
+.comment {
+    margin-bottom: 0px; /* Adjust the space between comments as needed */
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    word-wrap: break-word; /* Wrap long words */
+    max-height: 200px; /* Limit the height */
+    overflow: auto; /* Add a scrollbar if needed */
+    white-space: pre-wrap; /* Preserve line breaks */
+
+}
+
+/* Style the "Delete" button */
+.comment button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 2px 5px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 5px;
+}
+
+.comment button:hover {
+    background-color: #d32f2f;
+}
+
+.comment + .comment {
+    border-top: none
+}
+
+.comments-container {
+    /* ... Your existing styles ... */
+    display: flex;
+    flex-direction: column-reverse; /* Display comments in reverse order */
+}
+
+/* Add these styles to your CSS */
+.like-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+

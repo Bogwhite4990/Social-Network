@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        <form method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <input type="submit" value="Login">
+        </form>
+        <br>
+        <p class="small-text">Don't have an account? <a class="register-link" href="{{ url_for('register') }}">Register here</a></p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <p class="logout-msg" style="color: red; text-align:center;">{{ message }}</p>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+    </div>
+
+    <div class="logout-message">
+        {% if logout_msg %}
+            <p class="logout-msg">{{ logout_msg }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

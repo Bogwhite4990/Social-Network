@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <span>Welcome to your profile: <span class="username">{{ username }}</span></span>
+        <div class="button-group">
+            <a>|</a>
+            <a href="{{ url_for('dashboard') }}" class="back-button">Dashboard</a>
+            <a>|</a>
+            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+            <a>|</a>
+        </div>
+    </div>
+
+    <div class="dashboard-content profile-content">
+        <h1>Your Profile</h1>
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('profile') }}">
+            <div class="profile-photo">
+                <img src="{{ url_for('static', filename='uploads/profile-photo/' ~ current_user.profile_photo) }}" alt="Profile Photo">
+                <input type="file" id="photo" name="photo" accept="image/*">
+            </div>
+            <div class="profile-section">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="{{ username }}">
+            </div>
+            <div class="profile-section">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ current_user.email }}">
+            </div>
+            <div class="profile-section">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+                {% if error %}
+                    <p class="error">{{ error }}</p>
+                {% endif %}
+            </div>
+            <button class="save-button" type="submit">Save</button>
+        </form>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="messages">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+    </div>
+</body>
+</html>

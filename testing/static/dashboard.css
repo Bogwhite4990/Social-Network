@@ -1,0 +1,141 @@
+.navbar {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-bottom: 2px solid gold;
+}
+
+.username {
+    color: gold;
+    cursor: pointer; /* Add cursor pointer on hover */
+}
+
+.logout-button {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s; /* Add transition effect for color change */
+}
+
+.logout-button:hover {
+    color: lightgray; /* Change color on hover */
+}
+
+.dashboard-content {
+    padding: 20px;
+}
+
+.back-button {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s; /* Add transition effect for color change */
+}
+
+
+.back-button:hover {
+    color: lightgray; /* Change color on hover */
+}
+
+.profile-content {
+    padding: 40px;
+}
+
+.profile-photo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-photo img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid gold;
+}
+
+.profile-photo input[type="file"] {
+    display: block;
+    margin-top: 10px;
+    color: gold;
+}
+
+.profile-section {
+    margin-bottom: 20px;
+}
+
+.profile-section label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: gold;
+}
+
+.profile-section input[type="text"],
+.profile-section input[type="email"],
+.profile-section input[type="password"],
+.profile-section textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid gold;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
+}
+
+.save-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.save-button:hover {
+    background-color: #0056b3;
+}
+
+.photos {
+    display: flex;
+}
+
+.photo {
+    margin-right: 20px;
+}
+
+.photo-actions {
+    margin-top: 10px;
+}
+
+.photo-actions textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid gold;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.photo-actions .like-button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.photo-actions .like-button:hover {
+    background-color: #0056b3;
+}
+
+.comments {
+    margin-top: 10px;
+}
