@@ -235,19 +235,6 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route("/add_comment", methods=["POST"])
-@login_required
-def add_comment():
-    comment = request.form["comment"]  # Get the comment from the form
-    if comment.strip():  # Check if the comment is not empty or whitespace only
-        c.execute(
-            "INSERT INTO comments (name, comment) VALUES (?, ?)",
-            (current_user.username, comment),
-        )
-        conn.commit()
-    return redirect(url_for("dashboard"))  # Redirect to your dashboard route
-
-
 @app.route("/like_photo/<int:photo_id>", methods=["POST"])
 @login_required
 def like_photo(photo_id):
@@ -272,19 +259,6 @@ def like_photo(photo_id):
     # Return the updated like count
     like_count = len(photo.likes)
     return jsonify({"like_count": like_count})
-
-
-@app.route("/delete_comment/<int:comment_id>", methods=["POST"])
-@login_required
-def delete_comment(comment_id):
-    c.execute("SELECT name FROM comments WHERE id = ?", (comment_id,))
-    commenter_name = c.fetchone()[0]
-
-    if commenter_name == current_user.username:
-        c.execute("DELETE FROM comments WHERE id = ?", (comment_id,))
-        conn.commit()
-
-    return redirect(url_for("dashboard"))
 
 
 @app.route("/delete_photo/<int:photo_id>", methods=["POST"])
