@@ -52,12 +52,23 @@ class Like(db.Model):
     photo_id = db.Column(db.Integer, db.ForeignKey("photo.id"), nullable=False)
 
 
+# Add a Comment model to your code
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(255), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    photo_id = db.Column(db.Integer, db.ForeignKey("photo.id"), nullable=False)
+    user = db.relationship("User", backref=db.backref("comments", lazy=True))
+    photo = db.relationship("Photo", backref="comments_ref", lazy=True)
+
+
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     user = db.relationship("User", backref=db.backref("photos", lazy=True))
     likes = db.relationship("Like", backref="photo", lazy=True)
+    comments = db.relationship("Comment", backref="photo_ref", lazy=True, cascade="all, delete-orphan")
 
 
 class User(db.Model, UserMixin):
@@ -261,24 +272,52 @@ def like_photo(photo_id):
     return jsonify({"like_count": like_count})
 
 
+# Create a new route to add comments
+@app.route("/add_comment", methods=["POST"])
+@login_required
+def add_comment():
+    photo_id = request.form.get("photo_id")
+    comment_text = request.form.get("comment")
+
+    if photo_id and comment_text:
+        # Create a new comment and save it in the database
+        new_comment = Comment(text=comment_text, user=current_user, photo_id=photo_id)
+        db.session.add(new_comment)
+        db.session.commit()
+
+    return redirect(url_for("dashboard"))
+
+
+# Create a route to delete comments
+@app.route("/delete_comment/<int:comment_id>", methods=["POST"])
+@login_required
+def delete_comment(comment_id):
+    comment = Comment.query.get(comment_id)
+
+    if comment and comment.user == current_user:
+        db.session.delete(comment)
+        db.session.commit()
+
+    return redirect(url_for("dashboard"))
+
+
 @app.route("/delete_photo/<int:photo_id>", methods=["POST"])
 @login_required
 def delete_photo(photo_id):
     photo = Photo.query.get(photo_id)
 
     if photo:
-        # Check if the user is the owner of the photo (optional)
         if photo.user_id == current_user.id:
-            # Delete the associated likes
-            likes = Like.query.filter_by(photo_id=photo.id).all()
-            for like in likes:
-                db.session.delete(like)
+            # Manually delete associated comments
+            comments_to_delete = Comment.query.filter_by(photo_id=photo.id).all()
+            for comment in comments_to_delete:
+                db.session.delete(comment)
 
-            # Delete the photo from the database
+            # Delete the photo
             db.session.delete(photo)
             db.session.commit()
 
-            # Delete the file from the filesystem
+            # Delete the file from the filesystem (if needed)
             file_path = os.path.join(app.config["UPLOAD_FOLDER"], photo.filename)
             if os.path.exists(file_path):
                 os.remove(file_path)

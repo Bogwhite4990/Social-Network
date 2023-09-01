@@ -1,3 +1,14 @@
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
 /* dashboard.css */
 .navbar {
     background-color: black;
@@ -8,7 +19,40 @@
     align-items: center;
     font-weight: bold;
     border-bottom: 2px solid gold;
+    text-align: right;
 }
+
+.navbar .username {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.navbar .upload-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.navbar .back-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.navbar .logout-button {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
 
 .username {
     color: gold;
@@ -100,135 +144,132 @@
     background-color: #0056b3;
 }
 
-/* dashboard.css */
-/* ... Your other styles ... */
-
-.upload-button {
-    display: block;
-    margin: 0 auto;
+/* Style for the dashboard content */
+.dashboard-content {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-/* dashboard.css */
-.uploaded-photo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px; /* Add some margin for spacing */
+/* Style for the photo section */
+.photo-section {
+    text-align: center;
 }
 
-.uploaded-image {
-    max-width: 100%; /* Ensure the image doesn't exceed container width */
-    margin-bottom: 10px; /* Add spacing between photos */
-}
-
-/* Add these styles to your dashboard.css */
+/* Style for photo boxes */
 .photo-box {
-    background-color: black;
-    width: 470px;
-    height: 380px;
-    border-radius: 5px;
-    margin-bottom: 20px;
     display: flex;
-    flex-direction: column;
+    background-color: #f9f9f9;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for comment section on the left of the photo */
+.comment-section {
+    width: 300px;
+    padding: 10px;
+}
+
+/* Style for comment input form */
+.comment-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
     align-items: center;
-    justify-content: center;
+}
+
+.delete-comment-button {
+    padding_right: 100px;
+}
+
+.comment-form input[type="text"] {
+    flex-grow: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.comment-form button[type="submit"] {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.comment-form input[type="text"], .comment-form button[type="submit"] {
+    margin-right: 5px;
+}
+
+/* Style for the photo content (photo and like section) */
+.photo-content {
+    flex-grow: 1;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Style for the image and comments section */
+.image-and-comments {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Style for the image container */
+.image-container {
     position: relative;
 }
 
 .uploaded-image {
-    width: 390px;  /* Set the desired width */
-    height: 230px; /* Set the desired height */
+    width: 323px; /* Set the desired width */
+    height: 308px; /* Set the desired height */
 }
 
-.delete-form {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: 100%;
-}
-
-.delete-button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 3px 8px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 12px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.delete-button:hover {
-    background-color: #d32f2f;
-}
-
-.flash-messages {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 22%;
-    padding: 10px;
-    background-color: #333;
-    color: white;
-    text-align: center;
-}
-
-.flash-message {
-    margin: 5px;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-/* ... your existing CSS styles ... */
-
-.navbar {
-    background-color: black;
-    color: white;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-    border-bottom: 2px solid gold;
-    position: relative; /* Add position relative */
-}
-
-
-/* Add these styles to your CSS */
-/* Styling for the like button */
-/* Add this CSS to style the like count */
+/* Style for the like section */
 .like-section {
-    display: flex;
-    align-items: center;
-    margin-top: 10px; /* Adjust the margin as needed */
+    text-align: right;
 }
 
 .like-button {
-    background-color: #007bff;
-    color: white;
+    background-color: #24a0ed;
     border: none;
     padding: 5px 10px;
-    border-radius: 5px;
+    margin-right: 10px;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
-    margin-right: 10px; /* Add spacing between like button and count */
 }
 
-.like-button:hover {
-    background-color: #0056b3;
+.delete-button {
+    background-color: red;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    margin-top: 10px; /* Add margin-top to move the button lower */
 }
 
-.like-count {
-    font-weight: bold;
-    color: gold;
-    font-size: 16px; /* Adjust the font size as needed */
+/* Add any additional styles for like button and count as needed */
+
+/* Style for the comments section */
+.comments {
+    max-height: 100%;
+    overflow-y: auto;
 }
 
+/* Style for individual comments */
+.comment {
+    display: flex;
+    align-items: left;
+    margin: 5px 0;
+}
 
+.comment-text {
+    flex-grow: 1;
+    margin-right: 120px;
+}
 
-
+.comment-actions {
+    /* Add any additional styles for comment actions here */
+}

@@ -7,96 +7,153 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
 </head>
 <body>
-    <div class="navbar">
-        <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ username }}</span>!</span>
-        <button class="upload-button" onclick="document.getElementById('upload-photo').click()">Upload</button>
-        <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
-    </div>
- <div class="dashboard-content">
-        <div class="photo-section">
-            <center>
-                <h1>Welcome to the Dashboard</h1>
-                <p>This is a protected area where you can access different features.</p>
-                {% for photo in photos %}
-                {% if photo.filename %}
-                <div class="photo-box uploaded-photo">
-                    <div class="image-and-comments">
-                        <div class="image-container">
-                            <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo">
-                            <p>Uploaded by {{ photo.user.username }}</p>
-                        </div>
-                        <div class="like-section">
-                            <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
-                                {% if photo.is_liked_by_current_user %}
-                                Unlike
-                                {% else %}
-                                Like
-                                {% endif %}
-                            </button>
-                            <span class="like-count">{{ photo.likes|length }}</span>
-                        </div>
+<div class="navbar">
+    <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ username }}</span>!</span>
+    <button class="upload-button" onclick="document.getElementById('upload-photo').click()">Upload</button>
+    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+</div>
+<div class="dashboard-content">
+    <div class="photo-section">
+        <center>
+            <h1>Welcome to the Dashboard</h1>
+            <p>This is a protected area where you can access different features.</p>
+            {% for photo in photos %}
+            {% if photo.filename %}
+            <div class="photo-box uploaded-photo">
+                <div class="image-and-comments">
+                    <div class="image-container">
+                        <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo">
+                        <p>Uploaded by {{ photo.user.username }}</p>
                     </div>
-                    <br>
-                    {% if current_user == photo.user %}
-                    <form class="delete-form" action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST">
-                        <button class="delete-button" type="submit">Delete</button>
-                    </form>
-                    {% endif %}
+                    <div class="like-section">
+                        <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
+                            {% if photo.is_liked_by_current_user %}
+                            Unlike
+                            {% else %}
+                            👍
+                            {% endif %}
+                        </button>
+                        <span class="like-count">{{ photo.likes|length }}</span>
+                    </div>
                 </div>
+                <!-- Comment section -->
+                <div class="comment-section">
+                    <!-- Comment input form -->
+                    <form class="comment-form" action="{{ url_for('add_comment') }}" method="post">
+                        <input type="hidden" name="photo_id" value="{{ photo.id }}">
+                        <input type="text" name="comment" placeholder="Add a comment...">
+                        <button type="submit">Post</button>
+                    </form>
+                    <!-- Display comments -->
+                    <div class="comments">
+                        <!-- Display all comments for each photo -->
+                        {% for comment in photo.comments %}
+                        <div class="comment">
+                            <div class="comment-text">
+                            <p><strong>{{ comment.user.username }}:</strong> {{ comment.text }}</p>
+                            </div>
+                            {% if current_user == comment.user %}
+                            <form action="{{ url_for('delete_comment', comment_id=comment.id) }}" method="post">
+                                <button type="submit" class="delete-comment-button">x</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <br><br>
+                {% if current_user == photo.user %}
+                <form class="delete-form" action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST">
+                    <button class="delete-button" type="submit">Delete</button>
+                </form>
                 {% endif %}
-                {% endfor %}
-                {% if not photos %}
-                <p>No photos uploaded</p>
-                {% endif %}
-            </center>
-        </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% if not photos %}
+            <p>No photos uploaded</p>
+            {% endif %}
+        </center>
     </div>
-    <input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
-    <script>
-        // JavaScript to handle like button clicks
-        const likeButtons = document.querySelectorAll('.like-button');
+</div>
+<input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
+<script>
+    // JavaScript to handle comment submission
+    document.querySelectorAll(".comment-form").forEach(form => {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
 
-        likeButtons.forEach(button => {
-            button.addEventListener('click', async () => {
-                const photoId = button.getAttribute('data-photo-id');
-                const liked = button.getAttribute('data-liked') === 'true';
-                const likeCount = button.querySelector('.like-count');
-
-                const response = await fetch(`/like_photo/${photoId}`, {
-                    method: 'POST',
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-
-                    // Toggle the liked status
-                    const newLiked = !liked;
-                    button.setAttribute('data-liked', newLiked);
-
-                    // Toggle the button text
-                    if (newLiked) {
-                        button.textContent = 'Unlike';
-                    } else {
-                        button.textContent = 'Like';
-                    }
-
-                    // Update the like count
-                    likeCount.textContent = data.like_count;
-                }
+            const formData = new FormData(form);
+            const response = await fetch("/add_comment", {
+                method: "POST",
+                body: formData,
             });
-        });
 
-        // Function to handle image uploads (if needed)
-        function handleImageUpload(input) {
-            if (input.files && input.files[0]) {
-                var formData = new FormData();
-                formData.append('photo', input.files[0]);
-                fetch("{{ url_for('upload_photo') }}", {
-                    method: 'POST',
-                    body: formData
-                });
+            if (response.ok) {
+                // Reload the page or update the comments display as needed
+                window.location.reload();
             }
+        });
+    });
+
+    // JavaScript to handle comment deletion
+    document.querySelectorAll(".delete-comment-button").forEach(button => {
+        button.addEventListener("click", async () => {
+            const response = await fetch(button.parentElement.action, {
+                method: "POST",
+            });
+
+            if (response.ok) {
+                // Reload the page or update the comments display as needed
+                window.location.reload();
+            }
+        });
+    });
+
+    // JavaScript to handle like button clicks
+    const likeButtons = document.querySelectorAll('.like-button');
+
+    likeButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const photoId = button.getAttribute('data-photo-id');
+            const liked = button.getAttribute('data-liked') === 'true';
+            const likeCount = button.querySelector('.like-count');
+
+            const response = await fetch(`/like_photo/${photoId}`, {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Toggle the liked status
+                const newLiked = !liked;
+                button.setAttribute('data-liked', newLiked);
+
+                // Toggle the button text
+                if (newLiked) {
+                    button.textContent = 'Unlike';
+                } else {
+                    button.textContent = 'Like';
+                }
+
+                // Update the like count
+                likeCount.textContent = data.like_count;
+            }
+        });
+    });
+
+    // Function to handle image uploads (if needed)
+    function handleImageUpload(input) {
+        if (input.files && input.files[0]) {
+            var formData = new FormData();
+            formData.append('photo', input.files[0]);
+            fetch("{{ url_for('upload_photo') }}", {
+                method: 'POST',
+                body: formData
+            });
         }
-    </script>
+    }
+</script>
 </body>
 </html>
