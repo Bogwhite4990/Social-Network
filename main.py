@@ -34,11 +34,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"  # SQLite database
 conn = sqlite3.connect("comments.db", check_same_thread=False)
 c = conn.cursor()
 c.execute(
+    """CREATE TABLE IF NOT EXISTS photos
+             (id INTEGER PRIMARY KEY AUTOINCREMENT, filename TEXT, user_id INTEGER)"""
+)
+c.execute(
     """CREATE TABLE IF NOT EXISTS comments
              (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, comment TEXT)"""
 )
 conn.commit()
-
 db = SQLAlchemy(app)
 
 
@@ -203,15 +206,19 @@ def upload_photo():
         photo = request.files["photo"]
         if photo.filename != "":
             filename = secure_filename(photo.filename)
+
+            # Save the photo to the database
+            new_photo = Photo(filename=filename, user_id=current_user.id)
+            db.session.add(new_photo)
+            db.session.commit()
+
+            # Print the ID of the newly uploaded photo
+            # print(f"Uploaded photo with ID: {new_photo.id}")
+
+            # Save the file to the 'uploads' folder (if needed)
             photo_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
             photo.save(photo_path)
 
-            if current_user.profile_photos:
-                current_user.profile_photos += "," + filename
-            else:
-                current_user.profile_photos = filename
-
-            db.session.commit()
     return redirect(url_for("dashboard"))
 
 
@@ -245,20 +252,28 @@ def delete_comment(comment_id):
     return redirect(url_for("dashboard"))
 
 
-@app.route("/delete_photo/<filename>", methods=["POST"])
+@app.route("/delete_photo/<int:photo_id>", methods=["POST"])
 @login_required
-def delete_photo(filename):
-    if filename in current_user.profile_photos:
-        # Remove the filename from the list
-        filenames = current_user.profile_photos.split(",")
-        filenames.remove(filename)
-        current_user.profile_photos = ",".join(filenames)
-        db.session.commit()
+def delete_photo(photo_id):
+    photo = Photo.query.get(photo_id)
 
-        # Delete the file from the filesystem
-        file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-        if os.path.exists(file_path):
-            os.remove(file_path)
+    if photo:
+        # Check if the user is the owner of the photo (optional)
+        if photo.user_id == current_user.id:
+            # Delete the photo from the database
+            db.session.delete(photo)
+            db.session.commit()
+
+            # Delete the file from the filesystem
+            file_path = os.path.join(app.config["UPLOAD_FOLDER"], photo.filename)
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+            flash("Photo deleted successfully.", "success")
+        else:
+            flash("You do not have permission to delete this photo.", "error")
+    else:
+        flash("Photo not found.", "error")
 
     return redirect(url_for("dashboard"))
 
@@ -266,6 +281,7 @@ def delete_photo(filename):
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
+    # Retrieve all photos from the database
     photos = Photo.query.all()
     users = User.query.all()
     c.execute("SELECT * FROM comments ORDER BY id DESC")
@@ -273,12 +289,12 @@ def dashboard():
     for user in users:
         photo_filenames = user.profile_photos.split(",")
         for filename in photo_filenames:
-            photos.append({"filename": filename, "user": user})
+            photos.append(Photo(filename=filename, user=user))  # Append Photo objects
 
     # Sort the photos in reverse order based on the upload timestamp
     photos.sort(
         key=lambda x: os.path.getmtime(
-            os.path.join(app.config["UPLOAD_FOLDER"], x["filename"])
+            os.path.join(app.config["UPLOAD_FOLDER"], x.filename)
         ),
         reverse=True,
     )
