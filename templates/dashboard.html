@@ -132,7 +132,7 @@ likeButtons.forEach(button => {
             likeCount.textContent = data.like_count;
 
             // Change the button emoji according to the current state (liked)
-            button.textContent = liked ? '👎' : '👍';
+            button.textContent = liked ? '👍' : '👎';
             button.setAttribute('data-liked', !liked);
         }
     });

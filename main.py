@@ -17,6 +17,7 @@ import secrets
 import warnings
 import requests
 import sqlite3
+from sqlalchemy.orm.exc import StaleDataError
 
 # Suppressing the warning
 from werkzeug.utils import secure_filename
@@ -74,6 +75,7 @@ class Photo(db.Model):
 
 
 class Friendship(db.Model):
+    __tablename__ = 'friendship'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -96,6 +98,15 @@ class User(db.Model, UserMixin):
         self.email = email
         self.profile_photo = None  # Set initial value to None
         self.profile_photos = ""  # Initialize the list as an empty string
+
+    def is_friend_with(self, other_user):
+        """
+        Check if this user is friends with another user.
+        """
+        friendship = Friendship.query.filter(
+            (Friendship.user_id == self.id) & (Friendship.friend_id == other_user.id)
+        ).first()
+        return friendship is not None
 
 
 db.create_all()  # Create database tables if they don't exist
@@ -363,7 +374,6 @@ def friends():
 @app.route('/add_friend/<username>', methods=['POST'])
 @login_required
 def add_friend(username):
-    print(f"Adding friend: {username}")
     friend = User.query.filter_by(username=username).first()
     if friend:
         # Check if the friendship already exists
@@ -380,16 +390,25 @@ def add_friend(username):
 @app.route('/remove_friend/<username>', methods=['POST'])
 @login_required
 def remove_friend(username):
-    friend = User.query.filter_by(username=username).first()
-    if friend:
-        # Check if the friendship exists
-        friendship = Friendship.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
-        if friendship:
-            current_user.friends.remove(friend)
-            db.session.delete(friendship)
-            db.session.commit()
-            return jsonify({'message': f'You have removed {friend.username} from your friends list'})
-    return jsonify({'error': 'User not found or not in your friends list'}), 404
+    try:
+        friend = User.query.filter_by(username=username).first()
+        if friend:
+            # Check if the user is already friends with this person
+            if current_user.is_friend_with(friend):
+                # Remove the friend from the user's list
+                current_user.friends.remove(friend)
+                db.session.commit()
+                flash(f'{username} has been removed from your friends list.', 'success')
+            else:
+                flash(f'{username} is not in your friends list.', 'error')
+        else:
+            flash(f'User {username} not found.', 'error')
+    except StaleDataError as e:
+        db.session.rollback()  # Rollback the transaction
+        flash('An error occurred while removing the friend. Please try again.', 'error')
+        app.logger.error(f'Error removing friend: {str(e)}')
+
+    return redirect(url_for('friends'))
 
 
 @app.route('/chat/<username>', methods=['GET', 'POST'])

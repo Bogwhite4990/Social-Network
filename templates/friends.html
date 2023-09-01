@@ -11,7 +11,6 @@
 <body>
 <div class="navbar">
     <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ username }}</span>!</span>
-    <button class="friends-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Dashboard</button>
     <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
 </div>
 <div class="friends-content">
@@ -70,5 +69,6 @@
     <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Go Back</button>
 </div>
 <script src="{{ url_for('static', filename='friends.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
