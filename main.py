@@ -10,6 +10,8 @@ from flask_login import (
     current_user,
 )
 from flask_login import logout_user
+from flask_socketio import emit
+from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash
 import secrets
 import warnings
@@ -71,6 +73,12 @@ class Photo(db.Model):
     comments = db.relationship("Comment", backref="photo_ref", lazy=True, cascade="all, delete-orphan")
 
 
+class Friendship(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -79,6 +87,8 @@ class User(db.Model, UserMixin):
     profile_photo = db.Column(db.String(255))  # Add this line
     profile_photos = db.Column(db.String(1000))  # Store a list of filenames
     likes = db.relationship("Like", backref="user", lazy=True)
+    friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
+                           secondaryjoin=id == Friendship.friend_id)
 
     def __init__(self, username, password, email):
         self.username = username
@@ -308,10 +318,10 @@ def delete_photo(photo_id):
 
     if photo:
         if photo.user_id == current_user.id:
-            # Manually delete associated likes
-            likes_to_delete = Like.query.filter_by(photo_id=photo.id).all()
-            for like in likes_to_delete:
-                db.session.delete(like)
+            # Manually delete associated comments
+            comments_to_delete = Comment.query.filter_by(photo_id=photo.id).all()
+            for comment in comments_to_delete:
+                db.session.delete(comment)
 
             # Delete the photo
             db.session.delete(photo)
@@ -330,6 +340,81 @@ def delete_photo(photo_id):
 
     return redirect(url_for("dashboard"))
 
+
+@app.route('/friends', methods=['GET', 'POST'])
+@login_required
+def friends():
+    # Ensure that the user is authenticated before accessing 'friends'
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))  # Redirect to the login page if not logged in
+
+    if request.method == 'POST':
+        search_query = request.form.get('search_query')
+        # Search for users by username and exclude the current user's username
+        search_results = User.query.filter(User.username.ilike(f'%{search_query}%'),
+                                           User.username != current_user.username).all()
+        return render_template('friends.html', username=current_user.username, search_results=search_results)
+
+    # Display user's friends
+    friends = current_user.friends
+    return render_template('friends.html', username=current_user.username, friends=friends)
+
+
+@app.route('/add_friend/<username>', methods=['POST'])
+@login_required
+def add_friend(username):
+    print(f"Adding friend: {username}")
+    friend = User.query.filter_by(username=username).first()
+    if friend:
+        # Check if the friendship already exists
+        if Friendship.query.filter_by(user_id=current_user.id, friend_id=friend.id).first() is None:
+            current_user.friends.append(friend)
+            db.session.add(Friendship(user_id=current_user.id, friend_id=friend.id))
+            db.session.commit()
+            return jsonify({'message': f'You are now friends with {friend.username}'})
+        else:
+            return jsonify({'message': f'You are already friends with {friend.username}'})
+    return jsonify({'error': 'User not found'}), 404
+
+
+@app.route('/remove_friend/<username>', methods=['POST'])
+@login_required
+def remove_friend(username):
+    friend = User.query.filter_by(username=username).first()
+    if friend:
+        # Check if the friendship exists
+        friendship = Friendship.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
+        if friendship:
+            current_user.friends.remove(friend)
+            db.session.delete(friendship)
+            db.session.commit()
+            return jsonify({'message': f'You have removed {friend.username} from your friends list'})
+    return jsonify({'error': 'User not found or not in your friends list'}), 404
+
+
+@app.route('/chat/<username>', methods=['GET', 'POST'])
+def chat(username):
+    friend = User.query.filter_by(username=username).first()
+    if friend:
+        if request.method == 'POST':
+            message = request.form.get('message')
+            # Handle sending the message to the friend and saving it in the database
+            # You may need to use Flask-SocketIO or another real-time library for this
+            # Emit a real-time message to update the chat interface
+            emit('message', {'sender': current_user.username, 'message': message}, room=friend.id)
+        # Render the chat interface
+        return render_template('chat.html', friend=friend)
+    return 'Friend not found', 404
+
+
+@app.route('/search_users', methods=['POST'])
+def search_users():
+    search_query = request.form.get('search_query')
+    # Perform a search for users by username
+    search_results = User.query.filter(User.username.ilike(f'%{search_query}%')).all()
+    # Return the search results as JSON
+    results = [{'id': user.id, 'username': user.username} for user in search_results]
+    return jsonify(results)
 
 
 @app.route("/dashboard", methods=["GET", "POST"])

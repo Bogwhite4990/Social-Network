@@ -1,0 +1,164 @@
+/* friends.css */
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-bottom: 2px solid gold;
+    text-align: right;
+}
+
+.navbar .username {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.navbar .friends-button {
+    background-color: #24a0ed;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Friends Content Styles */
+.friends-content {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Search User Section Styles */
+.search-user-section {
+    margin-bottom: 20px;
+}
+
+.search-user-section h2 {
+    margin-bottom: 10px;
+}
+
+.search-user-section form {
+    display: flex;
+    align-items: center;
+}
+
+.search-user-section input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 2px solid gold;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
+}
+
+.search-user-section button[type="submit"] {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* User Listing Section Styles */
+.user-listing-section {
+    margin-bottom: 20px;
+}
+
+.user-listing-section h2 {
+    margin-bottom: 10px;
+}
+
+.user-listing-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.user-listing-section li {
+    margin-bottom: 10px;
+}
+
+.add-friend-button {
+    background-color: #24a0ed;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Chat Section Styles */
+.chat-section {
+    margin-bottom: 20px;
+}
+
+.chat-section h2 {
+    margin-bottom: 10px;
+}
+
+.chat-messages {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.chat-form {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#message-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 2px solid gold;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
+}
+
+#chat-form button[type="submit"] {
+    background-color: #24a0ed;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Go Back Button Styles */
+.back-button {
+    background-color: #24a0ed;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.username {
+    color: gold;
+    cursor: pointer; /* Add cursor pointer on hover */
+}
+
+.logout-button {
+    color: red;
+    text-decoration: none;
+    transition: color 0.3s; /* Add transition effect for color change */
+}
+
+.logout-button:hover {
+    color: lightgray; /* Change color on hover */
+}

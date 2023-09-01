@@ -9,6 +9,7 @@
 <body>
 <div class="navbar">
     <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ username }}</span>!</span>
+    <button class="friends-button" onclick="window.location.href='{{ url_for('friends') }}'">Friends</button>
     <button class="upload-button" onclick="document.getElementById('upload-photo').click()">Upload</button>
     <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
 </div>
