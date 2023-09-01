@@ -67,29 +67,26 @@ function removeFriend(username) {
 
 
 // Function to send a chat message
-function sendMessage(message) {
-    // Send the message to the server and display it in the chat
-    // You can use the fetch API or another library for this
+function sendMessage(message, recipient) {
+    const chatMessages = document.getElementById("chat-messages");
+    const messageElement = document.createElement("div");
+    messageElement.textContent = message;
+    chatMessages.appendChild(messageElement);
+
+    // Send the message to the server
     fetch("/send_message", {
         method: "POST",
-        body: new URLSearchParams({ message: message }), // Send the message as POST data
+        body: JSON.stringify({ message: message, recipient: recipient }),
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/json",
         },
     })
     .then(response => {
-        if (response.ok) {
-            // Message sent successfully
-            // You can handle success here, such as updating the chat UI
-            console.log(`Message sent: ${message}`);
-        } else {
-            // Handle the case where sending a message failed
-            // You can display an error message or take appropriate action
-            console.error(`Failed to send message: ${message}`);
+        if (!response.ok) {
+            console.error("Failed to send message:", response.statusText);
         }
     })
     .catch(error => {
-        // Handle any network or request error
         console.error("Error:", error);
     });
 }
@@ -97,16 +94,18 @@ function sendMessage(message) {
 // Handle form submission for sending chat messages
 const chatForm = document.getElementById("chat-form");
 const messageInput = document.getElementById("message-input");
-const chatMessages = document.getElementById("chat-messages");
+const friendList = document.getElementById("friend-list");
 
 chatForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const message = messageInput.value.trim();
+    const recipient = friendList.value;
     if (message !== "") {
-        sendMessage(message);
+        sendMessage(message, recipient);
         messageInput.value = "";
     }
 });
+
 
 // Handle form submission for searching users
 const searchForm = document.getElementById("search-user-section");

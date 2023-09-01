@@ -1,74 +1,81 @@
 <!-- friends.html -->
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friends</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='friends.css') }}">
-</head>
-<body>
-<div class="navbar">
-    <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ username }}</span>!</span>
-    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
-</div>
-<div class="friends-content">
-    <!-- Search User Section -->
-    <div class="search-user-section">
-        <h2>Search Users</h2>
-        <form action="{{ url_for('friends') }}" method="post">
-            <input type="text" name="search_query" placeholder="Search by username">
-            <button type="submit">Search</button>
-        </form>
-    </div>
-    <!-- User Listing Section -->
-    <div class="user-listing-section">
-        <h2>User Listings</h2>
-        <!-- Display search results here -->
-        <ul>
-            {% if search_results %}
-                {% for user in search_results %}
-                    <li>
-                        {{ user.username }}
-                        <button class="add-friend-button" onclick="addFriend('{{ user.username }}')">Add Friend</button>
-                    </li>
-                {% endfor %}
-            {% else %}
-                <p>No users found.</p>
-            {% endif %}
-        </ul>
-    </div>
-    <!-- Friends Section -->
-<div class="friends-section">
-    <h2>Friends</h2>
-    <ul>
-        {% for friend in friends %}
-            <li>
-                {{ friend.username }}
-                <button class="remove-friend-button" onclick="removeFriend('{{ friend.username }}')">Remove Friend</button>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-
-    <!-- Chat Section -->
-    <div class="chat-section">
-        <h2>Chat</h2>
-        <!-- Display chat messages here -->
-        <div class="chat-messages" id="chat-messages">
-            <!-- Chat messages will appear here -->
-        </div><br>
-        <!-- Chat input form -->
-        <form id="chat-form">
-            <input type="text" id="message-input" placeholder="Type your message...">
-            <button type="submit">Send</button>
-        </form>
-    </div>
-    <!-- Go Back Button -->
-    <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Go Back</button>
-</div>
-<script src="{{ url_for('static', filename='friends.js') }}"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</body>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Friends</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='friends.css') }}">
+   </head>
+   <body>
+      <div class="navbar">
+         <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ username }}</span>!</span>
+         <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+      </div>
+      <div class="friends-content">
+         <!-- Search User Section -->
+         <div class="search-user-section">
+            <h2>Search Users</h2>
+            <form action="{{ url_for('friends') }}" method="post">
+               <input type="text" name="search_query" placeholder="Search by username">
+               <button type="submit">Search</button>
+            </form>
+         </div>
+         <!-- User Listing Section -->
+         <div class="user-listing-section">
+            <h2>User Listings</h2>
+            <!-- Display search results here -->
+            <ul>
+               {% if search_results %}
+               {% for user in search_results %}
+               <li>
+                  {{ user.username }}
+                  <button class="add-friend-button" onclick="addFriend('{{ user.username }}')">Add Friend</button>
+               </li>
+               {% endfor %}
+               {% else %}
+               <p>No users found.</p>
+               {% endif %}
+            </ul>
+         </div>
+         <!-- Friends Section -->
+         <div class="friends-section">
+            <h2>Friends</h2>
+            <ul>
+               {% for friend in friends %}
+               <li>
+                  {{ friend.username }}
+                  <button class="remove-friend-button" onclick="removeFriend('{{ friend.username }}')">Remove Friend</button>
+               </li>
+               {% endfor %}
+            </ul>
+         </div>
+         <!-- Chat Section -->
+         <div class="chat-section">
+            <h2>Chat</h2>
+            <!-- Chat Dropdown -->
+            <div class="chat-dropdown">
+               <select id="friend-list">
+                  {% for friend in friends %}
+                  <option value="{{ friend.username }}">{{ friend.username }}</option>
+                  {% endfor %}
+               </select>
+            </div>
+            <!-- Display chat messages here -->
+            <div class="chat-messages" id="chat-messages">
+               <!-- Chat messages will appear here -->
+            </div>
+            <br>
+            <!-- Chat input form -->
+            <form id="chat-form">
+               <input type="text" id="message-input" placeholder="Type your message...">
+               <button type="submit">Send</button>
+            </form>
+         </div>
+         <!-- Go Back Button -->
+         <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Go Back</button>
+      </div>
+      <script src="{{ url_for('static', filename='friends.js') }}"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   </body>
 </html>

@@ -18,6 +18,7 @@ import warnings
 import requests
 import sqlite3
 from sqlalchemy.orm.exc import StaleDataError
+from datetime import datetime
 
 # Suppressing the warning
 from werkzeug.utils import secure_filename
@@ -27,6 +28,9 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 UPLOAD_FOLDER = "static/uploads"
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 UPLOAD_FOLDER_PROFILE = "static/uploads/profile-photo"
+
+# Sample data for chat messages (you can replace this with a database)
+chat_messages = {}
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -53,6 +57,19 @@ class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     photo_id = db.Column(db.Integer, db.ForeignKey("photo.id"), nullable=False)
+
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    text = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, sender_id, recipient_id, text):
+        self.sender_id = sender_id
+        self.recipient_id = recipient_id
+        self.text = text
 
 
 # Add a Comment model to your code
@@ -368,11 +385,10 @@ def friends():
 
     # Display user's friends
     friends = current_user.friends
-    return render_template('friends.html', username=current_user.username, friends=friends)
+    return render_template('friends.html', username=current_user.username, friends=friends, chat_messages=chat_messages)
 
 
 @app.route('/add_friend/<username>', methods=['POST'])
-@login_required
 def add_friend(username):
     friend = User.query.filter_by(username=username).first()
     if friend:
@@ -385,6 +401,7 @@ def add_friend(username):
         else:
             return jsonify({'message': f'You are already friends with {friend.username}'})
     return jsonify({'error': 'User not found'}), 404
+
 
 
 @app.route('/remove_friend/<username>', methods=['POST'])
@@ -434,6 +451,37 @@ def search_users():
     # Return the search results as JSON
     results = [{'id': user.id, 'username': user.username} for user in search_results]
     return jsonify(results)
+
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    data = request.json
+    message = data.get('message')
+    recipient = data.get('recipient')
+
+    if message and recipient:
+        # Store the message in the chat_messages dictionary
+        if recipient in chat_messages:
+            chat_messages[recipient].append(message)
+        else:
+            chat_messages[recipient] = [message]
+
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "error": "Message or recipient missing"}), 400
+
+
+@app.route('/get_messages/<recipient_id>', methods=['GET'])
+@login_required
+def get_messages(recipient_id):
+    messages = Message.query.filter(
+        (Message.sender_id == current_user.id) | (Message.recipient_id == current_user.id),
+        (Message.sender_id == recipient_id) | (Message.recipient_id == recipient_id)
+    ).all()
+    messages_data = [{"sender_id": message.sender_id, "text": message.text, "timestamp": message.timestamp}
+                     for message in messages]
+    return jsonify(messages_data)
+
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
