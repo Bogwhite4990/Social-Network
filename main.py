@@ -232,22 +232,6 @@ def add_comment():
     return redirect(url_for("dashboard"))  # Redirect to your dashboard route
 
 
-@app.route("/like_photo/<filename>", methods=["POST"])
-@login_required
-def like_photo(filename):
-    photo = Photo.query.filter_by(filename=filename).first()
-
-    # Increment the like count for the photo
-    photo.like_count += 1
-
-    db.session.commit()
-
-    # Return the updated like count
-    return jsonify({"success": True, "likeCount": photo.like_count})
-
-
-
-
 @app.route("/delete_comment/<int:comment_id>", methods=["POST"])
 @login_required
 def delete_comment(comment_id):
