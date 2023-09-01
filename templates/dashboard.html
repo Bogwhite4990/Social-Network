@@ -28,7 +28,7 @@
                     <div class="like-section">
                         <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
                             {% if photo.is_liked_by_current_user %}
-                            Unlike
+                            👎
                             {% else %}
                             👍
                             {% endif %}
@@ -110,38 +110,35 @@
         });
     });
 
-    // JavaScript to handle like button clicks
-    const likeButtons = document.querySelectorAll('.like-button');
+// JavaScript to handle like button clicks
+const likeButtons = document.querySelectorAll('.like-button');
 
-    likeButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const photoId = button.getAttribute('data-photo-id');
-            const liked = button.getAttribute('data-liked') === 'true';
-            const likeCount = button.querySelector('.like-count');
+likeButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+        const photoId = button.getAttribute('data-photo-id');
+        const liked = button.getAttribute('data-liked') === 'true';
+        const likeCount = button.nextElementSibling; // Item displaying the number of likes
 
-            const response = await fetch(`/like_photo/${photoId}`, {
-                method: 'POST',
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-
-                // Toggle the liked status
-                const newLiked = !liked;
-                button.setAttribute('data-liked', newLiked);
-
-                // Toggle the button text
-                if (newLiked) {
-                    button.textContent = 'Unlike';
-                } else {
-                    button.textContent = 'Like';
-                }
-
-                // Update the like count
-                likeCount.textContent = data.like_count;
-            }
+        // Send an AJAX request to the server to update the like
+        const response = await fetch(`/like_photo/${photoId}`, {
+            method: 'POST',
         });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            // Update the number of likes with the value received from the server
+            likeCount.textContent = data.like_count;
+
+            // Change the button emoji according to the current state (liked)
+            button.textContent = liked ? '👎' : '👍';
+            button.setAttribute('data-liked', !liked);
+        }
     });
+});
+
+
+
 
     // Function to handle image uploads (if needed)
     function handleImageUpload(input) {
