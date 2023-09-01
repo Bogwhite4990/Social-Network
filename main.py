@@ -67,7 +67,7 @@ class Photo(db.Model):
     filename = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     user = db.relationship("User", backref=db.backref("photos", lazy=True))
-    likes = db.relationship("Like", backref="photo", lazy=True)
+    likes = db.relationship("Like", backref="photo", lazy=True, cascade="all, delete-orphan")
     comments = db.relationship("Comment", backref="photo_ref", lazy=True, cascade="all, delete-orphan")
 
 
@@ -308,10 +308,10 @@ def delete_photo(photo_id):
 
     if photo:
         if photo.user_id == current_user.id:
-            # Manually delete associated comments
-            comments_to_delete = Comment.query.filter_by(photo_id=photo.id).all()
-            for comment in comments_to_delete:
-                db.session.delete(comment)
+            # Manually delete associated likes
+            likes_to_delete = Like.query.filter_by(photo_id=photo.id).all()
+            for like in likes_to_delete:
+                db.session.delete(like)
 
             # Delete the photo
             db.session.delete(photo)
@@ -329,6 +329,7 @@ def delete_photo(photo_id):
         flash("Photo not found.", "error")
 
     return redirect(url_for("dashboard"))
+
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
