@@ -304,6 +304,14 @@
 }
 
 /* Add these styles to your CSS */
+/* Styling for the like button */
+/* Add this CSS to style the like count */
+.like-section {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; /* Adjust the margin as needed */
+}
+
 .like-button {
     background-color: #007bff;
     color: white;
@@ -311,6 +319,21 @@
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+    margin-right: 10px; /* Add spacing between like button and count */
 }
+
+.like-button:hover {
+    background-color: #0056b3;
+}
+
+.like-count {
+    font-weight: bold;
+    color: gold;
+    font-size: 16px; /* Adjust the font size as needed */
+}
+
+
 
 

@@ -45,11 +45,19 @@ conn.commit()
 db = SQLAlchemy(app)
 
 
+# Add this model for tracking likes
+class Like(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    photo_id = db.Column(db.Integer, db.ForeignKey("photo.id"), nullable=False)
+
+
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     user = db.relationship("User", backref=db.backref("photos", lazy=True))
+    likes = db.relationship("Like", backref="photo", lazy=True)
 
 
 class User(db.Model, UserMixin):
@@ -59,6 +67,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     profile_photo = db.Column(db.String(255))  # Add this line
     profile_photos = db.Column(db.String(1000))  # Store a list of filenames
+    likes = db.relationship("Like", backref="user", lazy=True)
 
     def __init__(self, username, password, email):
         self.username = username
@@ -239,6 +248,32 @@ def add_comment():
     return redirect(url_for("dashboard"))  # Redirect to your dashboard route
 
 
+@app.route("/like_photo/<int:photo_id>", methods=["POST"])
+@login_required
+def like_photo(photo_id):
+    photo = Photo.query.get(photo_id)
+
+    if not photo:
+        return jsonify({"error": "Photo not found"})
+
+    user = current_user
+    like = Like.query.filter_by(user_id=user.id, photo_id=photo.id).first()
+
+    if like:
+        # User has already liked the photo, remove the like
+        db.session.delete(like)
+    else:
+        # User hasn't liked the photo, add a like
+        new_like = Like(user=user, photo=photo)
+        db.session.add(new_like)
+
+    db.session.commit()
+
+    # Return the updated like count
+    like_count = len(photo.likes)
+    return jsonify({"like_count": like_count})
+
+
 @app.route("/delete_comment/<int:comment_id>", methods=["POST"])
 @login_required
 def delete_comment(comment_id):
@@ -260,6 +295,11 @@ def delete_photo(photo_id):
     if photo:
         # Check if the user is the owner of the photo (optional)
         if photo.user_id == current_user.id:
+            # Delete the associated likes
+            likes = Like.query.filter_by(photo_id=photo.id).all()
+            for like in likes:
+                db.session.delete(like)
+
             # Delete the photo from the database
             db.session.delete(photo)
             db.session.commit()

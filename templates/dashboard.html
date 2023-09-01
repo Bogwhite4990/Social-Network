@@ -21,13 +21,25 @@
 
             {% for photo in photos %}
                 {% if photo.filename %}
-                    <div class="photo-box uploaded-photo">
-                        <div class="image-and-comments">
-                            <div class="image-container">
-                                <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo">
-                                <p>Uploaded by {{ photo.user.username }}</p>
-                            </div>
-                        </div>
+<div class="photo-box uploaded-photo">
+    <div class="image-and-comments">
+        <div class="image-container">
+            <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo">
+            <p>Uploaded by {{ photo.user.username }}</p>
+        </div>
+        <div class="like-section">
+            <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
+    {% if photo.is_liked_by_current_user %}
+        Unlike
+    {% else %}
+        Like
+    {% endif %}
+</button>
+<span class="like-count">{{ photo.likes|length }}</span>
+
+        </div>
+    </div>
+                        <br>
                         {% if current_user == photo.user %}
                             <form class="delete-form" action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST">
                                 <button class="delete-button" type="submit">Delete</button>
@@ -39,7 +51,8 @@
 
             {% if not photos %}
                 <p>No photos uploaded</p>
-            {% endif %}</center>
+            {% endif %}
+            </center>
         </div>
 
         <div class="comments-section">
@@ -67,6 +80,41 @@
     <input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
 
     <script>
+// JavaScript to handle like button clicks
+const likeButtons = document.querySelectorAll('.like-button');
+
+likeButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+        const photoId = button.getAttribute('data-photo-id');
+        const liked = button.getAttribute('data-liked') === 'true';
+        const likeCount = button.querySelector('.like-count');
+
+        const response = await fetch(`/like_photo/${photoId}`, {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+
+            // Toggle the liked status
+            const newLiked = !liked;
+            button.setAttribute('data-liked', newLiked);
+
+            // Toggle the button text
+            if (newLiked) {
+                button.textContent = 'Unlike';
+            } else {
+                button.textContent = 'Like';
+            }
+
+            // Update the like count
+            likeCount.textContent = data.like_count;
+        }
+    });
+});
+
+
+        // Function to handle image uploads (if needed)
         function handleImageUpload(input) {
             if (input.files && input.files[0]) {
                 var formData = new FormData();
