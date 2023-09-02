@@ -66,6 +66,7 @@ function removeFriend(username) {
 
 
 
+
 // Function to send a chat message
 function sendMessage(message, recipient) {
     const chatMessages = document.getElementById("chat-messages");

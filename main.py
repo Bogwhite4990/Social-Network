@@ -17,17 +17,21 @@ import secrets
 import warnings
 import requests
 import sqlite3
-from sqlalchemy.orm.exc import StaleDataError
 from datetime import datetime
 
 # Suppressing the warning
 from werkzeug.utils import secure_filename
+
+# Import
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import UniqueConstraint
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 UPLOAD_FOLDER = "static/uploads"
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 UPLOAD_FOLDER_PROFILE = "static/uploads/profile-photo"
+SECRET_KEY_VERIFY_CAP = "0xf391442b9432C94165DF28f7B88538b4aC2F983e"
 
 # Sample data for chat messages (you can replace this with a database)
 chat_messages = {}
@@ -37,6 +41,8 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["UPLOAD_FOLDER_PROFILE"] = UPLOAD_FOLDER_PROFILE
 app.secret_key = secrets.token_hex(16)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"  # SQLite database
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
 
 conn = sqlite3.connect("comments.db", check_same_thread=False)
 c = conn.cursor()
@@ -50,6 +56,38 @@ c.execute(
 )
 conn.commit()
 db = SQLAlchemy(app)
+
+# ----------------------
+
+# Assuming you already have SQLAlchemy set up with your app
+
+# Create a session
+Session = sessionmaker(bind=db.engine)
+session = Session()
+
+# SQL query to delete duplicate entries in the Friendship table
+delete_query = """
+    DELETE FROM friendship
+    WHERE id NOT IN (
+        SELECT MIN(id)
+        FROM friendship
+        GROUP BY user_id, friend_id
+    );
+"""
+
+try:
+    # Execute the query
+    session.execute(delete_query)
+    session.commit()
+    print("Duplicate entries removed successfully.")
+except Exception as e:
+    session.rollback()
+    print(f"Error removing duplicate entries: {str(e)}")
+finally:
+    session.close()
+
+
+# ----------------------
 
 
 # Add this model for tracking likes
@@ -96,6 +134,8 @@ class Friendship(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    __table_args__ = (
+        UniqueConstraint('user_id', 'friend_id', name='unique_friendship'),)
 
 
 class User(db.Model, UserMixin):
@@ -211,7 +251,7 @@ def profile():
 def register():
     if request.method == "POST":
         hcaptcha_response = request.form.get("h-captcha-response")
-        secret_key = "0xf391442b9432C94165DF28f7B88538b4aC2F983e"
+        secret_key = SECRET_KEY_VERIFY_CAP
         response = requests.post(
             "https://hcaptcha.com/siteverify",
             data={"secret": secret_key, "response": hcaptcha_response},
@@ -403,7 +443,6 @@ def add_friend(username):
     return jsonify({'error': 'User not found'}), 404
 
 
-
 @app.route('/remove_friend/<username>', methods=['POST'])
 @login_required
 def remove_friend(username):
@@ -414,14 +453,14 @@ def remove_friend(username):
             if current_user.is_friend_with(friend):
                 # Remove the friend from the user's list
                 current_user.friends.remove(friend)
-                db.session.commit()
+                db.session.commit()  # Make sure to commit the changes
                 flash(f'{username} has been removed from your friends list.', 'success')
             else:
                 flash(f'{username} is not in your friends list.', 'error')
         else:
             flash(f'User {username} not found.', 'error')
-    except StaleDataError as e:
-        db.session.rollback()  # Rollback the transaction
+    except Exception as e:
+        db.session.rollback()  # Rollback the transaction on error
         flash('An error occurred while removing the friend. Please try again.', 'error')
         app.logger.error(f'Error removing friend: {str(e)}')
 
@@ -483,7 +522,6 @@ def get_messages(recipient_id):
     return jsonify(messages_data)
 
 
-
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
@@ -534,4 +572,5 @@ def dashboard():
 
 
 if __name__ == "__main__":
+    login_manager.init_app(app)
     app.run(debug=True)
