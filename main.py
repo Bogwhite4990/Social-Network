@@ -17,7 +17,7 @@ import secrets
 import warnings
 import requests
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Suppressing the warning
 from werkzeug.utils import secure_filename
@@ -27,15 +27,20 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import UniqueConstraint
 from flask_caching import Cache
 
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 UPLOAD_FOLDER = "static/uploads"
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 UPLOAD_FOLDER_PROFILE = "static/uploads/profile-photo"
 SECRET_KEY_VERIFY_CAP = "0xf391442b9432C94165DF28f7B88538b4aC2F983e"
+DATABASE = 'reputation.db'
 
 # Sample data for chat messages (you can replace this with a database)
 chat_messages = {}
+
+# A dictionary to store user reputations. Replace this with a database.
+user_reputations = {}
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -94,6 +99,8 @@ except Exception as e:
 finally:
     session.close()
 
+
+# ---------------------- Reputation
 
 # ----------------------
 
@@ -478,6 +485,7 @@ def removeFriend(username):
 
 
 @app.route('/chat/<username>', methods=['GET', 'POST'])
+@login_required
 def chat(username):
     friend = User.query.filter_by(username=username).first()
     if friend:
@@ -493,6 +501,7 @@ def chat(username):
 
 
 @app.route('/search_users', methods=['POST'])
+@login_required
 def search_users():
     search_query = request.form.get('search_query')
     # Perform a search for users by username
@@ -503,6 +512,7 @@ def search_users():
 
 
 @app.route('/send_message', methods=['POST'])
+@login_required
 def send_message():
     data = request.json
     message = data.get('message')
@@ -533,6 +543,7 @@ def get_messages(recipient_id):
 
 
 @app.route("/user_profile/<username>")
+@login_required
 def user_profile(username):
     # Fetch the user's profile information based on the username
     user = User.query.filter_by(username=username).first()
@@ -544,6 +555,26 @@ def user_profile(username):
         # Handle the case where the user does not exist
         flash("User not found.", "error")
         return redirect(url_for("dashboard"))
+
+
+@app.route('/give-reputation', methods=['POST'])
+@login_required
+def give_reputation():
+    giver_user_id = request.form.get('giver_user_id')
+    receiver_user_id = request.form.get('receiver_user_id')
+
+    # Check if the giver can give reputation (e.g., once every 24 hours)
+    last_reputation_time = user_reputations.get(giver_user_id, None)
+
+    if last_reputation_time is None or datetime.now() - last_reputation_time >= timedelta(days=1):
+        # Update the reputation count for the receiver
+        user_reputations[receiver_user_id] = datetime.now()
+
+        # You should also update the reputation count in your database
+
+        return jsonify({'success': True, 'message': 'Reputation added successfully.'})
+
+    return jsonify({'success': False, 'message': 'You can only give reputation once every 24 hours.'})
 
 
 @app.route("/dashboard", methods=["GET", "POST"])

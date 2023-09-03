@@ -13,6 +13,12 @@
     <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
     <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
 </div>
+<!-- Add Reputation section -->
+<div class="reputation-section">
+    <h2>Reputation: <span id="reputation-count">{{ user.reputation }}</span></h2>
+    <button id="give-reputation-button">Give Reputation</button>
+    <p id="reputation-message"></p>
+</div>
 <div class="profile-container">
     <div class="profile-avatar">
         <!-- Display the user's avatar (profile photo) -->
@@ -23,5 +29,27 @@
         <h1>{{ user.username }}</h1>
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const reputationButton = document.getElementById("give-reputation-button");
+    const reputationMessage = document.getElementById("reputation-message");
+    const reputationCount = document.getElementById("reputation-count");
+
+    reputationButton.addEventListener("click", function() {
+        // Perform an AJAX request to the backend to update reputation
+        // Include logic to check if the user can give reputation (based on a timestamp in the backend response)
+
+        // Simulate a successful response from the backend with an updated reputation count
+        const updatedReputation = 2; // Replace with the actual updated reputation value from your backend response
+
+        if (updatedReputation !== undefined) {
+            reputationCount.textContent = updatedReputation; // Update the displayed reputation count
+            reputationMessage.textContent = 'Reputation added successfully.';
+        } else {
+            reputationMessage.textContent = 'You can only give reputation once every 24 hours.';
+        }
+    });
+});
+</script>
 </body>
 </html>

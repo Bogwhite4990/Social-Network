@@ -50,6 +50,13 @@
     flex-direction: column; /* Stack child elements vertically */
     justify-content: center; /* Center vertically */
     align-items: center; /* Center horizontally */
-    height: 100vh; /* Make the container take up the full viewport height */
+    height: 50vh; /* Make the container take up the full viewport height */
+}
+
+.reputation-section {
+    display: flex;
+    flex-direction: column; /* Stack child elements vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
 }
 
