@@ -19,18 +19,18 @@
 
     /* Style the Friends button */
     .friends-button {
-        background-color: gray; /* Set the background color to gray */
+        background-color: gray;
         color: #fff;
         border: none;
         padding: 5px 10px;
         margin-right: 10px;
         cursor: pointer;
-        text-decoration: none; /* Remove default anchor text decoration */
+        text-decoration: none;
     }
 
     /* Adjust the space between the Friends button and the text */
     .navbar .username {
-        margin-right: 10px; /* Add space to the right of the username */
+        margin-right: 10px;
     }
 
     /* Hide the Friends button on tablets */
@@ -40,7 +40,7 @@
 
     /* Center the Back button */
     .back-button {
-        margin: 10px auto; /* Center the button horizontally and add vertical space */
+        margin: 10px auto;
     }
 }
 
@@ -66,18 +66,18 @@
 
     /* Style the Friends button */
     .friends-button {
-        background-color: gray; /* Set the background color to gray */
+        background-color: gray;
         color: #fff;
         border: none;
         padding: 5px 10px;
         margin-right: 10px;
         cursor: pointer;
-        text-decoration: none; /* Remove default anchor text decoration */
+        text-decoration: none;
     }
 
     /* Adjust the space between the Friends button and the text */
     .navbar .username {
-        margin-right: 10px; /* Add space to the right of the username */
+        margin-right: 10px;
     }
 
     /* Hide the Friends button on mobile */
@@ -87,7 +87,7 @@
 
     /* Center the Back button */
     .back-button {
-        margin: 10px auto; /* Center the button horizontally and add vertical space */
+        margin: 10px auto;
     }
 }
 
@@ -109,7 +109,6 @@
     text-decoration: underline;
 }
 
-.navbar .friends-button,
 .navbar .logout-button {
     background-color: #4caf50;
     color: #fff;
@@ -117,8 +116,27 @@
     padding: 5px 10px;
     margin-right: 10px;
     cursor: pointer;
-    text-decoration: none; /* Remove default anchor text decoration */
+    text-decoration: none;
+
 }
+
+/* Adjust the position of the username and Friends button */
+.navbar-content {
+    display: flex;
+    align-items: center;
+
+}
+
+.navbar .friends-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-left: 10px; /* Add margin to separate username and Friends button if needed */
+}
+
 
 .navbar .logout-button {
     background-color: #f44336;
@@ -130,8 +148,8 @@
 }
 
 .logout-button {
-    text-decoration: none; /* Remove default anchor text decoration */
-    transition: color 0.3s; /* Add transition effect for color change */
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
 .logout-button:hover {
@@ -140,17 +158,17 @@
 
 .profile-container {
     display: flex;
-    flex-direction: column; /* Stack child elements vertically */
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
-    height: 50vh; /* Make the container take up the full viewport height */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
 }
 
 .reputation-section {
     display: flex;
-    flex-direction: column; /* Stack child elements vertically */
-    justify-content: center; /* Center vertically */
-    align-items: center; /* Center horizontally */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .back-button {
@@ -168,7 +186,6 @@
     background-color: #0056b3;
 }
 
-
-
-
-
+.center-button {
+    text-align: center;
+}

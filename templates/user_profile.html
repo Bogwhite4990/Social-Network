@@ -32,7 +32,9 @@
          <div class="profile-info">
             <!-- Display the user's name -->
             <h1>{{ user.username }}</h1>
-            <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
+            <div class="center-button">
+               <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
+            </div>
          </div>
       </div>
       <script>
