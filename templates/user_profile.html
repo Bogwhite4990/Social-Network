@@ -16,13 +16,14 @@
 <div class="reputation-section">
     <h2>Reputation: <span id="reputation-count">{{ reputation }}</span></h2>
     <button
-    id="give-reputation-button"
-    data-receiver-user-id="{{ user.id }}"
-    onclick="giveReputation(this.getAttribute('data-receiver-user-id'))"
->
-    Give Reputation
-</button>
+        id="give-reputation-button"
+        data-receiver-user-id="{{ user.id }}"
+        onclick="giveReputation(this.getAttribute('data-receiver-user-id'))"
+    >
+        Give Reputation
+    </button>
     <p id="reputation-message"></p>
+    <span id="time-left" data-time-left="86400"></span>
 </div>
 <div class="profile-container">
     <div class="profile-avatar">
@@ -40,11 +41,27 @@ document.addEventListener("DOMContentLoaded", function() {
     const reputationButton = document.getElementById("give-reputation-button");
     const reputationMessage = document.getElementById("reputation-message");
     const reputationCount = document.getElementById("reputation-count");
+    const timeLeftSpan = document.getElementById("time-left");
+
+    function updateTimer(timeLeftSeconds) {
+        if (timeLeftSeconds <= 0) {
+            timeLeftSpan.textContent = "You can give reputation now!";
+        } else {
+            const hours = Math.floor(timeLeftSeconds / 3600);
+            const minutes = Math.floor((timeLeftSeconds % 3600) / 60);
+            const seconds = timeLeftSeconds % 60;
+            const formattedTimeLeft = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timeLeftSpan.textContent = `Time left: ${formattedTimeLeft}`;
+        }
+        timeLeftSpan.style.color = "white";
+    }
+
+    const initialTimeLeft = parseInt(timeLeftSpan.getAttribute("data-initial-time-left"));
+    if (!isNaN(initialTimeLeft)) {
+        updateTimer(initialTimeLeft);
+    }
 
     reputationButton.addEventListener("click", function() {
-        console.log("Button clicked");
-
-        // Perform an AJAX request to the backend to update reputation
         fetch('/give-reputation', {
             method: 'POST',
             body: JSON.stringify({ receiver_user_id: reputationButton.getAttribute('data-receiver-user-id') }),
@@ -54,8 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(response => {
             if (response.ok) {
-                // Reputation updated successfully
-                return response.json(); // Parse the response JSON
+                return response.json();
             } else {
                 return Promise.reject('Error updating reputation');
             }
@@ -63,26 +79,30 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             console.log(data);
 
-            // Update the displayed reputation count on the page
-            reputationCount.textContent = data.updated_reputation;
-            reputationMessage.textContent = 'Reputation added successfully.';
-            reputationButton.disabled = true;
+            if (data.updated_reputation !== undefined) {
+                reputationCount.textContent = data.updated_reputation;
+                reputationMessage.textContent = 'Reputation added successfully.';
+                reputationButton.disabled = true;
+            } else if (data.time_left_seconds !== undefined) {
+                const timeLeft = data.time_left_seconds;
+                updateTimer(timeLeft);
+            } else if (data.next_allowed_timestamp !== undefined) {
+                const nextAllowedTimestamp = new Date(data.next_allowed_timestamp);
+                const currentTime = new Date();
+                const timeLeftSeconds = Math.max(0, Math.floor((nextAllowedTimestamp - currentTime) / 1000));
+                updateTimer(timeLeftSeconds);
+            }
 
-            // Reload the user's profile page after a short delay
             setTimeout(function () {
                 window.location.reload();
-            }, 1000); // Reload after 1 second (adjust the delay as needed)
+            }, 1000);
         })
         .catch(error => {
-            // Handle error
             reputationMessage.textContent = 'Error updating reputation';
             console.error(error);
         });
     });
 });
-
-
-
 </script>
 </body>
 </html>
