@@ -1,0 +1,55 @@
+/* user_profile.css */
+.navbar {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-bottom: 2px solid gold;
+    text-align: right;
+}
+
+.navbar .username {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.navbar .friends-button,
+.navbar .logout-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    text-decoration: none; /* Remove default anchor text decoration */
+}
+
+.navbar .logout-button {
+    background-color: #f44336;
+}
+
+.username {
+    color: gold;
+    cursor: pointer;
+}
+
+.logout-button {
+    text-decoration: none; /* Remove default anchor text decoration */
+    transition: color 0.3s; /* Add transition effect for color change */
+}
+
+.logout-button:hover {
+    color: lightgray;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column; /* Stack child elements vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    height: 100vh; /* Make the container take up the full viewport height */
+}
+

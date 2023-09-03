@@ -25,6 +25,7 @@ from werkzeug.utils import secure_filename
 # Import
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import UniqueConstraint
+from flask_caching import Cache
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -43,6 +44,13 @@ app.secret_key = secrets.token_hex(16)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"  # SQLite database
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+
+# Cache setup
+cache = Cache()
+app.config['CACHE_TYPE'] = 'redis'  # Use Redis as the caching backend
+app.config['CACHE_REDIS_HOST'] = 'localhost'  # Configure the Redis host
+app.config['CACHE_REDIS_PORT'] = 6379  # Configure the Redis port
+cache.init_app(app)
 
 conn = sqlite3.connect("comments.db", check_same_thread=False)
 c = conn.cursor()
@@ -445,7 +453,7 @@ def add_friend(username):
 
 @app.route('/remove_friend/<username>', methods=['POST'])
 @login_required
-def remove_friend(username):
+def removeFriend(username):
     try:
         friend = User.query.filter_by(username=username).first()
         if friend:
@@ -453,7 +461,8 @@ def remove_friend(username):
             if current_user.is_friend_with(friend):
                 # Remove the friend from the user's list
                 current_user.friends.remove(friend)
-                db.session.commit()  # Make sure to commit the changes
+                db.session.commit()  # Commit the changes to the database
+                cache.clear()  # Clear the cache
                 flash(f'{username} has been removed from your friends list.', 'success')
             else:
                 flash(f'{username} is not in your friends list.', 'error')
@@ -463,6 +472,7 @@ def remove_friend(username):
         db.session.rollback()  # Rollback the transaction on error
         flash('An error occurred while removing the friend. Please try again.', 'error')
         app.logger.error(f'Error removing friend: {str(e)}')
+
 
     return redirect(url_for('friends'))
 
@@ -520,6 +530,20 @@ def get_messages(recipient_id):
     messages_data = [{"sender_id": message.sender_id, "text": message.text, "timestamp": message.timestamp}
                      for message in messages]
     return jsonify(messages_data)
+
+
+@app.route("/user_profile/<username>")
+def user_profile(username):
+    # Fetch the user's profile information based on the username
+    user = User.query.filter_by(username=username).first()
+
+    if user:
+        # Render the user's profile template and pass the user object
+        return render_template("user_profile.html", user=user)
+    else:
+        # Handle the case where the user does not exist
+        flash("User not found.", "error")
+        return redirect(url_for("dashboard"))
 
 
 @app.route("/dashboard", methods=["GET", "POST"])

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_profile.css') }}">
+</head>
+<body>
+<div class="navbar">
+    <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ user.username }}</span>!</span>
+    <button class="friends-button" onclick="window.location.href='{{ url_for('friends') }}'">Friends</button>
+    <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
+    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+</div>
+<div class="profile-container">
+    <div class="profile-avatar">
+        <!-- Display the user's avatar (profile photo) -->
+        <img src="{{ url_for('static', filename='uploads/profile-photo/' ~ user.profile_photo) }}" alt="User Avatar">
+    </div>
+    <div class="profile-info">
+        <!-- Display the user's name -->
+        <h1>{{ user.username }}</h1>
+    </div>
+</div>
+</body>
+</html>

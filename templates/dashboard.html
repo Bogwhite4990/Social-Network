@@ -24,7 +24,7 @@
                 <div class="image-and-comments">
                     <div class="image-container">
                         <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo">
-                        <p>Uploaded by {{ photo.user.username }}</p>
+                        <p>Uploaded by <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link">{{ photo.user.username }}</a></p>
                     </div>
                     <div class="like-section">
                         <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
