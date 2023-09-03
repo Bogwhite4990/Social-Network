@@ -101,8 +101,19 @@ finally:
 
 
 # ---------------------- Reputation
+def can_give_reputation(giver_user_id, receiver_user_id):
+    # Calculate the datetime 24 hours ago
+    twenty_four_hours_ago = datetime.utcnow() - timedelta(hours=24)
 
+    # Query the ReputationGiven table to check if the user has given reputation in the last 24 hours
+    reputation_given = ReputationGiven.query.filter(
+        ReputationGiven.giver_user_id == giver_user_id,
+        ReputationGiven.receiver_user_id == receiver_user_id,
+        ReputationGiven.timestamp >= twenty_four_hours_ago
+    ).first()
 
+    # Return True if they haven't given reputation in the last 24 hours, otherwise False
+    return reputation_given is None
 
 # ----------------------
 
@@ -117,6 +128,7 @@ class ReputationGiven(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     giver_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     receiver_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, giver_user_id, receiver_user_id):
         self.giver_user_id = giver_user_id
@@ -587,10 +599,10 @@ def user_profile(username):
 @login_required
 def give_reputation():
     if request.method == 'POST':
-        receiver_user_id = request.form.get('receiver_user_id')
+        receiver_user_id = request.json.get('receiver_user_id')
 
-        # Check if the giver has already given reputation to the receiver
-        if not has_given_reputation(current_user.id, receiver_user_id):
+        # Check if the giver can give reputation to the receiver
+        if can_give_reputation(current_user.id, receiver_user_id):
             # Update the reputation count for the receiver
             receiver_user = User.query.get(receiver_user_id)
             receiver_user.reputation += 1  # Increase the reputation count by 1
@@ -599,11 +611,13 @@ def give_reputation():
             # Mark that the giver has given reputation to the receiver
             mark_gave_reputation(current_user.id, receiver_user_id)
 
-            return jsonify({'success': True, 'message': 'Reputation added successfully.'})
+            # Return the updated reputation count as JSON response
+            return jsonify({'updated_reputation': receiver_user.reputation})
         else:
-            return jsonify({'success': False, 'message': 'You can only give reputation once.'})
+            return jsonify({'error': 'You can only give reputation once every 24 hours.'})
 
     return jsonify({'error': 'Invalid request'}), 400
+
 
 # ...
 
@@ -640,8 +654,6 @@ def update_reputation():
 
     # Handle other HTTP methods or errors
     return jsonify({'error': 'Invalid request'}), 400
-
-
 
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
@@ -691,7 +703,21 @@ def dashboard():
         comments=comments,
     )  # Pass the comments to the template
 
+# Reset reputation only once
+# def reset_reputation():
+#     try:
+#         # Update all user records to set reputation to a default value (e.g., 0)
+#         db.session.query(User).update({User.reputation: 0})
+#         db.session.commit()
+#         print("Reputation reset successfully.")
+#     except Exception as e:
+#         db.session.rollback()
+#         print(f"Error resetting reputation: {str(e)}")
+#     finally:
+#         db.session.close()
+
 
 if __name__ == "__main__":
     login_manager.init_app(app)
+    # reset_reputation() Reset reputation only once
     app.run(debug=True)

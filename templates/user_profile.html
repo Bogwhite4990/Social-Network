@@ -42,51 +42,47 @@ document.addEventListener("DOMContentLoaded", function() {
     const reputationCount = document.getElementById("reputation-count");
 
     reputationButton.addEventListener("click", function() {
+        console.log("Button clicked");
+
         // Perform an AJAX request to the backend to update reputation
-        // Include logic to check if the user can give reputation (based on a timestamp in the backend response)
-
-        // Simulate a successful response from the backend with an updated reputation value
-        const updatedReputation = 2; // Replace with the actual updated reputation value from your backend response
-
-        if (updatedReputation !== undefined) {
-            // Update the displayed reputation count on the page
-            reputationCount.textContent = updatedReputation;
-
-            // Update the user's reputation in the database (send a request to your backend for this)
-            updateReputationInDatabase(updatedReputation);
-
-            reputationMessage.textContent = 'Reputation added successfully.';
-        } else {
-            reputationMessage.textContent = 'You can only give reputation once every 24 hours.';
-        }
-    });
-
-    // Function to update the user's reputation in the database
-    function updateReputationInDatabase(newReputation) {
-        // Make an AJAX request to your backend API or route to update the reputation
-        // Send the newReputation value to the backend and update it in the user's profile
-
-        // Example AJAX request (you may need to adapt this to your backend implementation):
-        fetch('/update_reputation', {
+        fetch('/give-reputation', {
             method: 'POST',
-            body: JSON.stringify({ reputation: newReputation }),
+            body: JSON.stringify({ receiver_user_id: reputationButton.getAttribute('data-receiver-user-id') }),
             headers: {
                 'Content-Type': 'application/json',
             },
         })
         .then(response => {
-            // Handle the response from the backend
             if (response.ok) {
                 // Reputation updated successfully
+                return response.json(); // Parse the response JSON
             } else {
-                // Handle error
+                return Promise.reject('Error updating reputation');
             }
         })
+        .then(data => {
+            console.log(data);
+
+            // Update the displayed reputation count on the page
+            reputationCount.textContent = data.updated_reputation;
+            reputationMessage.textContent = 'Reputation added successfully.';
+            reputationButton.disabled = true;
+
+            // Reload the user's profile page after a short delay
+            setTimeout(function () {
+                window.location.reload();
+            }, 1000); // Reload after 1 second (adjust the delay as needed)
+        })
         .catch(error => {
-            // Handle network or other errors
+            // Handle error
+            reputationMessage.textContent = 'Error updating reputation';
+            console.error(error);
         });
-    }
+    });
 });
+
+
+
 </script>
 </body>
 </html>
