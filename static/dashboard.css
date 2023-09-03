@@ -172,7 +172,26 @@
 
 
 /* Browser CSS ---------------------------------------------- */
+@media (min-width: 769px) {
+    /* Adjust the layout for desktop PCs */
+    .navbar {
+        justify-content: space-between; /* Place content at both ends */
+    }
 
+    .friends-button {
+        margin-left: 20px; /* Add space between "Friends" and "Welcome, username!" */
+    }
+
+    .centered-content {
+        flex-grow: 1; /* Allow the centered content to expand and take available space */
+        display: flex;
+        justify-content: center; /* Center-align its children horizontally */
+    }
+
+    .upload-button {
+        margin: 1 auto; /* Center-align the "Upload" button horizontally */
+    }
+}
 
 
 
