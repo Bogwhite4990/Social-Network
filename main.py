@@ -102,6 +102,8 @@ finally:
 
 # ---------------------- Reputation
 
+
+
 # ----------------------
 
 
@@ -111,6 +113,14 @@ class Like(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     photo_id = db.Column(db.Integer, db.ForeignKey("photo.id"), nullable=False)
 
+class ReputationGiven(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    giver_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __init__(self, giver_user_id, receiver_user_id):
+        self.giver_user_id = giver_user_id
+        self.receiver_user_id = receiver_user_id
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -161,6 +171,9 @@ class User(db.Model, UserMixin):
     profile_photo = db.Column(db.String(255))  # Add this line
     profile_photos = db.Column(db.String(1000))  # Store a list of filenames
     likes = db.relationship("Like", backref="user", lazy=True)
+    reputation = db.Column(db.Integer, default=0)
+    last_given_reputation_timestamp = db.Column(db.DateTime, default=None)
+    reputation_given_count = db.Column(db.Integer, default=0)
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
                            secondaryjoin=id == Friendship.friend_id)
 
@@ -170,6 +183,9 @@ class User(db.Model, UserMixin):
         self.email = email
         self.profile_photo = None  # Set initial value to None
         self.profile_photos = ""  # Initialize the list as an empty string
+        self.reputation = 0 # Set the initial reputation count to 0
+        self.last_given_reputation_timestamp = None
+        self.reputation_given_count = 0
 
     def is_friend_with(self, other_user):
         """
@@ -542,15 +558,18 @@ def get_messages(recipient_id):
     return jsonify(messages_data)
 
 
-@app.route("/user_profile/<username>")
+@app.route('/user_profile/<username>')
 @login_required
 def user_profile(username):
     # Fetch the user's profile information based on the username
     user = User.query.filter_by(username=username).first()
 
     if user:
-        # Render the user's profile template and pass the user object
-        return render_template("user_profile.html", user=user)
+        # Get the user's reputation from the database
+        user_reputation = user.reputation  # Replace 'reputation' with the actual field in your User model
+
+        # Render the user's profile template and pass the user object and reputation value
+        return render_template("user_profile.html", user=user, reputation=user_reputation)
     else:
         # Handle the case where the user does not exist
         flash("User not found.", "error")
@@ -560,21 +579,61 @@ def user_profile(username):
 @app.route('/give-reputation', methods=['POST'])
 @login_required
 def give_reputation():
-    giver_user_id = request.form.get('giver_user_id')
-    receiver_user_id = request.form.get('receiver_user_id')
+    if request.method == 'POST':
+        receiver_user_id = request.form.get('receiver_user_id')
 
-    # Check if the giver can give reputation (e.g., once every 24 hours)
-    last_reputation_time = user_reputations.get(giver_user_id, None)
+        # Check if the giver has already given reputation to the receiver
+        if not has_given_reputation(current_user.id, receiver_user_id):
+            # Update the reputation count for the receiver
+            receiver_user = User.query.get(receiver_user_id)
+            receiver_user.reputation += 1  # Increase the reputation count by 1
+            db.session.commit()
 
-    if last_reputation_time is None or datetime.now() - last_reputation_time >= timedelta(days=1):
-        # Update the reputation count for the receiver
-        user_reputations[receiver_user_id] = datetime.now()
+            # Mark that the giver has given reputation to the receiver
+            mark_gave_reputation(current_user.id, receiver_user_id)
 
-        # You should also update the reputation count in your database
+            return jsonify({'success': True, 'message': 'Reputation added successfully.'})
+        else:
+            return jsonify({'success': False, 'message': 'You can only give reputation once.'})
 
-        return jsonify({'success': True, 'message': 'Reputation added successfully.'})
+    return jsonify({'error': 'Invalid request'}), 400
 
-    return jsonify({'success': False, 'message': 'You can only give reputation once every 24 hours.'})
+# ...
+
+def has_given_reputation(giver_user_id, receiver_user_id):
+    # Query your database or data structure to check if giver_user_id has given reputation to receiver_user_id
+    # Return True if reputation has been given, otherwise return False
+    # Example implementation using SQLAlchemy:
+    reputation_given = ReputationGiven.query.filter_by(giver_user_id=giver_user_id, receiver_user_id=receiver_user_id).first()
+    return reputation_given is not None
+
+def mark_gave_reputation(giver_user_id, receiver_user_id):
+    # Create a new record in your database or update your data structure to track this action
+    # Example implementation using SQLAlchemy:
+    reputation_given = ReputationGiven(giver_user_id=giver_user_id, receiver_user_id=receiver_user_id)
+    db.session.add(reputation_given)
+    db.session.commit()
+
+@app.route('/update_reputation', methods=['POST'])
+def update_reputation():
+    if request.method == 'POST':
+        # Retrieve the new reputation value from the POST request
+        data = request.get_json()
+        new_reputation = data.get('reputation')
+
+        if new_reputation is not None:
+            # Update the user's reputation in the database (replace 'current_user' with your user object)
+            current_user.reputation = new_reputation
+            db.session.commit()
+
+            # Return a response indicating success
+            return jsonify({'success': True}), 200
+        else:
+            return jsonify({'error': 'Invalid reputation value'}), 400
+
+    # Handle other HTTP methods or errors
+    return jsonify({'error': 'Invalid request'}), 400
+
 
 
 @app.route("/dashboard", methods=["GET", "POST"])

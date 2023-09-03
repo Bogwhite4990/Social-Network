@@ -8,15 +8,21 @@
 </head>
 <body>
 <div class="navbar">
-    <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ user.username }}</span>!</span>
+    <span>Welcome, <span class="username">{{ current_user.username }}</span>!</span>
     <button class="friends-button" onclick="window.location.href='{{ url_for('friends') }}'">Friends</button>
     <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
     <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
 </div>
 <!-- Add Reputation section -->
 <div class="reputation-section">
-    <h2>Reputation: <span id="reputation-count">{{ user.reputation }}</span></h2>
-    <button id="give-reputation-button">Give Reputation</button>
+    <h2>Reputation: <span id="reputation-count">{{ reputation }}</span></h2>
+    <button
+    id="give-reputation-button"
+    data-receiver-user-id="{{ user.id }}"
+    onclick="giveReputation(this.getAttribute('data-receiver-user-id'))"
+>
+    Give Reputation
+</button>
     <p id="reputation-message"></p>
 </div>
 <div class="profile-container">
@@ -39,16 +45,47 @@ document.addEventListener("DOMContentLoaded", function() {
         // Perform an AJAX request to the backend to update reputation
         // Include logic to check if the user can give reputation (based on a timestamp in the backend response)
 
-        // Simulate a successful response from the backend with an updated reputation count
+        // Simulate a successful response from the backend with an updated reputation value
         const updatedReputation = 2; // Replace with the actual updated reputation value from your backend response
 
         if (updatedReputation !== undefined) {
-            reputationCount.textContent = updatedReputation; // Update the displayed reputation count
+            // Update the displayed reputation count on the page
+            reputationCount.textContent = updatedReputation;
+
+            // Update the user's reputation in the database (send a request to your backend for this)
+            updateReputationInDatabase(updatedReputation);
+
             reputationMessage.textContent = 'Reputation added successfully.';
         } else {
             reputationMessage.textContent = 'You can only give reputation once every 24 hours.';
         }
     });
+
+    // Function to update the user's reputation in the database
+    function updateReputationInDatabase(newReputation) {
+        // Make an AJAX request to your backend API or route to update the reputation
+        // Send the newReputation value to the backend and update it in the user's profile
+
+        // Example AJAX request (you may need to adapt this to your backend implementation):
+        fetch('/update_reputation', {
+            method: 'POST',
+            body: JSON.stringify({ reputation: newReputation }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            // Handle the response from the backend
+            if (response.ok) {
+                // Reputation updated successfully
+            } else {
+                // Handle error
+            }
+        })
+        .catch(error => {
+            // Handle network or other errors
+        });
+    }
 });
 </script>
 </body>
