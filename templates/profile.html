@@ -10,11 +10,11 @@
     <div class="navbar">
         <span>Welcome to your profile: <span class="username">{{ username }}</span></span>
         <div class="button-group">
-            <a>|</a>
+            <a class="separator">|</a>
             <a href="{{ url_for('dashboard') }}" class="back-button">Dashboard</a>
-            <a>|</a>
+            <a class="separator">|</a>
             <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
-            <a>|</a>
+            <a class="separator">|</a>
         </div>
     </div>
 

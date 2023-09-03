@@ -1,3 +1,54 @@
+/* Media query for tablets (e.g., iPad) */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    /* Add more specific styles for tablet layout if needed */
+    .like-button {
+        margin-right: 10px;
+    }
+
+    .like-count {
+        padding-left: 5px;
+    }
+
+    /* Hide the Friends button on tablets */
+    .desktop-friends-button {
+        display: none;
+    }
+}
+
+/* Media query for mobile devices */
+@media (max-width: 480px) {
+    body {
+        font-size: 12px;
+    }
+
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    /* Adjust other styles for mobile layout */
+    .like-button {
+        margin-right: 5px;
+    }
+
+    .like-count {
+        padding-left: 3px;
+    }
+
+    /* Hide the Friends button on mobile */
+    .desktop-friends-button {
+        display: none;
+    }
+}
+
 /* user_profile.css */
 .navbar {
     background-color: black;

@@ -460,17 +460,24 @@ def friends():
 
 
 @app.route('/add_friend/<username>', methods=['POST'])
+@login_required
 def add_friend(username):
     friend = User.query.filter_by(username=username).first()
+
     if friend:
         # Check if the friendship already exists
-        if Friendship.query.filter_by(user_id=current_user.id, friend_id=friend.id).first() is None:
-            current_user.friends.append(friend)
-            db.session.add(Friendship(user_id=current_user.id, friend_id=friend.id))
-            db.session.commit()
-            return jsonify({'message': f'You are now friends with {friend.username}'})
-        else:
+        existing_friendship = Friendship.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
+
+        if existing_friendship:
             return jsonify({'message': f'You are already friends with {friend.username}'})
+
+        # Create a new friendship record
+        new_friendship = Friendship(user_id=current_user.id, friend_id=friend.id)
+        db.session.add(new_friendship)
+        db.session.commit()
+
+        return jsonify({'message': f'You are now friends with {friend.username}'})
+
     return jsonify({'error': 'User not found'}), 404
 
 
