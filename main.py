@@ -623,7 +623,7 @@ def give_reputation():
                     db.session.commit()
 
                     # Return the updated reputation count and next allowed timestamp as JSON response
-                    next_allowed_timestamp = datetime.utcnow() + timedelta(hours=24)
+                    next_allowed_timestamp = datetime.utcnow() + timedelta(seconds=20)
                     return jsonify({
                         'updated_reputation': receiver_user.reputation,
                         'next_allowed_timestamp': next_allowed_timestamp.isoformat(),

@@ -43,19 +43,17 @@
              const timeLeftSpan = document.getElementById("time-left");
 
              function updateTimer(timeLeftSeconds) {
-             if (timeLeftSeconds <= 0) {
-                 timeLeftSpan.textContent = "You can give reputation now!";
-             } else {
-                 const hours = Math.floor(timeLeftSeconds / 3600);
-                 const minutes = Math.floor((timeLeftSeconds % 3600) / 60);
-                 const seconds = timeLeftSeconds % 60;
-                 const formattedTimeLeft = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                 timeLeftSpan.textContent = `You can only give reputation once every 24 hours. (Time Left: ${formattedTimeLeft})`;
+                 if (timeLeftSeconds <= 0) {
+                     timeLeftSpan.textContent = "You can give reputation now!";
+                 } else {
+                     const hours = Math.floor(timeLeftSeconds / 3600);
+                     const minutes = Math.floor((timeLeftSeconds % 3600) / 60);
+                     const seconds = timeLeftSeconds % 60;
+                     const formattedTimeLeft = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                     timeLeftSpan.textContent = `You can only give reputation once every 24 hours (${formattedTimeLeft})`;
+                 }
+                 timeLeftSpan.style.color = "white";
              }
-             timeLeftSpan.style.color = "white";
-         }
-
-
 
              const initialTimeLeft = parseInt(timeLeftSpan.getAttribute("data-initial-time-left"));
              if (!isNaN(initialTimeLeft)) {
@@ -106,7 +104,6 @@
                  });
              });
          });
-
 
       </script>
    </body>
