@@ -33,6 +33,14 @@ body {
     cursor: pointer;
 }
 
+.navbar .logout-button {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
 /* Friends Content Styles */
 .friends-content {
     max-width: 800px;
@@ -154,7 +162,7 @@ body {
 }
 
 .logout-button {
-    color: red;
+    color: white;
     text-decoration: none;
     transition: color 0.3s; /* Add transition effect for color change */
 }
