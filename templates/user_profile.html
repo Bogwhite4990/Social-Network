@@ -10,7 +10,6 @@
 <div class="navbar">
     <span>Welcome, <a href="{{ url_for('profile') }}" class="username-link"><span class="username">{{ current_user.username }}</span></a>!</span>
     <button class="friends-button" onclick="window.location.href='{{ url_for('friends') }}'">Friends</button>
-    <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
     <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
 </div>
 <!-- Add Reputation section -->
@@ -33,6 +32,7 @@
     <div class="profile-info">
         <!-- Display the user's name -->
         <h1>{{ user.username }}</h1>
+        <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
     </div>
 </div>
 <script>

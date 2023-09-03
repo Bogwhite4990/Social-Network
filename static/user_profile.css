@@ -17,9 +17,30 @@
         padding-left: 5px;
     }
 
+    /* Style the Friends button */
+    .friends-button {
+        background-color: gray; /* Set the background color to gray */
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        margin-right: 10px;
+        cursor: pointer;
+        text-decoration: none; /* Remove default anchor text decoration */
+    }
+
+    /* Adjust the space between the Friends button and the text */
+    .navbar .username {
+        margin-right: 10px; /* Add space to the right of the username */
+    }
+
     /* Hide the Friends button on tablets */
     .desktop-friends-button {
         display: none;
+    }
+
+    /* Center the Back button */
+    .back-button {
+        margin: 10px auto; /* Center the button horizontally and add vertical space */
     }
 }
 
@@ -43,9 +64,30 @@
         padding-left: 3px;
     }
 
+    /* Style the Friends button */
+    .friends-button {
+        background-color: gray; /* Set the background color to gray */
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        margin-right: 10px;
+        cursor: pointer;
+        text-decoration: none; /* Remove default anchor text decoration */
+    }
+
+    /* Adjust the space between the Friends button and the text */
+    .navbar .username {
+        margin-right: 10px; /* Add space to the right of the username */
+    }
+
     /* Hide the Friends button on mobile */
     .desktop-friends-button {
         display: none;
+    }
+
+    /* Center the Back button */
+    .back-button {
+        margin: 10px auto; /* Center the button horizontally and add vertical space */
     }
 }
 
@@ -110,4 +152,21 @@
     justify-content: center; /* Center vertically */
     align-items: center; /* Center horizontally */
 }
+
+.back-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+
 
