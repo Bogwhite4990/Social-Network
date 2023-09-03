@@ -601,11 +601,11 @@ def give_reputation():
     if request.method == 'POST':
         receiver_user_id = request.json.get('receiver_user_id')
 
+        # Calculate the time left until reputation can be given again
+        time_left = calculate_time_left(current_user.last_given_reputation_timestamp)
+
         # Check if the giver can give reputation to the receiver
         if can_give_reputation(current_user.id, receiver_user_id):
-            # Calculate the time left until reputation can be given again
-            time_left = calculate_time_left(current_user.last_given_reputation_timestamp)
-
             if time_left.total_seconds() <= 0:
                 # Retrieve the receiver user from the database based on receiver_user_id
                 receiver_user = User.query.get(receiver_user_id)
@@ -618,6 +618,10 @@ def give_reputation():
                     # Mark that the giver has given reputation to the receiver
                     mark_gave_reputation(current_user.id, receiver_user_id)
 
+                    # Update the last given reputation timestamp for the giver
+                    current_user.last_given_reputation_timestamp = datetime.utcnow()
+                    db.session.commit()
+
                     # Return the updated reputation count and next allowed timestamp as JSON response
                     next_allowed_timestamp = datetime.utcnow() + timedelta(hours=24)
                     return jsonify({
@@ -628,12 +632,12 @@ def give_reputation():
                     return jsonify({'error': 'Receiver user not found.'})
             else:
                 # Return the time left until reputation can be given again as seconds
-                return jsonify({'time_left_seconds': int(time_left.total_seconds())})
+                return jsonify({'error': 'You can only give reputation once every 24 hours.', 'time_left_seconds': int(time_left.total_seconds())})
         else:
-            return jsonify({'error': 'You can only give reputation once every 24 hours.'})
+            # If the giver can't give reputation yet, return the error message with time left
+            return jsonify({'error': 'You can only give reputation once every 24 hours.', 'time_left_seconds': int(time_left.total_seconds())})
 
     return jsonify({'error': 'Invalid request'}), 400
-
 # ...
 
 def calculate_time_left(last_given_reputation_timestamp):

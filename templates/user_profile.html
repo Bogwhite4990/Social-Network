@@ -1,108 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='user_profile.css') }}">
-</head>
-<body>
-<div class="navbar">
-    <span>Welcome, <a href="{{ url_for('profile') }}" class="username-link"><span class="username">{{ current_user.username }}</span></a>!</span>
-    <button class="friends-button" onclick="window.location.href='{{ url_for('friends') }}'">Friends</button>
-    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
-</div>
-<!-- Add Reputation section -->
-<div class="reputation-section">
-    <h2>Reputation: <span id="reputation-count">{{ reputation }}</span></h2>
-    <button
-        id="give-reputation-button"
-        data-receiver-user-id="{{ user.id }}"
-        onclick="giveReputation(this.getAttribute('data-receiver-user-id'))"
-    >
-        Give Reputation
-    </button>
-    <p id="reputation-message"></p>
-    <span id="time-left" data-time-left="86400"></span>
-</div>
-<div class="profile-container">
-    <div class="profile-avatar">
-        <!-- Display the user's avatar (profile photo) -->
-        <img src="{{ url_for('static', filename='uploads/profile-photo/' ~ user.profile_photo) }}" alt="User Avatar">
-    </div>
-    <div class="profile-info">
-        <!-- Display the user's name -->
-        <h1>{{ user.username }}</h1>
-        <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
-    </div>
-</div>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const reputationButton = document.getElementById("give-reputation-button");
-    const reputationMessage = document.getElementById("reputation-message");
-    const reputationCount = document.getElementById("reputation-count");
-    const timeLeftSpan = document.getElementById("time-left");
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>User Profile</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='user_profile.css') }}">
+   </head>
+   <body>
+      <div class="navbar">
+         <span>Welcome, <a href="{{ url_for('profile') }}" class="username-link"><span class="username">{{ current_user.username }}</span></a>!</span>
+         <button class="friends-button" onclick="window.location.href='{{ url_for('friends') }}'">Friends</button>
+         <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+      </div>
+      <!-- Add Reputation section -->
+      <div class="reputation-section">
+         <h2>Reputation: <span id="reputation-count">{{ reputation }}</span></h2>
+         <button
+            id="give-reputation-button"
+            data-receiver-user-id="{{ user.id }}"
+            >
+         Give Reputation
+         </button>
+         <p id="reputation-message"></p>
+         <span id="time-left" data-time-left="86400"></span>
+      </div>
+      <div class="profile-container">
+         <div class="profile-avatar">
+            <!-- Display the user's avatar (profile photo) -->
+            <img src="{{ url_for('static', filename='uploads/profile-photo/' ~ user.profile_photo) }}" alt="User Avatar">
+         </div>
+         <div class="profile-info">
+            <!-- Display the user's name -->
+            <h1>{{ user.username }}</h1>
+            <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
+         </div>
+      </div>
+      <script>
+         document.addEventListener("DOMContentLoaded", function() {
+             const reputationButton = document.getElementById("give-reputation-button");
+             const reputationMessage = document.getElementById("reputation-message");
+             const reputationCount = document.getElementById("reputation-count");
+             const timeLeftSpan = document.getElementById("time-left");
 
-    function updateTimer(timeLeftSeconds) {
-        if (timeLeftSeconds <= 0) {
-            timeLeftSpan.textContent = "You can give reputation now!";
-        } else {
-            const hours = Math.floor(timeLeftSeconds / 3600);
-            const minutes = Math.floor((timeLeftSeconds % 3600) / 60);
-            const seconds = timeLeftSeconds % 60;
-            const formattedTimeLeft = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            timeLeftSpan.textContent = `Time left: ${formattedTimeLeft}`;
-        }
-        timeLeftSpan.style.color = "white";
-    }
+             function updateTimer(timeLeftSeconds) {
+             if (timeLeftSeconds <= 0) {
+                 timeLeftSpan.textContent = "You can give reputation now!";
+             } else {
+                 const hours = Math.floor(timeLeftSeconds / 3600);
+                 const minutes = Math.floor((timeLeftSeconds % 3600) / 60);
+                 const seconds = timeLeftSeconds % 60;
+                 const formattedTimeLeft = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                 timeLeftSpan.textContent = `You can only give reputation once every 24 hours. (Time Left: ${formattedTimeLeft})`;
+             }
+             timeLeftSpan.style.color = "white";
+         }
 
-    const initialTimeLeft = parseInt(timeLeftSpan.getAttribute("data-initial-time-left"));
-    if (!isNaN(initialTimeLeft)) {
-        updateTimer(initialTimeLeft);
-    }
 
-    reputationButton.addEventListener("click", function() {
-        fetch('/give-reputation', {
-            method: 'POST',
-            body: JSON.stringify({ receiver_user_id: reputationButton.getAttribute('data-receiver-user-id') }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                return Promise.reject('Error updating reputation');
-            }
-        })
-        .then(data => {
-            console.log(data);
 
-            if (data.updated_reputation !== undefined) {
-                reputationCount.textContent = data.updated_reputation;
-                reputationMessage.textContent = 'Reputation added successfully.';
-                reputationButton.disabled = true;
-            } else if (data.time_left_seconds !== undefined) {
-                const timeLeft = data.time_left_seconds;
-                updateTimer(timeLeft);
-            } else if (data.next_allowed_timestamp !== undefined) {
-                const nextAllowedTimestamp = new Date(data.next_allowed_timestamp);
-                const currentTime = new Date();
-                const timeLeftSeconds = Math.max(0, Math.floor((nextAllowedTimestamp - currentTime) / 1000));
-                updateTimer(timeLeftSeconds);
-            }
+             const initialTimeLeft = parseInt(timeLeftSpan.getAttribute("data-initial-time-left"));
+             if (!isNaN(initialTimeLeft)) {
+                 updateTimer(initialTimeLeft);
+             }
 
-            setTimeout(function () {
-                window.location.reload();
-            }, 1000);
-        })
-        .catch(error => {
-            reputationMessage.textContent = 'Error updating reputation';
-            console.error(error);
-        });
-    });
-});
-</script>
-</body>
+             reputationButton.addEventListener("click", function() {
+                 fetch('/give-reputation', {
+                     method: 'POST',
+                     body: JSON.stringify({ receiver_user_id: reputationButton.getAttribute('data-receiver-user-id') }),
+                     headers: {
+                         'Content-Type': 'application/json',
+                     },
+                 })
+                 .then(response => {
+                     if (response.ok) {
+                         return response.json();
+                     } else {
+                         return Promise.reject('Error updating reputation');
+                     }
+                 })
+                 .then(data => {
+                     console.log(data);
+
+                     if (data.error) {
+                         reputationMessage.textContent = data.error;
+                     } else if (data.updated_reputation !== undefined) {
+                         reputationCount.textContent = data.updated_reputation;
+                         reputationMessage.textContent = 'Reputation added successfully.';
+                         reputationButton.disabled = true;
+                     } else if (data.time_left_seconds !== undefined) {
+                         const timeLeft = data.time_left_seconds;
+                         updateTimer(timeLeft);
+                     }
+
+                     // Check if reputation can be given again
+                     if (data.time_left_seconds === 0) {
+                         reputationButton.disabled = false; // Enable the button
+                     }
+
+                     setTimeout(function () {
+                         window.location.reload();
+                     }, 1000);
+                 })
+                 .catch(error => {
+                     reputationMessage.textContent = 'Error updating reputation';
+                     console.error(error);
+                 });
+             });
+         });
+
+
+      </script>
+   </body>
 </html>
