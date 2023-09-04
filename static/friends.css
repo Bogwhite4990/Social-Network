@@ -1,9 +1,13 @@
 /* friends.css */
+h2, p, li {
+    color: white;
+}
+
 
 /* General Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #131516;
 }
 
 /* Navbar Styles */
@@ -46,7 +50,7 @@ body {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #131516;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 

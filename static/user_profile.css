@@ -2,6 +2,7 @@
 @media (max-width: 768px) {
     body {
         font-size: 14px;
+
     }
 
     .container {
@@ -92,6 +93,18 @@
 }
 
 /* user_profile.css */
+body {
+    background-color: #131516;
+}
+
+h1, h2 {
+    color: white;
+}
+
+#reputation-message {
+    color: white;
+}
+
 .navbar {
     background-color: black;
     color: white;

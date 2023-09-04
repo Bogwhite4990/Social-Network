@@ -198,12 +198,13 @@
 body, h1, h2, h3, p, ul, li {
     margin: 0;
     padding: 0;
+    color: white;
 }
 
 /* Style for the entire page */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #131516;
 }
 
 /* dashboard.css */
@@ -346,8 +347,9 @@ body {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #131516;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #white;
 }
 
 /* Style for the photo section */
@@ -358,10 +360,11 @@ body {
 /* Style for photo boxes */
 .photo-box {
     display: flex;
-    background-color: #f9f9f9;
+    background-color: #131516;
     margin: 20px 0;
-    border: 1px solid #ddd;
+    border: 1px solid #white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #090A0B;
 }
 
 /* Style for comment section on the left of the photo */
@@ -423,6 +426,7 @@ body {
 .uploaded-image {
     width: 323px; /* Set the desired width */
     height: 308px; /* Set the desired height */
+    border: 1px solid gold;
 }
 
 /* Style for the like section */
@@ -469,4 +473,8 @@ body {
 
 .comment-actions {
     /* Add any additional styles for comment actions here */
+}
+
+.user-profile-link {
+    color: #7393B3;
 }
