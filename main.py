@@ -550,15 +550,14 @@ def search_users():
 @login_required
 def send_message():
     data = request.json
-    message = data.get('message')
-    recipient = data.get('recipient')
+    message_text = data.get('message')
+    recipient_id = data.get('recipient_id')
 
-    if message and recipient:
-        # Store the message in the chat_messages dictionary
-        if recipient in chat_messages:
-            chat_messages[recipient].append(message)
-        else:
-            chat_messages[recipient] = [message]
+    if message_text and recipient_id:
+        # Store the message in the database (if used)
+        message = Message(sender_id=current_user.id, recipient_id=recipient_id, text=message_text)
+        db.session.add(message)
+        db.session.commit()
 
         return jsonify({"success": True}), 200
     else:
@@ -569,12 +568,15 @@ def send_message():
 @login_required
 def get_messages(recipient_id):
     messages = Message.query.filter(
-        (Message.sender_id == current_user.id) | (Message.recipient_id == current_user.id),
-        (Message.sender_id == recipient_id) | (Message.recipient_id == recipient_id)
-    ).all()
+        ((Message.sender_id == current_user.id) & (Message.recipient_id == recipient_id)) |
+        ((Message.sender_id == recipient_id) & (Message.recipient_id == current_user.id))
+    ).order_by(Message.timestamp).all()
+
     messages_data = [{"sender_id": message.sender_id, "text": message.text, "timestamp": message.timestamp}
                      for message in messages]
+
     return jsonify(messages_data)
+
 
 
 @app.route('/user_profile/<username>')

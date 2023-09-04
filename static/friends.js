@@ -64,26 +64,20 @@ function removeFriend(username) {
     });
 }
 
-
-
-
 // Function to send a chat message
-function sendMessage(message, recipient) {
-    const chatMessages = document.getElementById("chat-messages");
-    const messageElement = document.createElement("div");
-    messageElement.textContent = message;
-    chatMessages.appendChild(messageElement);
-
-    // Send the message to the server
+function sendMessage(message, recipient_id) {
     fetch("/send_message", {
         method: "POST",
-        body: JSON.stringify({ message: message, recipient: recipient }),
+        body: JSON.stringify({ message: message, recipient_id: recipient_id }),
         headers: {
             "Content-Type": "application/json",
         },
     })
     .then(response => {
-        if (!response.ok) {
+        if (response.ok) {
+            // Message sent successfully
+            // You can update the UI or do something on success
+        } else {
             console.error("Failed to send message:", response.statusText);
         }
     })
@@ -92,11 +86,38 @@ function sendMessage(message, recipient) {
     });
 }
 
-// Handle form submission for sending chat messages
+// Function to load and display messages
+function loadMessages(recipient_id) {
+    // Fetch chat messages from the server based on recipient_id
+    fetch(`/get_messages/${recipient_id}`)
+        .then(response => response.json())
+        .then(data => {
+            // Display messages in your chat UI
+            // You can update your chat UI here
+            console.log(data);
+
+            // Append the messages to the chat-messages div
+            const chatMessages = document.getElementById("chat-messages");
+            chatMessages.innerHTML = ""; // Clear existing messages
+
+            data.forEach(message => {
+                const messageElement = document.createElement("div");
+                messageElement.textContent = `${message.sender_id}: ${message.text}`;
+                chatMessages.appendChild(messageElement);
+            });
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+
+// Define chatForm, messageInput, and friendList variables
 const chatForm = document.getElementById("chat-form");
 const messageInput = document.getElementById("message-input");
 const friendList = document.getElementById("friend-list");
+const currentUserId = 1;
 
+// Handle form submission for sending chat messages
 chatForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const message = messageInput.value.trim();
@@ -104,9 +125,10 @@ chatForm.addEventListener("submit", (e) => {
     if (message !== "") {
         sendMessage(message, recipient);
         messageInput.value = "";
+        // Load messages after sending
+        loadMessages(recipient);
     }
 });
-
 
 // Handle form submission for searching users
 const searchForm = document.getElementById("search-user-section");
