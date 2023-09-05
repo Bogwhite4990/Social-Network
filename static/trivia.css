@@ -107,19 +107,19 @@ button:hover {
     }
 
     .question {
-        font-size: 90px; /* Triple the text size for the question on tablets */
+        font-size: 20px; /* Triple the text size for the question on tablets */
     }
 
     .answer {
-        font-size: 72px; /* Triple the text size for answers on tablets */
+        font-size: 20px; /* Triple the text size for answers on tablets */
     }
 
     .feedback {
-        font-size: 108px; /* Triple the text size for feedback on tablets */
+        font-size: 20px; /* Triple the text size for feedback on tablets */
     }
 
     button {
-        font-size: 90px; /* Triple the text size for buttons on tablets */
+        font-size: 20px; /* Triple the text size for buttons on tablets */
     }
 }
 
@@ -132,18 +132,18 @@ button:hover {
     }
 
     .question {
-        font-size: 90px; /* Triple the text size for the question on mobile phones */
+        font-size: 20px; /* Triple the text size for the question on mobile phones */
     }
 
     .answer {
-        font-size: 72px; /* Triple the text size for answers on mobile phones */
+        font-size: 20px; /* Triple the text size for answers on mobile phones */
     }
 
     .feedback {
-        font-size: 108px; /* Triple the text size for feedback on mobile phones */
+        font-size: 20px; /* Triple the text size for feedback on mobile phones */
     }
 
     button {
-        font-size: 90px; /* Triple the text size for buttons on mobile phones */
+        font-size: 20px; /* Triple the text size for buttons on mobile phones */
     }
 }
