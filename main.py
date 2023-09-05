@@ -24,10 +24,9 @@ from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 
 # Import
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy import UniqueConstraint
 from flask_caching import Cache
-from flask_session import Session
+
 
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -60,7 +59,7 @@ app.config['CACHE_REDIS_PORT'] = 6379  # Configure the Redis port
 cache.init_app(app)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+
 
 conn = sqlite3.connect("comments.db", check_same_thread=False)
 c = conn.cursor()
