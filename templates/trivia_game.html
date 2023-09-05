@@ -6,12 +6,15 @@
 <body>
     <div class="trivia-content">
         <h1>Trivia Game</h1>
+        <div class="center-button">
+            <button id="backButton" onclick="window.location.href='{{ url_for('dashboard') }}'">Back to Dashboard</button>
+        </div>
         <div class="score">
             <p>Score: <span id="score">0</span></p>
         </div>
         <div class="question">
             <p id="questionText">Loading question...</p>
-            <p id="timer">Time remaining: 20 seconds</p> <!-- Added timer display -->
+            <p id="timer">Time remaining: 10 seconds</p> <!-- Fixed timer display to 10 seconds -->
         </div>
         <div class="answers" id="answerOptions">
             <!-- Answer options will be filled dynamically -->
@@ -21,9 +24,6 @@
         </div>
         <div class="next-button">
             <button id="nextButton" onclick="checkAnswer()">Answer</button>
-        </div>
-        <div class="back-button" style="display: none;">
-            <button id="backButton" onclick="backToDashboard()">Back to Dashboard</button>
         </div>
     </div>
     <script>
@@ -47,9 +47,9 @@
             timerElement.textContent = `Time remaining: ${seconds} seconds`;
         }
 
-        // Function to start the timer for 20 seconds
+        // Function to start the timer for 10 seconds (fixed)
         function startTimer() {
-            var seconds = 20;
+            var seconds = 10;
             updateTimerDisplay(seconds);
 
             timer = setInterval(function () {
@@ -58,18 +58,15 @@
 
                 if (seconds <= 0) {
                     clearInterval(timer);
-                    checkAnswer(); // Deduct 1 point if timer runs out and you haven't answered
+                    finishGame(); // Finish the game if timer runs out
                 }
             }, 1000); // Update every second
         }
 
         // Function to fetch and display a new question
         function fetchNextQuestion() {
-            if (currentQuestionNumber === totalQuestions) {
-                // Display congratulatory message and score
-                questionElement.textContent = "Congratulations! You scored " + score + " points.";
-                backButton.style.display = "block";
-                nextButton.style.display = "none"; // Hide the Next Question button
+            if (currentQuestionNumber >= totalQuestions) {
+                finishGame(); // Finish the game if all questions are answered
                 return;
             }
 
@@ -169,8 +166,32 @@
                 radio.disabled = true;
             });
 
-            // Automatically go to the next question after displaying feedback
-            setTimeout(fetchNextQuestion, 1000);
+            currentQuestionNumber++;
+
+            // Automatically go to the next question after displaying feedback or finish the game
+            if (currentQuestionNumber >= totalQuestions) {
+                finishGame();
+            } else {
+                fetchNextQuestion();
+            }
+        }
+
+        // Function to finish the game
+        function finishGame() {
+            // Hide answer options and timer
+            answerOptionsElement.style.display = "none";
+            timerElement.style.display = "none";
+
+            // Clear the feedback text
+            feedbackElement.textContent = "";
+
+            // Display "Game Over" message along with the score
+            questionElement.textContent = "Game Over - Congratulations! You scored " + score + " points.";
+            scoreElement.textContent = score;
+
+            // Display the back button
+            backButton.style.display = "block";
+            nextButton.style.display = "none"; // Hide the Next Question button
         }
 
         // Function to go back to the dashboard
