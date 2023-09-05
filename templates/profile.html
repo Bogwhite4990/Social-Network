@@ -20,6 +20,10 @@
 
     <div class="dashboard-content profile-content">
         <h1>Your Profile</h1>
+            <div class="profile-section">
+        <label for="score">Score:</label>
+        <span id="score">{{ user_score.score if user_score else 0 }}</span>
+    </div>
         <form method="POST" enctype="multipart/form-data" action="{{ url_for('profile') }}">
             <div class="profile-photo">
                 <img src="{{ url_for('static', filename='uploads/profile-photo/' ~ current_user.profile_photo) }}" alt="Profile Photo">
