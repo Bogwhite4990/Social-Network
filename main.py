@@ -1,6 +1,7 @@
 import os
+import html
 
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
     LoginManager,
@@ -26,6 +27,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import UniqueConstraint
 from flask_caching import Cache
+from flask_session import Session
 
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -56,6 +58,9 @@ app.config['CACHE_TYPE'] = 'redis'  # Use Redis as the caching backend
 app.config['CACHE_REDIS_HOST'] = 'localhost'  # Configure the Redis host
 app.config['CACHE_REDIS_PORT'] = 6379  # Configure the Redis port
 cache.init_app(app)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 conn = sqlite3.connect("comments.db", check_same_thread=False)
 c = conn.cursor()
@@ -72,12 +77,6 @@ db = SQLAlchemy(app)
 
 # ----------------------
 
-# Assuming you already have SQLAlchemy set up with your app
-
-# Create a session
-Session = sessionmaker(bind=db.engine)
-session = Session()
-
 # SQL query to delete duplicate entries in the Friendship table
 delete_query = """
     DELETE FROM friendship
@@ -87,18 +86,6 @@ delete_query = """
         GROUP BY user_id, friend_id
     );
 """
-
-try:
-    # Execute the query
-    session.execute(delete_query)
-    session.commit()
-    print("Duplicate entries removed successfully.")
-except Exception as e:
-    session.rollback()
-    print(f"Error removing duplicate entries: {str(e)}")
-finally:
-    session.close()
-
 
 # ---------------------- Reputation
 def can_give_reputation(giver_user_id, receiver_user_id):
@@ -690,6 +677,52 @@ def update_reputation():
 
     # Handle other HTTP methods or errors
     return jsonify({'error': 'Invalid request'}), 400
+
+# Game Dashboard
+# Define the trivia API endpoint
+TRIVIA_API_URL = 'https://opentdb.com/api.php?amount=10&type=multiple'
+
+
+@app.route('/trivia-game', methods=['GET', 'POST'])
+@login_required
+def trivia_game():
+    if request.method == 'GET':
+        response = requests.get(TRIVIA_API_URL)
+        data = response.json()
+
+        # Decode HTML-encoded entities in questions and answers
+        questions = data['results']
+        for question in questions:
+            question['question'] = html.unescape(question['question'])
+            question['correct_answer'] = html.unescape(question['correct_answer'])
+            question['incorrect_answers'] = [html.unescape(answer) for answer in question['incorrect_answers']]
+
+        session['questions'] = questions
+
+        return render_template('trivia_game.html', questions=session['questions'], current_question_index=0,
+                               feedback=None, completed=False)
+
+    if request.method == 'POST':
+        current_question_index = int(request.form['current_question_index'])
+        user_answer = request.form['user_answer']
+        correct_answer = request.form['correct_answer']
+
+        feedback = "Correct!" if user_answer == correct_answer else "Wrong!"
+
+        # Fetch the next question from the session
+        questions = session.get('questions', [])
+        next_question = None
+        completed = False
+
+        if current_question_index < len(questions) - 1:
+            next_question = questions[current_question_index + 1]
+        else:
+            completed = True
+
+        return render_template('trivia_game.html', questions=questions,
+                               current_question_index=current_question_index + 1, feedback=feedback,
+                               next_question=next_question, completed=completed)
+
 
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required

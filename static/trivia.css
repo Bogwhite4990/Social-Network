@@ -1,0 +1,75 @@
+/* Add your CSS styling here */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+.trivia-content {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.question {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.answers {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.answer {
+    width: 48%; /* 2 answers per row */
+    margin-bottom: 10px;
+}
+
+input[type="radio"] {
+    display: none; /* Hide the default radio buttons */
+}
+
+label {
+    display: block;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+label:hover {
+    background-color: #f0f0f0;
+}
+
+input[type="radio"]:checked + label {
+    background-color: #4CAF50; /* Green for correct answers */
+    color: #fff;
+}
+
+.feedback {
+    margin-top: 10px;
+    font-weight: bold;
+    color: red; /* Red for incorrect answers */
+}
+
+.next-button {
+    margin-top: 20px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
