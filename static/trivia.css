@@ -98,6 +98,33 @@ button:hover {
     height: 100vh;
 }
 
+/* Styles for the centering container for the "Back to Dashboard" button */
+.center-button {
+    text-align: center; /* Center-align the content */
+    margin-top: 20px; /* Add margin for spacing below the game name or feedback */
+}
+
+/* Styles for the "Back to Dashboard" button within the centering container */
+.center-button button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 20px 40px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.center-button button:hover {
+    background-color: #45a049;
+}
+
+.answer label:hover {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+
 /* Styles for tablets */
 @media (max-width: 768px) {
     .trivia-content {
