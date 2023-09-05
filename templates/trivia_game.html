@@ -23,7 +23,7 @@
             <p id="feedbackText"></p>
         </div>
         <div class="next-button">
-            <button id="nextButton" onclick="checkAnswer()">Answer</button>
+            <button id="nextButton" onclick="checkAnswer()" disabled>Answer</button>
         </div>
     </div>
     <script>
@@ -138,6 +138,7 @@
                 // Deduct 1 point if timer runs out and you haven't answered
                 score--;
                 scoreElement.textContent = score;
+                return; // Don't proceed if no answer is selected
             } else {
                 var userAnswerText = selectedAnswer.value;
                 var correctAnswerElement = document.querySelector(`label[for="${userAnswerText}"]`);
