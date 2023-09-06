@@ -109,6 +109,21 @@
     .navbar {
         text-align: left; /* Align the text to the left on tablets */
     }
+
+    .game-button{
+        display: flex;
+        margin-left: 0px;
+    }
+
+    .shop-button{
+        display: flex;
+        margin-left: 0px;
+    }
+
+    .friends-button{
+        display: flex;
+        margin-left: 0px;
+    }
 }
 
 /* Media query for mobile devices */
@@ -168,6 +183,21 @@
     .like-count {
         padding-left: 3px; /* Add padding to the left of the likes count */
     }
+
+        .game-button{
+        display: flex;
+        margin-left: 0px;
+    }
+
+    .shop-button{
+        display: flex;
+        margin-left: 0px;
+    }
+
+    .friends-button{
+        display: flex;
+        margin-left: 0px;
+    }
 }
 
 
@@ -190,6 +220,16 @@
 
     .upload-button {
         margin: 1 auto; /* Center-align the "Upload" button horizontally */
+    }
+
+    .game-button{
+        display: flex;
+        margin-left: 0px;
+    }
+
+    .shop-button{
+        display: flex;
+        margin-left: 0px;
     }
 }
 
@@ -480,6 +520,11 @@ body {
 }
 
 .game-button{
+    display: flex;
+    margin-left: 10px;
+}
+
+.shop-button{
     display: flex;
     margin-left: 10px;
 }

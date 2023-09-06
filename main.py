@@ -723,6 +723,20 @@ def trivia_game():
                                next_question=next_question, completed=completed)
 
 
+# Shop functionality
+@app.route('/shop')
+def shop():
+    # List of available items in the shop
+    shop_items = [
+        {'id': 1, 'name': 'Item 1', 'price': 2},
+        {'id': 2, 'name': 'Item 2', 'price': 3},
+        {'id': 3, 'name': 'Item 3', 'price': 5},
+        {'id': 4, 'name': 'Item 4', 'price': 4}
+    ]
+
+    return render_template('shop.html', shop_items=shop_items)
+
+
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():

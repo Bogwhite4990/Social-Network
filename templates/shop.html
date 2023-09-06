@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <!-- Include any CSS or stylesheets here -->
+</head>
+<body>
+    <h1>Shop</h1>
+    <p>Your Balance: {{ user_balance }} coins</p>
+
+    <div class="shop-items">
+        {% for item in shop_items %}
+        <div class="shop-item">
+            <h3>{{ item.name }}</h3>
+            <p>Price: {{ item.price }} coins</p>
+            <button onclick="buyItem({{ item.id }}, {{ item.price }})">Buy</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Include any other HTML content here -->
+
+    <script>
+        // JavaScript function to handle item purchases
+        function buyItem(itemId, itemPrice) {
+            if (user_balance >= itemPrice) {
+                // Send a request to Flask to process the purchase
+                fetch(`/buy_item/${itemId}`, {
+                    method: 'POST',
+                }).then(response => {
+                    if (response.ok) {
+                        // Purchase successful, update the user's balance
+                        user_balance -= itemPrice;
+                        // Update the displayed balance on the page
+                        document.querySelector('p').textContent = `Your Balance: ${user_balance} coins`;
+                        alert('Purchase successful!');
+                    } else {
+                        alert('Purchase failed.');
+                    }
+                });
+            } else {
+                alert('Insufficient coins.');
+            }
+        }
+    </script>
+</body>
+</html>
