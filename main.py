@@ -736,7 +736,7 @@ def dashboard():
         for filename in photo_filenames:
             photos.append(Photo(filename=filename, user=user))  # Append Photo objects
 
-    # Sort the photos in reverse order based on the upload timestamp.
+    # Sort the photos in reverse order based on the upload timestamp
     photos.sort(
         key=lambda x: os.path.getmtime(
             os.path.join(app.config["UPLOAD_FOLDER"], x.filename)
