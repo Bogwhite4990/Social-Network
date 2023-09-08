@@ -20,7 +20,7 @@ import requests
 import sqlite3
 from datetime import datetime, timedelta
 
-# Suppressing the warning
+# Suppressing the warning.
 from werkzeug.utils import secure_filename
 
 # Import
