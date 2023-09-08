@@ -758,9 +758,6 @@ def shop():
     return render_template('shop.html', shop_items=shop_items, user_balance=user_balance)
 
 
-
-
-# Route for buying an item
 # Route to handle item purchases
 @app.route('/buy_item/<int:item_id>', methods=['POST'])
 @login_required
