@@ -143,6 +143,17 @@ class Comment(db.Model):
     photo = db.relationship("Photo", backref="comments_ref", lazy=True)
 
 
+class ShopItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+
+class PurchasedItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('shop_item.id'), nullable=False)
+
+
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(255), nullable=False)
@@ -172,6 +183,7 @@ class User(db.Model, UserMixin):
     reputation = db.Column(db.Integer, default=0)
     last_given_reputation_timestamp = db.Column(db.DateTime, default=None)
     reputation_given_count = db.Column(db.Integer, default=0)
+    coins = db.Column(db.Integer, default=10)  # Initialize coins to 10
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
                            secondaryjoin=id == Friendship.friend_id)
 
@@ -318,6 +330,7 @@ def register():
             )
 
         new_user = User(username=username, password=password, email=email)
+        new_user.coins = 10  # Initialize coins to 10
         db.session.add(new_user)
         db.session.commit()
 
@@ -371,6 +384,9 @@ def like_photo(photo_id):
         # User hasn't liked the photo, add a like
         new_like = Like(user=user, photo=photo)
         db.session.add(new_like)
+
+        # Increment user's coins by 1
+        user.coins += 1
 
     db.session.commit()
 
@@ -725,6 +741,7 @@ def trivia_game():
 
 # Shop functionality
 @app.route('/shop')
+@login_required
 def shop():
     # List of available items in the shop
     shop_items = [
@@ -734,7 +751,51 @@ def shop():
         {'id': 4, 'name': 'Item 4', 'price': 4}
     ]
 
-    return render_template('shop.html', shop_items=shop_items)
+    # Fetch the current user and their balance from the database
+    current_user = User.query.filter_by(id=1).first()  # Replace with your actual logic to get the current user
+    user_balance = current_user.coins
+
+    return render_template('shop.html', shop_items=shop_items, user_balance=user_balance)
+
+
+
+
+# Route for buying an item
+# Route to handle item purchases
+@app.route('/buy_item/<int:item_id>', methods=['POST'])
+@login_required
+def buy_item(item_id):
+    # Get the item from the database by its ID
+    item = ShopItem.query.get(item_id)
+
+    if not item:
+        return jsonify({'success': False, 'message': 'Item not found'})
+
+    # Get the current user
+    user = current_user
+
+    # Check if the user has enough coins to make the purchase
+    if user.coins >= item.price:
+        # Deduct the item price from the user's coins
+        user.coins -= item.price
+
+        # Create a new PurchasedItem entry for the user
+        purchased_item = PurchasedItem(user_id=user.id, item_id=item.id)
+        db.session.add(purchased_item)
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        return jsonify({'success': True, 'message': 'Purchase successful'})
+    else:
+        return jsonify({'success': False, 'message': 'Insufficient coins'})
+
+@app.route('/inventory')
+@login_required
+def inventory():
+    # Fetch the user's inventory from the database
+    user_inventory = PurchasedItem.query.filter_by(user_id=current_user.id).all()
+    return render_template('inventory.html', user_inventory=user_inventory)
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -784,20 +845,6 @@ def dashboard():
         photos=photos,
         comments=comments,
     )  # Pass the comments to the template
-
-# Reset reputation only once
-# def reset_reputation():
-#     try:
-#         # Update all user records to set reputation to a default value (e.g., 0)
-#         db.session.query(User).update({User.reputation: 0})
-#         db.session.commit()
-#         print("Reputation reset successfully.")
-#     except Exception as e:
-#         db.session.rollback()
-#         print(f"Error resetting reputation: {str(e)}")
-#     finally:
-#         db.session.close()
-
 
 if __name__ == "__main__":
     login_manager.init_app(app)

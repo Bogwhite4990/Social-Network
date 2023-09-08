@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+    <!-- Add your CSS stylesheets and scripts here -->
+</head>
+<body>
+    <h1>Inventory</h1>
+    <p>Hello, {{ current_user.username }}!</p>
+
+    <h2>Your Inventory:</h2>
+    <ul>
+        {% for purchased_item in purchased_items %}
+            <li>{{ purchased_item.item.name }} (Price: {{ purchased_item.item.price }} coins)</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add any additional content or functionality here -->
+
+    <a href="/">Go back to Dashboard</a>
+</body>
+</html>

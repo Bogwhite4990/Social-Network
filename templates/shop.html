@@ -7,8 +7,12 @@
     <!-- Include any CSS or stylesheets here -->
 </head>
 <body>
+    <div class="navbar">
+        <span>Welcome, <span class="username">{{ current_user.username }}</span>! Coins: <span id="user-balance">{{ current_user.coins }}</span></span>
+        <button class="dashboard-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Dashboard</button>
+    </div>
     <h1>Shop</h1>
-    <p>Your Balance: {{ user_balance }} coins</p>
+    <p>Your Balance: <span id="user-balance-display">{{ user_balance }}</span> coins</p>
 
     <div class="shop-items">
         {% for item in shop_items %}
@@ -25,16 +29,19 @@
     <script>
         // JavaScript function to handle item purchases
         function buyItem(itemId, itemPrice) {
-            if (user_balance >= itemPrice) {
+            // Get the user's current balance from the page
+            const userBalanceDisplay = document.getElementById('user-balance-display');
+            const userBalance = parseInt(userBalanceDisplay.textContent);
+
+            if (userBalance >= itemPrice) {
                 // Send a request to Flask to process the purchase
                 fetch(`/buy_item/${itemId}`, {
                     method: 'POST',
                 }).then(response => {
                     if (response.ok) {
                         // Purchase successful, update the user's balance
-                        user_balance -= itemPrice;
-                        // Update the displayed balance on the page
-                        document.querySelector('p').textContent = `Your Balance: ${user_balance} coins`;
+                        const newBalance = userBalance - itemPrice;
+                        userBalanceDisplay.textContent = newBalance;
                         alert('Purchase successful!');
                     } else {
                         alert('Purchase failed.');
