@@ -33,9 +33,9 @@
                      <div class="like-section">
                         <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
                         {% if photo.is_liked_by_current_user %}
-                        👎
+                        ❤️
                         {% else %}
-                        👍
+                        ❤️
                         {% endif %}
                         </button>
                         <span class="like-count">{{ photo.likes|length }}</span>
@@ -136,7 +136,7 @@
                  likeCount.textContent = data.like_count;
 
                  // Change the button emoji according to the current state (liked)
-                 button.textContent = liked ? '👍' : '👎';
+                 button.textContent = liked ? '❤️' : '❤️';
                  button.setAttribute('data-liked', !liked);
              }
          });

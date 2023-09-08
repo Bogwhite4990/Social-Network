@@ -728,7 +728,7 @@ def trivia_game():
 def shop():
     # List of available items in the shop
     shop_items = [
-        {'id': 1, 'name': 'Item 1', 'price': 2},
+        {'id': 1, 'name': 'Test', 'price': 2},
         {'id': 2, 'name': 'Item 2', 'price': 3},
         {'id': 3, 'name': 'Item 3', 'price': 5},
         {'id': 4, 'name': 'Item 4', 'price': 4}
