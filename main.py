@@ -796,14 +796,6 @@ def get_balance():
     return jsonify({'balance': current_user.coins})
 
 
-@app.route('/inventory')
-@login_required
-def inventory():
-    # Fetch the user's inventory from the database
-    user_inventory = PurchasedItem.query.filter_by(user_id=current_user.id).all()
-    return render_template('inventory.html', user_inventory=user_inventory)
-
-
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
