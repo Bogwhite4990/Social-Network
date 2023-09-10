@@ -86,6 +86,8 @@ delete_query = """
     );
 """
 
+
+
 # ---------------------- Reputation
 def can_give_reputation(giver_user_id, receiver_user_id):
     # Calculate the datetime 24 hours ago
@@ -100,6 +102,16 @@ def can_give_reputation(giver_user_id, receiver_user_id):
 
     # Return True if they haven't given reputation in the last 24 hours, otherwise False
     return reputation_given is None
+
+# ----------SHOP ITEMS------------
+
+# List of available items in the shop
+shop_items = [
+    {"id": 1, "name": "Photo Border", "price": 2},
+    {"id": 2, "name": "Color Name", "price": 3},
+    {"id": 3, "name": "Color Comment", "price": 5},
+]
+
 
 # ----------------------
 
@@ -743,49 +755,46 @@ def trivia_game():
 @app.route('/shop')
 @login_required
 def shop():
-    # List of available items in the shop
-    shop_items = [
-        {'id': 1, 'name': 'Test', 'price': 2},
-        {'id': 2, 'name': 'Item 2', 'price': 3},
-        {'id': 3, 'name': 'Item 3', 'price': 5},
-        {'id': 4, 'name': 'Item 4', 'price': 4}
-    ]
-
-    # Fetch the current user and their balance from the database
-    current_user = User.query.filter_by(id=1).first()  # Replace with your actual logic to get the current user
+    # Fetch the current user's balance from the database
     user_balance = current_user.coins
 
     return render_template('shop.html', shop_items=shop_items, user_balance=user_balance)
 
 
 # Route to handle item purchases
-@app.route('/buy_item/<int:item_id>', methods=['POST'])
+@app.route("/buy_item/<int:item_id>", methods=["POST"])
 @login_required
 def buy_item(item_id):
-    # Get the item from the database by its ID
-    item = ShopItem.query.get(item_id)
+
+    # Get the item from shop_items
+    item = next((item for item in shop_items if item["id"] == item_id), None)
 
     if not item:
-        return jsonify({'success': False, 'message': 'Item not found'})
+        flash("Item not found")
+        return redirect(url_for("shop"))
 
-    # Get the current user
+    # Get current user
     user = current_user
 
-    # Check if the user has enough coins to make the purchase
-    if user.coins >= item.price:
-        # Deduct the item price from the user's coins
-        user.coins -= item.price
+    # Validate coins
+    if user.coins < item["price"]:
+        flash("Insufficient coins")
+        return redirect(url_for("shop"))
 
-        # Create a new PurchasedItem entry for the user
-        purchased_item = PurchasedItem(user_id=user.id, item_id=item.id)
-        db.session.add(purchased_item)
+    # Purchase item
+    user.coins -= item["price"]
 
-        # Commit the changes to the database
-        db.session.commit()
+    # Save user
+    db.session.commit()
 
-        return jsonify({'success': True, 'message': 'Purchase successful'})
-    else:
-        return jsonify({'success': False, 'message': 'Insufficient coins'})
+    flash("Item purchased!")
+
+    return redirect(url_for("shop"))
+
+@app.route('/get_balance')
+def get_balance():
+    return jsonify({'balance': current_user.coins})
+
 
 @app.route('/inventory')
 @login_required

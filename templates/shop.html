@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="navbar">
-        <span>Welcome, <span class="username">{{ current_user.username }}</span>! Coins: <span id="user-balance">{{ current_user.coins }}</span></span>
+        <span>Welcome, <span class="username">{{ current_user.username }}</span>! Coins: <span id="user-balance">{{ user_balance }}</span></span>
         <button class="dashboard-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Dashboard</button>
     </div>
     <h1>Shop</h1>
@@ -26,31 +26,32 @@
 
     <!-- Include any other HTML content here -->
 
-    <script>
-        // JavaScript function to handle item purchases
-        function buyItem(itemId, itemPrice) {
-            // Get the user's current balance from the page
-            const userBalanceDisplay = document.getElementById('user-balance-display');
-            const userBalance = parseInt(userBalanceDisplay.textContent);
+<script >
+    // JavaScript function to handle item purchases
+    function buyItem(itemId, itemPrice) {
+        // Get the user's current balance from the page
+        const userBalanceDisplay = document.getElementById('user-balance-display');
+        let userBalance = parseInt(userBalanceDisplay.textContent);
 
-            if (userBalance >= itemPrice) {
-                // Send a request to Flask to process the purchase
-                fetch(`/buy_item/${itemId}`, {
-                    method: 'POST',
-                }).then(response => {
-                    if (response.ok) {
-                        // Purchase successful, update the user's balance
-                        const newBalance = userBalance - itemPrice;
-                        userBalanceDisplay.textContent = newBalance;
-                        alert('Purchase successful!');
-                    } else {
-                        alert('Purchase failed.');
-                    }
-                });
-            } else {
-                alert('Insufficient coins.');
-            }
+        if (userBalance >= itemPrice) {
+            // Send a request to Flask to process the purchase
+            fetch(`/buy_item/${itemId}`, {
+                method: 'POST',
+            }).then(response => {
+                if (response.ok) {
+                    // Purchase successful, update the user's balance on the page
+                    userBalance -= itemPrice; // Deduct the item price
+                    userBalanceDisplay.textContent = userBalance; // Update the displayed balance
+                    alert('Purchase successful!');
+                } else {
+                    alert('Purchase failed.');
+                }
+            });
+        } else {
+            alert('Insufficient coins.');
         }
-    </script>
+    }
+
+</script>
 </body>
 </html>
