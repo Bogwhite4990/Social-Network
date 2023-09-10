@@ -1,5 +1,8 @@
+import colorsys
 import os
 import html
+import random
+import uuid
 
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
@@ -105,9 +108,15 @@ def can_give_reputation(giver_user_id, receiver_user_id):
 
 # ----------SHOP ITEMS------------
 
+# Function to generate a random hex color code
+def generate_random_color():
+    # Generate a random color in RGB format
+    r, g, b = [int(x * 255) for x in colorsys.hsv_to_rgb(random.random(), 1, 1)]
+    return f"#{r:02X}{g:02X}{b:02X}"
+
 # List of available items in the shop
 shop_items = [
-    {"id": 1, "name": "Photo Border", "price": 2},
+    {"id": 1, "name": "Photo Border", "price": 1, "border_color": None},
     {"id": 2, "name": "Color Name", "price": 3},
     {"id": 3, "name": "Color Comment", "price": 5},
 ]
@@ -173,6 +182,8 @@ class Photo(db.Model):
     user = db.relationship("User", backref=db.backref("photos", lazy=True))
     likes = db.relationship("Like", backref="photo", lazy=True, cascade="all, delete-orphan")
     comments = db.relationship("Comment", backref="photo_ref", lazy=True, cascade="all, delete-orphan")
+    border_color = db.Column(db.String(20))  # Store the border color associated with the photo
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 class Friendship(db.Model):
@@ -182,6 +193,25 @@ class Friendship(db.Model):
     friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     __table_args__ = (
         UniqueConstraint('user_id', 'friend_id', name='unique_friendship'),)
+
+
+class Border(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)  # Border name (e.g., "Gold Border")
+    color = db.Column(db.String(20), nullable=False)  # Random color for the border
+    price = db.Column(db.Integer, nullable=False)      # Price of the border
+
+    def __init__(self, name, color, price):
+        self.name = name
+        self.color = color
+        self.price = price
+
+
+user_border = db.Table(
+    'user_border',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('border_id', db.Integer, db.ForeignKey('border.id'), primary_key=True)
+)
 
 
 class User(db.Model, UserMixin):
@@ -196,6 +226,7 @@ class User(db.Model, UserMixin):
     last_given_reputation_timestamp = db.Column(db.DateTime, default=None)
     reputation_given_count = db.Column(db.Integer, default=0)
     coins = db.Column(db.Integer, default=10)  # Initialize coins to 10
+    selected_border_color = db.Column(db.String(20))  # Store the selected border color
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
                            secondaryjoin=id == Friendship.friend_id)
 
@@ -208,6 +239,7 @@ class User(db.Model, UserMixin):
         self.reputation = 0 # Set the initial reputation count to 0
         self.last_given_reputation_timestamp = None
         self.reputation_given_count = 0
+        self.selected_border_color = None  # Initialize selected border color to None
 
     def is_friend_with(self, other_user):
         """
@@ -354,24 +386,37 @@ def register():
 @app.route("/upload_photo", methods=["POST"])
 @login_required
 def upload_photo():
-    if "photo" in request.files:
-        photo = request.files["photo"]
-        if photo.filename != "":
-            filename = secure_filename(photo.filename)
+    if "photo" not in request.files:
+        flash("No file part")
+        return redirect(request.url)
 
-            # Save the photo to the database
-            new_photo = Photo(filename=filename, user_id=current_user.id)
-            db.session.add(new_photo)
-            db.session.commit()
+    photo_file = request.files["photo"]
 
-            # Print the ID of the newly uploaded photo
-            # print(f"Uploaded photo with ID: {new_photo.id}")
+    if photo_file.filename == "":
+        flash("No selected file")
+        return redirect(request.url)
 
-            # Save the file to the 'uploads' folder (if needed)
-            photo_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            photo.save(photo_path)
+    if photo_file and allowed_file(photo_file.filename):
+        # Generate a unique filename for the photo
+        filename = secure_filename(str(uuid.uuid4()) + ".jpg")
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+        photo_file.save(file_path)
 
-    return redirect(url_for("dashboard"))
+        # Create a new Photo instance and associate it with the current user
+        new_photo = Photo(user_id=current_user.id, filename=filename)
+
+        # Retrieve the user's selected border color from the database
+        selected_border_color = current_user.selected_border_color
+        new_photo.border_color = selected_border_color
+
+        db.session.add(new_photo)
+        db.session.commit()
+
+        flash("Photo uploaded successfully")
+        return redirect(url_for("dashboard"))
+
+    flash("Invalid file format. Only JPEG and PNG files are allowed.")
+    return redirect(request.url)
 
 
 def allowed_file(filename):
@@ -765,7 +810,6 @@ def shop():
 @app.route("/buy_item/<int:item_id>", methods=["POST"])
 @login_required
 def buy_item(item_id):
-
     # Get the item from shop_items
     item = next((item for item in shop_items if item["id"] == item_id), None)
 
@@ -783,6 +827,17 @@ def buy_item(item_id):
 
     # Purchase item
     user.coins -= item["price"]
+
+    # Check if the purchased item is the "Photo Border"
+    if item['name'] == 'Photo Border':
+        # Generate a random border color
+        random_border_color = generate_random_color()
+
+        # Set the selected border color for the current user
+        current_user.selected_border_color = random_border_color
+
+        # Save user
+        db.session.commit()
 
     # Save user
     db.session.commit()
@@ -842,6 +897,7 @@ def dashboard():
         users_with_photos=users_with_photos,
         photos=photos,
         comments=comments,
+        shop_items=shop_items,
     )  # Pass the comments to the template
 
 if __name__ == "__main__":

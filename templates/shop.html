@@ -26,32 +26,46 @@
 
     <!-- Include any other HTML content here -->
 
-<script >
-    // JavaScript function to handle item purchases
-    function buyItem(itemId, itemPrice) {
-        // Get the user's current balance from the page
-        const userBalanceDisplay = document.getElementById('user-balance-display');
-        let userBalance = parseInt(userBalanceDisplay.textContent);
+    <script>
+        const shop_items = {{ shop_items|tojson|safe }};
 
-        if (userBalance >= itemPrice) {
-            // Send a request to Flask to process the purchase
-            fetch(`/buy_item/${itemId}`, {
-                method: 'POST',
-            }).then(response => {
-                if (response.ok) {
-                    // Purchase successful, update the user's balance on the page
-                    userBalance -= itemPrice; // Deduct the item price
-                    userBalanceDisplay.textContent = userBalance; // Update the displayed balance
-                    alert('Purchase successful!');
-                } else {
-                    alert('Purchase failed.');
-                }
-            });
-        } else {
-            alert('Insufficient coins.');
+        // Function to generate a random color
+        function getRandomColor() {
+            const colors = ["red", "blue", "green", "orange", "purple"]; // Add more colors as needed
+            return colors[Math.floor(Math.random() * colors.length)];
         }
-    }
 
-</script>
+        // Function to handle the purchase of items
+        function buyItem(itemId, itemPrice) {
+            const userBalanceDisplay = document.getElementById('user-balance-display');
+            let userBalance = parseInt(userBalanceDisplay.textContent);
+
+            if (userBalance >= itemPrice) {
+                fetch(`/buy_item/${itemId}`, {
+                    method: 'POST',
+                }).then(response => {
+                    if (response.ok) {
+                        userBalance -= itemPrice;
+                        userBalanceDisplay.textContent = userBalance;
+                        alert('Purchase successful!');
+
+                        // Check if the purchased item is "Photo Border"
+                        if (itemId === 1) {
+                            // Generate a random border color
+                            const randomBorderColor = getRandomColor();
+                            console.log('Random Border Color:', randomBorderColor);
+
+                            // Store the selected border color in local storage
+                            localStorage.setItem('borderColor', randomBorderColor);
+                        }
+                    } else {
+                        alert('Purchase failed.');
+                    }
+                });
+            } else {
+                alert('Insufficient coins.');
+            }
+        }
+    </script>
 </body>
 </html>
