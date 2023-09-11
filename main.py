@@ -116,7 +116,7 @@ def generate_random_color():
 
 # List of available items in the shop
 shop_items = [
-    {"id": 1, "name": "Photo Border", "price": 1, "border_color": None},
+    {"id": 1, "name": "Photo Border", "price": 0, "border_color": None},
     {"id": 2, "name": "Color Name", "price": 3},
     {"id": 3, "name": "Color Comment", "price": 5},
 ]
@@ -183,7 +183,6 @@ class Photo(db.Model):
     likes = db.relationship("Like", backref="photo", lazy=True, cascade="all, delete-orphan")
     comments = db.relationship("Comment", backref="photo_ref", lazy=True, cascade="all, delete-orphan")
     border_color = db.Column(db.String(20))  # Store the border color associated with the photo
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 class Friendship(db.Model):
@@ -828,16 +827,12 @@ def buy_item(item_id):
     # Purchase item
     user.coins -= item["price"]
 
-    # Check if the purchased item is the "Photo Border"
     if item['name'] == 'Photo Border':
         # Generate a random border color
         random_border_color = generate_random_color()
 
         # Set the selected border color for the current user
-        current_user.selected_border_color = random_border_color
-
-        # Save user
-        db.session.commit()
+        user.selected_border_color = random_border_color
 
     # Save user
     db.session.commit()
@@ -845,6 +840,7 @@ def buy_item(item_id):
     flash("Item purchased!")
 
     return redirect(url_for("shop"))
+
 
 @app.route('/get_balance')
 def get_balance():
