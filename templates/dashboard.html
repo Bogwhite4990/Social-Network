@@ -172,22 +172,10 @@
         });
     }
 
-    // Function to apply the comment color from the data attribute
-    function applyCommentColor() {
-        const commentTextElements = document.querySelectorAll('.comment-text');
-        commentTextElements.forEach(commentTextElement => {
-            const commentColor = commentTextElement.getAttribute('data-comment-color');
-            if (commentColor) {
-                commentTextElement.style.color = commentColor; // Set the comment text color
-            }
-        });
-    }
-
     // Call these functions when the dashboard page loads
     window.addEventListener('load', () => {
         applyBorderColor();
         applyUsernameColor();
-        applyCommentColor(); // Apply comment text color
     });
 </script>
 </body>
