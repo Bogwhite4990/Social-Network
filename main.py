@@ -89,8 +89,6 @@ delete_query = """
     );
 """
 
-
-
 # ---------------------- Reputation
 def can_give_reputation(giver_user_id, receiver_user_id):
     # Calculate the datetime 24 hours ago
@@ -118,7 +116,7 @@ def generate_random_color():
 shop_items = [
     {"id": 1, "name": "Photo Border", "price": 100, "border_color": None, "image_url": "/static/images/item1.jpg"},
     {"id": 2, "name": "Color Name", "price": 500, "image_url": "/static/images/item2.jpg"},
-    {"id": 3, "name": "Color Comment", "price": 9999, "image_url": "/static/images/item2.jpg"},
+    {"id": 3, "name": "Color Comment", "price": 9999, "image_url": "/static/images/item3.jpg"},
 ]
 
 
@@ -861,8 +859,6 @@ def buy_item(item_id):
 @app.route('/get_balance')
 def get_balance():
     return jsonify({'balance': current_user.coins})
-
-
 
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
