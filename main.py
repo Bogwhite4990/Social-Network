@@ -89,6 +89,18 @@ delete_query = """
     );
 """
 
+# --- Icons for rank
+thresholds_and_icons = [
+    (1, 'icon1.png'),
+    (10, 'icon10.png'),
+    (50, 'icon50.png'),
+    (100, 'icon100.png'),
+    (200, 'icon200.png'),
+    (400, 'icon400.png'),
+    (500, 'icon500.png'),
+    (1000, 'icon1000.png'),
+]
+
 # ---------------------- Reputation
 def can_give_reputation(giver_user_id, receiver_user_id):
     # Calculate the datetime 24 hours ago
@@ -226,6 +238,7 @@ class User(db.Model, UserMixin):
     selected_border_color = db.Column(db.String(20))  # Store the selected border color
     selected_username_color = db.Column(db.String(7))  # Store color as a hex string (e.g., "#RRGGBB")
     selected_username_comment = db.Column(db.String(7)) # Store color for comment
+    uploaded_photo_count = db.Column(db.Integer, default=0)  # Initialize with 0
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
                            secondaryjoin=id == Friendship.friend_id)
 
@@ -385,6 +398,15 @@ def register():
 @app.route("/upload_photo", methods=["POST"])
 @login_required
 def upload_photo():
+    if current_user:
+        # Increment the uploaded_photo_count
+        current_user.uploaded_photo_count += 1
+        db.session.commit()
+    else:
+        current_user.uploaded_photo_count -= 1
+        db.session.commit()
+
+
     if "photo" not in request.files:
         flash("No file part")
         return redirect(request.url)
@@ -862,6 +884,7 @@ def buy_item(item_id):
 def get_balance():
     return jsonify({'balance': current_user.coins})
 
+
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
@@ -900,6 +923,7 @@ def dashboard():
                     users_with_photos=users_with_photos,
                     photos=photos,
                     comments=comments,
+                    thresholds_and_icons=thresholds_and_icons,
                 )  # Pass the comments to the template
 
     return render_template(
@@ -909,6 +933,7 @@ def dashboard():
         photos=photos,
         comments=comments,
         shop_items=shop_items,
+        thresholds_and_icons=thresholds_and_icons,
     )  # Pass the comments to the template
 
 if __name__ == "__main__":
