@@ -436,6 +436,8 @@ def like_photo(photo_id):
     if like:
         # User has already liked the photo, remove the like
         db.session.delete(like)
+        # Increment user's coins by 1
+        user.coins -= 1
     else:
         # User hasn't liked the photo, add a like
         new_like = Like(user=user, photo=photo)

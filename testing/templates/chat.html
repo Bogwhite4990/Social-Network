@@ -6,23 +6,33 @@
 <body>
     <div id="chat">
         <ul id="messages"></ul>
-        <input id="message_input" autocomplete="off" /><button onclick="sendMessage()">Send</button>
+        <input id="username_input" placeholder="Enter your username" /><br />
+        <input id="message_input" placeholder="Enter your message" autocomplete="off" /><button onclick="sendMessage()">Send</button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script>
         var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-        socket.on('message', function(msg) {
+        socket.on('message', function(data) {
             var ul = document.getElementById('messages');
             var li = document.createElement('li');
-            li.appendChild(document.createTextNode(msg));
+            li.appendChild(document.createTextNode(data.username + ': ' + data.message));
             ul.appendChild(li);
         });
 
         function sendMessage() {
+            var username_input = document.getElementById('username_input');
             var message_input = document.getElementById('message_input');
-            socket.emit('message', message_input.value);
-            message_input.value = '';
+            var username = username_input.value;
+            var message = message_input.value;
+
+            // Check if both username and message are provided before sending
+            if (username && message) {
+                socket.emit('message', { username: username, message: message });
+                message_input.value = '';
+            } else {
+                alert('Please enter both a username and a message.');
+            }
         }
     </script>
 </body>
