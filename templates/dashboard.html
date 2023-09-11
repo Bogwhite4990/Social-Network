@@ -32,9 +32,9 @@
                         <!-- Apply the username color to the username text -->
                         <p>Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a>
                             <!-- Display icons based on uploaded_photo_count -->
-                            {% for threshold, icon in thresholds_and_icons %}
+                            {% for threshold, emoji in thresholds_and_icons %}
                                 {% if photo.user.uploaded_photo_count >= threshold %}
-                                    <img src="{{ url_for('static', filename=icon) }}" alt="Icon">
+                                    <span title="{% if threshold == 1 %}1 Photo{% else %}{{ threshold }} Photos{% endif %}">{{ emoji }}</span>
                                 {% endif %}
                             {% endfor %}
                         </p>

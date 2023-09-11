@@ -91,15 +91,14 @@ delete_query = """
 
 # --- Icons for rank
 thresholds_and_icons = [
-    (1, 'icon1.png'),
-    (10, 'icon10.png'),
-    (50, 'icon50.png'),
-    (100, 'icon100.png'),
-    (200, 'icon200.png'),
-    (400, 'icon400.png'),
-    (500, 'icon500.png'),
-    (1000, 'icon1000.png'),
+    (1, '🚩'),           # Emoji for 1 photo
+    (50, '📸'),          # Emoji for 50 photos
+    (100, '🌟'),          # Emoji for 100 photos
+    (250, '💎'),         # Emoji for 250 photos
+    (500, '👑'),         # Emoji for 500 photos
+    (1000, '💯'),        # Emoji for 1000 photos
 ]
+
 
 # ---------------------- Reputation
 def can_give_reputation(giver_user_id, receiver_user_id):
