@@ -1,0 +1,119 @@
+/* Import the common styles from dashboard.css */
+@import url("dashboard.css");
+
+/* Additional styles for the Shop page */
+body {
+    background-color: #131516; /* Maintain the same background color as the dashboard */
+}
+
+.shop-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+.shop-item {
+    background-color: #222; /* Background color for each shop item */
+    border: 1px solid gold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    max-width: 300px;
+}
+
+
+.shop-item img {
+    max-width: 50%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.shop-item h3 {
+    font-size: 1.5rem; /* Adjust heading font size */
+    color: gold;
+}
+
+.shop-item p {
+    color: white;
+    margin-top: 10px;
+}
+
+.shop-item button {
+    background-color: #24a0ed; /* Button color */
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.shop-item button:hover {
+    background-color: #007bff; /* Button color on hover */
+}
+
+/* Style the navbar */
+.navbar {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-bottom: 2px solid gold;
+    text-align: right;
+}
+
+.navbar .username {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.navbar .dashboard-button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.navbar .dashboard-button:hover {
+    background-color: #45a049;
+}
+
+/* Style user balance and page title */
+#user-balance,
+#user-balance-display,
+h1,
+p {
+    color: white;
+    text-align: center;
+    margin: 20px;
+    font-size: 1.2rem; /* Adjust font size */
+}
+
+/* Style user balance and page title */
+#user-balance,
+#user-balance-display,
+h1,
+p {
+    color: white;
+    text-align: center;
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+    font-size: 1.2rem; /* Adjust font size */
+}
+
+/* Center the "Shop" text */
+.shop-title {
+    text-align: center;
+    padding-right: 50px;
+    margin: 0; /* Remove any default margin */
+    font-size: 1rem; /* Adjust font size as needed */
+}
+

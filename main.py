@@ -116,9 +116,9 @@ def generate_random_color():
 
 # List of available items in the shop
 shop_items = [
-    {"id": 1, "name": "Photo Border", "price": 0, "border_color": None},
-    {"id": 2, "name": "Color Name", "price": 0},
-    {"id": 3, "name": "Color Comment", "price": 5},
+    {"id": 1, "name": "Photo Border", "price": 100, "border_color": None, "image_url": "/static/images/item1.jpg"},
+    {"id": 2, "name": "Color Name", "price": 500, "image_url": "/static/images/item2.jpg"},
+    {"id": 3, "name": "Color Comment", "price": 9999, "image_url": "/static/images/item2.jpg"},
 ]
 
 
@@ -227,6 +227,7 @@ class User(db.Model, UserMixin):
     coins = db.Column(db.Integer, default=10)  # Initialize coins to 10
     selected_border_color = db.Column(db.String(20))  # Store the selected border color
     selected_username_color = db.Column(db.String(7))  # Store color as a hex string (e.g., "#RRGGBB")
+    selected_username_comment = db.Column(db.String(7)) # Store color for comment
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
                            secondaryjoin=id == Friendship.friend_id)
 
@@ -841,6 +842,13 @@ def buy_item(item_id):
 
         # Set the selected username color for the current user
         user.selected_username_color = random_username_color
+
+    elif item['name'] == 'Color Comment':
+        # Generate a random comment color
+        random_comment_color = generate_random_color()
+
+        # Set the selected username color for the current user
+        user.selected_username_comment = random_comment_color
 
     # Save user
     db.session.commit()

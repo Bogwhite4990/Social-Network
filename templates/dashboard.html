@@ -30,7 +30,7 @@
                         <!-- Add a custom data attribute to store the username color -->
                         <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }};">
                         <!-- Apply the username color to the username text -->
-                        <p>Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'black' }}">{{ photo.user.username }}</a></p>
+                        <p>Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a></p>
                     </div>
                     <div class="like-section">
                         <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
@@ -52,10 +52,10 @@
                         <!-- Display all comments for each photo -->
                         {% for comment in photo.comments %}
                         <div class="comment">
-                            <div class="comment-text">
+                            <div class="comment-text" data-comment-color="{{ comment.user.selected_comment_color }}">
                                 <p>
                                     <strong>{{ comment.user.username }}:</strong> {{ comment.text }}
-                                </p>
+                                 </p>
                             </div>
                             {% if current_user == comment.user %}
                             <form action="{{ url_for('delete_comment', comment_id=comment.id) }}" method="post">
@@ -172,10 +172,22 @@
         });
     }
 
+    // Function to apply the comment color from the data attribute
+    function applyCommentColor() {
+        const commentTextElements = document.querySelectorAll('.comment-text');
+        commentTextElements.forEach(commentTextElement => {
+            const commentColor = commentTextElement.getAttribute('data-comment-color');
+            if (commentColor) {
+                commentTextElement.style.color = commentColor; // Set the comment text color
+            }
+        });
+    }
+
     // Call these functions when the dashboard page loads
     window.addEventListener('load', () => {
         applyBorderColor();
         applyUsernameColor();
+        applyCommentColor(); // Apply comment text color
     });
 </script>
 </body>
