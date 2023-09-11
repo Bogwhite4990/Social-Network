@@ -27,9 +27,10 @@
             <div class="photo-box uploaded-photo">
                 <div class="image-and-comments">
                     <div class="image-container">
-                        <!-- Add a custom data attribute to store the border color -->
-                        <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo" data-border-color="{{ photo.user.selected_border_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }};">
-                        <p>Uploaded by <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link">{{ photo.user.username }}</a></p>
+                        <!-- Add a custom data attribute to store the username color -->
+                        <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }};">
+                        <!-- Apply the username color to the username text -->
+                        <p>Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'black' }}">{{ photo.user.username }}</a></p>
                     </div>
                     <div class="like-section">
                         <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
@@ -149,7 +150,7 @@
         }, 1000);
     }
 
-    // Function to retrieve and apply the border color from the data attribute
+    // Function to apply the border color from the data attribute
     function applyBorderColor() {
         const uploadedImages = document.querySelectorAll('.uploaded-image');
         uploadedImages.forEach(image => {
@@ -160,8 +161,22 @@
         });
     }
 
-    // Call this function when the dashboard page loads
-    window.addEventListener('load', applyBorderColor);
+    // Function to apply the username color from the data attribute
+    function applyUsernameColor() {
+        const usernameElements = document.querySelectorAll('.user-profile-link.username-color');
+        usernameElements.forEach(usernameElement => {
+            const usernameColor = usernameElement.getAttribute('data-username-color');
+            if (usernameColor) {
+                usernameElement.style.color = usernameColor; // Set the username color
+            }
+        });
+    }
+
+    // Call these functions when the dashboard page loads
+    window.addEventListener('load', () => {
+        applyBorderColor();
+        applyUsernameColor();
+    });
 </script>
 </body>
 </html>

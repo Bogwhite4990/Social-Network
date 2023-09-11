@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="navbar">
-        <span>Welcome, <span class="username">{{ current_user.username }}</span>! Coins: <span id="user-balance">{{ user_balance }}</span></span>
+        <span>Welcome, <span class="username" id="user-username" data-selected-color="{{ current_user.selected_color }}">{{ current_user.username }}</span>! Coins: <span id="user-balance">{{ user_balance }}</span></span>
         <button class="dashboard-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Dashboard</button>
     </div>
     <h1>Shop</h1>
@@ -49,13 +49,17 @@
                         userBalanceDisplay.textContent = userBalance;
                         alert('Purchase successful!');
 
-                        // Check if the purchased item is "Photo Border"
-                        if (itemId === 1) {
-                            // Generate a random border color
-                            const randomBorderColor = getRandomColor();
+                        // Check if the purchased item is "Color Name"
+                        if (itemId === 2) {
+                            // Generate a random color
+                            const randomColor = getRandomColor();
 
-                            // Store the selected border color in local storage
-                            localStorage.setItem('borderColor', randomBorderColor);
+                            // Change the username color
+                            const usernameElement = document.getElementById('user-username');
+                            usernameElement.style.color = randomColor;
+
+                            // Update the data attribute with the selected color
+                            usernameElement.setAttribute('data-selected-color', randomColor);
                         }
                     } else {
                         alert('Purchase failed.');

@@ -117,7 +117,7 @@ def generate_random_color():
 # List of available items in the shop
 shop_items = [
     {"id": 1, "name": "Photo Border", "price": 0, "border_color": None},
-    {"id": 2, "name": "Color Name", "price": 3},
+    {"id": 2, "name": "Color Name", "price": 0},
     {"id": 3, "name": "Color Comment", "price": 5},
 ]
 
@@ -226,6 +226,7 @@ class User(db.Model, UserMixin):
     reputation_given_count = db.Column(db.Integer, default=0)
     coins = db.Column(db.Integer, default=10)  # Initialize coins to 10
     selected_border_color = db.Column(db.String(20))  # Store the selected border color
+    selected_username_color = db.Column(db.String(7))  # Store color as a hex string (e.g., "#RRGGBB")
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
                            secondaryjoin=id == Friendship.friend_id)
 
@@ -834,6 +835,13 @@ def buy_item(item_id):
         # Set the selected border color for the current user
         user.selected_border_color = random_border_color
 
+    elif item['name'] == 'Color Name':
+        # Generate a random username color
+        random_username_color = generate_random_color()
+
+        # Set the selected username color for the current user
+        user.selected_username_color = random_username_color
+
     # Save user
     db.session.commit()
 
@@ -845,6 +853,7 @@ def buy_item(item_id):
 @app.route('/get_balance')
 def get_balance():
     return jsonify({'balance': current_user.coins})
+
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
