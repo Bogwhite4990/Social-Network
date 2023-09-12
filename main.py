@@ -237,6 +237,7 @@ class User(db.Model, UserMixin):
     selected_username_comment = db.Column(db.String(7)) # Store color for comment
     uploaded_photo_count = db.Column(db.Integer, default=0)  # Initialize with 0
     trivia_score = db.Column(db.Integer, default=0)  # Add this line to store the trivia score
+    is_following = db.Column(db.Boolean, default=False)
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
                            secondaryjoin=id == Friendship.friend_id)
 
@@ -906,6 +907,24 @@ def get_balance():
 #
 #     return render_template('modify_coins.html')
 
+# Follow and unfollow logic
+@app.route('/follow/<int:user_id>', methods=['POST'])
+def follow_user(user_id):
+    user = User.query.get(user_id)
+    if user:
+        user.is_following = True
+        db.session.commit()
+        return jsonify({'message': 'Followed successfully'}), 200
+    return jsonify({'message': 'User not found'}), 404
+
+@app.route('/unfollow/<int:user_id>', methods=['POST'])
+def unfollow_user(user_id):
+    user = User.query.get(user_id)
+    if user:
+        user.is_following = False
+        db.session.commit()
+        return jsonify({'message': 'Unfollowed successfully'}), 200
+    return jsonify({'message': 'User not found'}), 404
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -916,6 +935,7 @@ def dashboard():
     users = User.query.all()
     c.execute("SELECT * FROM comments ORDER BY id DESC")
     comments = c.fetchall()
+
     for user in users:
         photo_filenames = user.profile_photos.split(",")
         for filename in photo_filenames:
