@@ -99,7 +99,6 @@ thresholds_and_icons = [
     (1000, '💯'),        # Emoji for 1000 photos
 ]
 
-
 # ---------------------- Reputation
 def can_give_reputation(giver_user_id, receiver_user_id):
     # Calculate the datetime 24 hours ago
@@ -129,7 +128,6 @@ shop_items = [
     {"id": 2, "name": "Color Name", "price": 500, "image_url": "/static/images/item2.jpg"},
     {"id": 3, "name": "Color Comment", "price": 9999, "image_url": "/static/images/item3.jpg"},
 ]
-
 
 # ----------------------
 
@@ -238,6 +236,7 @@ class User(db.Model, UserMixin):
     selected_username_color = db.Column(db.String(7))  # Store color as a hex string (e.g., "#RRGGBB")
     selected_username_comment = db.Column(db.String(7)) # Store color for comment
     uploaded_photo_count = db.Column(db.Integer, default=0)  # Initialize with 0
+    trivia_score = db.Column(db.Integer, default=0)  # Add this line to store the trivia score
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
                            secondaryjoin=id == Friendship.friend_id)
 
@@ -251,6 +250,7 @@ class User(db.Model, UserMixin):
         self.last_given_reputation_timestamp = None
         self.reputation_given_count = 0
         self.selected_border_color = None  # Initialize selected border color to None
+        self.trivia_score = 0  # Initialize the trivia score to 0
 
     def is_friend_with(self, other_user):
         """
@@ -260,7 +260,6 @@ class User(db.Model, UserMixin):
             (Friendship.user_id == self.id) & (Friendship.friend_id == other_user.id)
         ).first()
         return friendship is not None
-
 
 db.create_all()  # Create database tables if they don't exist
 
@@ -812,6 +811,11 @@ def trivia_game():
             next_question = questions[current_question_index + 1]
         else:
             completed = True
+
+        # Check if the user earned a high score
+        if feedback == "Correct!" and current_user.trivia_score < current_question_index + 1:
+            current_user.trivia_score = current_question_index + 1
+            db.session.commit()
 
         return render_template('trivia_game.html', questions=questions,
                                current_question_index=current_question_index + 1, feedback=feedback,
