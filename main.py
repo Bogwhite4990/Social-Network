@@ -887,6 +887,26 @@ def buy_item(item_id):
 def get_balance():
     return jsonify({'balance': current_user.coins})
 
+# @app.route('/modify_coins', methods=['GET', 'POST'])
+# @login_required
+# def modify_coins():
+#     if request.method == 'POST':
+#         user_id = int(request.form['user_id'])
+#         coins = int(request.form['coins'])
+#
+#         # Retrieve the user from the database
+#         user = User.query.get(user_id)
+#
+#         if user:
+#             user.coins = coins
+#             db.session.commit()
+#             flash(f'Coins for user {user.username} modified to {coins}', 'success')
+#         else:
+#             flash('User not found', 'danger')
+#
+#     return render_template('modify_coins.html')
+
+
 
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
