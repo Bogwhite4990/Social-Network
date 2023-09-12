@@ -91,7 +91,7 @@ delete_query = """
 
 # --- Icons for rank
 thresholds_and_icons = [
-    (1, '🚩'),           # Emoji for 1 photo
+    (10, '😍'),           # Emoji for 1 photo
     (50, '📸'),          # Emoji for 50 photos
     (100, '🌟'),          # Emoji for 100 photos
     (250, '💎'),         # Emoji for 250 photos
