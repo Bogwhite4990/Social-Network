@@ -12,7 +12,7 @@
       <button class="dashboard-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Dashboard</button>
     </div>
     <div class="container">
-        <h1>Chat with {{ friend.username }}</h1>
+        <h1>Chat with <a href="{{ url_for('user_profile', username=friend.username) }}" style="color: green;">{{ friend.username }}</a></h1>
         <div id="chat-container">
             <div id="chat-messages">
                 {% for message in messages %}
