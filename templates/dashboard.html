@@ -38,15 +38,6 @@
                                 {% endif %}
                             {% endfor %}
                         </p>
-<!-- Set the initial state of the Follow/Unfollow buttons -->
-{% if not photo.user.is_following(current_user) %}
-    <button class="follow-button" data-user-id="{{ photo.user.id }}">Follow</button>
-    <button class="unfollow-button" data-user-id="{{ photo.user.id }}" style="display: none;">Unfollow</button>
-{% else %}
-    <button class="follow-button" data-user-id="{{ photo.user.id }}" style="display: none;">Follow</button>
-    <button class="unfollow-button" data-user-id="{{ photo.user.id }}">Unfollow</button>
-{% endif %}
-
                     </div>
                     <div class="like-section">
                         <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
@@ -100,45 +91,6 @@
 </div>
 <input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
 <script>
-// Function to handle the follow/unfollow button click
-// Function to handle the follow/unfollow button click
-document.querySelectorAll('.follow-button').forEach(button => {
-    button.addEventListener('click', async () => {
-        const userId = button.getAttribute('data-user-id');
-
-        // Send an AJAX request to the server to follow the user
-        const response = await fetch(`/follow/${userId}`, {
-            method: 'POST',
-        });
-
-        if (response.ok) {
-            // Toggle the buttons for this specific user
-            button.style.display = 'none';
-            button.nextElementSibling.style.display = 'inline-block';
-        }
-    });
-});
-
-document.querySelectorAll('.unfollow-button').forEach(button => {
-    button.addEventListener('click', async () => {
-        const userId = button.getAttribute('data-user-id');
-
-        // Send an AJAX request to the server to unfollow the user (use DELETE method)
-        const response = await fetch(`/unfollow/${userId}`, {
-            method: 'DELETE', // Change the method to DELETE
-        });
-
-        if (response.ok) {
-            // Toggle the buttons for this specific user
-            button.style.display = 'none';
-            button.previousElementSibling.style.display = 'inline-block';
-        }
-    });
-});
-
-
-
-
     // JavaScript to handle comment submission
     document.querySelectorAll(".comment-form").forEach(form => {
         form.addEventListener("submit", async (event) => {

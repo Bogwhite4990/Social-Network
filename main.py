@@ -27,7 +27,7 @@ from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 
 # Import
-from sqlalchemy import UniqueConstraint, Table, Column, Integer, ForeignKey
+from sqlalchemy import UniqueConstraint
 from flask_caching import Cache
 
 
@@ -78,14 +78,6 @@ conn.commit()
 db = SQLAlchemy(app)
 
 # ----------------------
-
-# Define the association table 'followers'
-followers = Table(
-    'followers',
-    db.Model.metadata,
-    Column('follower_id', Integer, ForeignKey('user.id')),
-    Column('followed_id', Integer, ForeignKey('user.id'))
-)
 
 # SQL query to delete duplicate entries in the Friendship table
 delete_query = """
@@ -227,6 +219,11 @@ user_border = db.Table(
     db.Column('border_id', db.Integer, db.ForeignKey('border.id'), primary_key=True)
 )
 
+followers = db.Table(
+    'followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followee_id', db.Integer, db.ForeignKey('user.id'))
+)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -245,15 +242,8 @@ class User(db.Model, UserMixin):
     selected_username_comment = db.Column(db.String(7)) # Store color for comment
     uploaded_photo_count = db.Column(db.Integer, default=0)  # Initialize with 0
     trivia_score = db.Column(db.Integer, default=0)  # Add this line to store the trivia score
-    is_following = db.Column(db.Boolean, default=False)
-    followed_users = db.relationship(
-        'User',
-        secondary=followers,
-        primaryjoin=(followers.c.follower_id == id),
-        secondaryjoin=(followers.c.followed_id == id),
-        backref=db.backref('followers', lazy='dynamic'),
-        lazy='dynamic'
-    )
+    followers = db.relationship('User', secondary='followers', primaryjoin='User.id==followers.c.followee_id',
+                                secondaryjoin='User.id==followers.c.follower_id', backref='following')
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
                            secondaryjoin=id == Friendship.friend_id)
 
@@ -268,17 +258,6 @@ class User(db.Model, UserMixin):
         self.reputation_given_count = 0
         self.selected_border_color = None  # Initialize selected border color to None
         self.trivia_score = 0  # Initialize the trivia score to 0
-
-    def follow(self, user):
-        if not self.is_following(user):
-            self.followed_users.append(user)
-
-    def unfollow(self, user):
-        if self.is_following(user):
-            self.followed_users.remove(user)
-
-    def is_following(self, user):
-        return self.followed_users.filter(followers.c.followed_id == user.id).count() > 0
 
     def is_friend_with(self, other_user):
         """
@@ -934,52 +913,37 @@ def get_balance():
 #
 #     return render_template('modify_coins.html')
 
-# Follow and unfollow logic
-# Route to follow a user
 @app.route('/follow/<int:user_id>', methods=['POST'])
 @login_required
 def follow_user(user_id):
-    user = User.query.get(user_id)
-    if user:
-        # Check if the current user is already following the target user
-        if current_user.is_following(user):
-            # If following, unfollow the user
-            current_user.unfollow(user)
-            db.session.commit()
-            return jsonify({"message": f"Unfollowed {user.username}", "status": "Follow"})
-        else:
-            # If not following, follow the user
-            current_user.follow(user)
-            db.session.commit()
-            return jsonify({"message": f"Followed {user.username}", "status": "Following"})
-    else:
-        return jsonify({"error": "User not found"}), 404
+    user_to_follow = User.query.get(user_id)
 
-# Route to unfollow a user
-@app.route('/unfollow/<int:user_id>', methods=['DELETE'])  # Update the HTTP method to DELETE
+    if user_to_follow:
+        if user_to_follow not in current_user.following:
+            current_user.following.append(user_to_follow)
+            db.session.commit()
+            print(f"You followed {user_to_follow.username}")
+        else:
+            print(f"You are already following {user_to_follow.username}")
+    else:
+        print("User not found")
+
+    return redirect(url_for('user_profile', username=user_to_follow.username))
+
+@app.route('/unfollow/<int:user_id>', methods=['POST'])
 @login_required
 def unfollow_user(user_id):
-    user = User.query.get(user_id)
-    if user:
-        current_user.unfollow(user)
+    user_to_unfollow = User.query.get(user_id)
+
+    if user_to_unfollow is None:
+        return jsonify({'error': 'User not found'}), 404
+
+    if user_to_unfollow in current_user.following:
+        current_user.following.remove(user_to_unfollow)
         db.session.commit()
-        return jsonify({"message": f"Unfollowed {user.username}"}), 200
-    else:
-        return jsonify({"error": "User not found"}), 404
+        return jsonify({'message': f'Unfollowed {user_to_unfollow.username}'}), 200
 
-
-# Route to get follow status for a user
-@app.route('/get_follow_status/<int:user_id>', methods=['GET'])
-@login_required
-def get_follow_status(user_id):
-    user = User.query.get(user_id)
-    if user:
-        # Check if the current user is following the target user
-        is_following = current_user.is_following(user)
-        return jsonify({"is_following": is_following}), 200
-    else:
-        return jsonify({"error": "User not found"}), 404
-
+    return jsonify({'error': f'You are not following {user_to_unfollow.username}'}), 400
 
 
 
@@ -1039,4 +1003,4 @@ if __name__ == "__main__":
     login_manager.init_app(app)
     # reset_reputation() Reset reputation only once
     app.run(debug=True)
-    app.run(host='192.168.1.135', port=5000, debug=True)
+    # app.run(host='192.168.1.135', port=5000, debug=True)

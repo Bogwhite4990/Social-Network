@@ -202,3 +202,48 @@ h1, h2 {
 .center-button {
     text-align: center;
 }
+
+/* Add this CSS to your user_profile.css file */
+.follower-following-counts {
+    text-align: center;
+    margin-top: 10px; /* Adjust margin as needed */
+}
+
+.follower-count,
+.following-count {
+    display: inline-block;
+    color: white;
+    font-size: 18px; /* Adjust the font size as needed */
+    margin: 0 10px; /* Add margin to separate the counts */
+}
+
+/* Add this CSS to your user_profile.css file */
+.profile-info h1 {
+    text-align: center;
+    color: white;
+    font-size: 24px; /* Adjust the font size as needed */
+    margin-top: 10px; /* Add margin-top to center the text vertically */
+}
+
+/* Add this CSS to your user_profile.css file */
+#follow-btn {
+    margin-top: 20px; /* Add space above the button */
+    margin-bottom: 20px; /* Add space below the button */
+
+}
+
+.follow-unfollow-button {
+    text-align: center;
+}
+
+.profile-avatar img {
+    max-width: 250px;
+    max-height: 400px;
+    width: auto;
+    height: auto;
+}
+
+.time-left-container {
+    margin-bottom: 0;
+}
+
