@@ -58,6 +58,23 @@
         <div class="center-button">
             <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
         </div>
+        <div class="dashboard-content">
+    <div class="photo-section">
+        <!-- ... -->
+    </div>
+<div class="uploaded-photos-section">
+    <h2>Uploaded Photos</h2>
+    <div class="uploaded-photos-grid">
+        {% for uploaded_photo in user_uploaded_photos %}
+            <div class="uploaded-photo-box">
+                <div class="uploaded-photo">
+                    <img src="{{ url_for('static', filename='uploads/' ~ uploaded_photo.filename) }}" alt="Uploaded Photo">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
     </div>
 </div>
 <script>

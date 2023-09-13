@@ -244,6 +244,88 @@ h1, h2 {
 }
 
 .time-left-container {
-    margin-bottom: 0;
+    margin-bottom: 50px;
 }
+
+/* Style for the uploaded photo box */
+.uploaded-photo-box {
+    display: inline-block; /* Display photos in a line */
+    margin: 5px; /* Add spacing around each photo */
+    width: 268px; /* Set the fixed width for each photo box */
+    height: 238px; /* Set the fixed height for each photo box */
+    border: 1px solid gold; /* Add a golden 1px border to each photo box */
+    overflow: hidden; /* Hide overflowing parts of photos */
+}
+
+/* Style for individual uploaded photos */
+.uploaded-photo {
+    width: 100%; /* Stretch the image to fill the photo box width */
+    height: 100%; /* Stretch the image to fill the photo box height */
+    display: block; /* Prevent inline spacing issues */
+    object-fit: contain; /* Fit the entire image within the photo box */
+}
+
+.uploaded-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This will make the image cover the entire container, maintaining its aspect ratio */
+    border: 1px solid gold; /* Add a golden 1px border */
+}
+
+
+/* Clear the line after every 3 photos on PC */
+@media (min-width: 768px) {
+    .uploaded-photo-box:nth-child(3n+1) {
+        clear: left;
+    }
+}
+
+/* On tablets and mobile, display photos in a single column */
+@media (max-width: 768px) {
+    .uploaded-photo-box {
+        display: block;
+        clear: both; /* Clear each photo to a new line */
+        text-align: center; /* Center-align photos on small screens */
+        margin: 10px auto; /* Center-align photos and add spacing */
+    }
+}
+
+/* Media query for mobile devices */
+@media (max-width: 480px) {
+    body {
+        font-size: 12px;
+    }
+
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    /* Adjust other styles for mobile layout */
+    .like-button,
+    .like-count,
+    .friends-button,
+    .navbar .username,
+    .navbar .logout-button,
+    .back-button,
+    .uploaded-photo-box {
+        margin-right: 0; /* Remove horizontal margin */
+        margin-bottom: 10px; /* Add vertical margin to separate elements */
+        display: block; /* Change the display property to stack elements vertically */
+    }
+
+    /* Hide the Friends button on mobile */
+    .desktop-friends-button {
+        display: none;
+    }
+
+    /* Center the Back button */
+    .back-button {
+        margin: 10px auto;
+    }
+}
+
+
+
+
 

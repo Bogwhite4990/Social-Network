@@ -676,12 +676,16 @@ def user_profile(username):
         # Get the user's reputation from the database
         user_reputation = user.reputation  # Replace 'reputation' with the actual field in your User model
 
-        # Render the user's profile template and pass the user object and reputation value
-        return render_template("user_profile.html", user=user, reputation=user_reputation)
+        # Retrieve the user's uploaded photos
+        user_uploaded_photos = Photo.query.filter_by(user_id=user.id).all()
+
+        # Render the user's profile template and pass the user object, reputation value, and uploaded photos
+        return render_template("user_profile.html", user=user, reputation=user_reputation, user_uploaded_photos=user_uploaded_photos)
     else:
         # Handle the case where the user does not exist
         flash("User not found.", "error")
         return redirect(url_for("dashboard"))
+
 
 
 @app.route('/give-reputation', methods=['POST'])
@@ -955,6 +959,7 @@ def dashboard():
     users = User.query.all()
     c.execute("SELECT * FROM comments ORDER BY id DESC")
     comments = c.fetchall()
+    user_uploaded_photos = Photo.query.filter_by(user_id=current_user.id).all()
 
     for user in users:
         photo_filenames = user.profile_photos.split(",")
@@ -987,6 +992,7 @@ def dashboard():
                     photos=photos,
                     comments=comments,
                     thresholds_and_icons=thresholds_and_icons,
+                    user_uploaded_photos=user_uploaded_photos,  # Pass the user's uploaded photos
                 )  # Pass the comments to the template
 
     return render_template(
@@ -997,6 +1003,7 @@ def dashboard():
         comments=comments,
         shop_items=shop_items,
         thresholds_and_icons=thresholds_and_icons,
+        user_uploaded_photos=user_uploaded_photos,  # Pass the user's uploaded photos
     )  # Pass the comments to the template
 
 if __name__ == "__main__":
