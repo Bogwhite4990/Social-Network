@@ -286,9 +286,45 @@ h1, h2 {
         display: block;
         clear: both; /* Clear each photo to a new line */
         text-align: center; /* Center-align photos on small screens */
-        margin: 10px auto; /* Center-align photos and add spacing */
+        margin: 20px auto; /* Center-align photos and add spacing */
+    }
+
+    /* Move reputation text below navbar */
+    .reputation-text {
+        display: block; /* Show the reputation text */
+        text-align: center; /* Center-align the reputation text */
+        margin-top: 20px; /* Add some spacing below the navbar */
+    }
+
+    /* Rearrange and center-align the following elements */
+    .follower-following-counts,
+    #reputation-count,
+    .reputation-text,
+    #reputation-message,
+    .time-left-container
+    .back-button {
+        text-align: center; /* Center-align these elements */
+        margin-top: 110px; /* Add spacing between the elements */
+    }
+
+     .username-info {
+        text-align: center;
+    }
+
+    #give-reputation-button{
+        display: none;
+    }
+
+    /* Rearrange the elements */
+    .profile-avatar {
+        display: none;
+    }
+
+    .uploaded-photos-section {
+        text-align: center;
     }
 }
+
 
 /* Media query for mobile devices */
 @media (max-width: 480px) {

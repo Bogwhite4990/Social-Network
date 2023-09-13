@@ -15,7 +15,7 @@
 </div>
 <!-- Add Reputation section -->
 <div class="reputation-section">
-    <h2>Reputation: <span id="reputation-count">{{ reputation }}</span></h2>
+    <h2 class="reputation-text">Reputation: <span id="reputation-count">{{ reputation }}</span></h2>
     <button id="give-reputation-button" data-receiver-user-id="{{ user.id }}">
         Give Reputation
     </button>
@@ -31,7 +31,7 @@
     </div>
     <div class="profile-info">
         <!-- Display the user's name -->
-        <h1>{{ user.username }}</h1>
+        <h1 class="username-info">{{ user.username }}</h1>
         <div class="profile-header">
             <!-- Display follower and following counts -->
             <div class="follower-following-counts">
