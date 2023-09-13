@@ -1,39 +1,129 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Chat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
 </head>
 <body>
-    <div id="chat">
-        <ul id="messages"></ul>
-        <input id="username_input" placeholder="Enter your username" /><br />
-        <input id="message_input" placeholder="Enter your message" autocomplete="off" /><button onclick="sendMessage()">Send</button>
+<div class="navbar">
+    <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ username }}</span>! </span>
+    <button class="friends-button" onclick="window.location.href='{{ url_for('friends') }}'">Friends</button>
+    <button class="game-button" onclick="window.location.href='{{ url_for('trivia_game') }}'">Game</button>
+    <button class="shop-button" onclick="window.location.href='{{ url_for('shop') }}'">Shop</button>
+    <div class="centered-content">
+        <button class="upload-button" onclick="document.getElementById('upload-photo').click()">Upload</button>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
-    <script>
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
+    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+</div>
+<div class="dashboard-content">
+    <div class="photo-section">
+        <center>
+            <h1>Welcome to the Dashboard</h1>
+            <p>This is a protected area where you can access different features.</p>
+            {% for photo in photos %}
+            {% if photo.filename %}
+            <div class="photo-box uploaded-photo">
+                <div class="image-and-comments">
+                    <div class="image-container">
+                        <!-- Updated follow and unfollow buttons with data attributes for user ID -->
+                        <button class="follow-button" data-user-id="{{ photo.user.id }}" {% if photo.user.id in current_user.following_ids %}style="display: none;"{% endif %}>Follow</button>
+                        <button class="unfollow-button" data-user-id="{{ photo.user.id }}" {% if photo.user.id not in current_user.following_ids %}style="display: none;"{% endif %}>Unfollow</button>
+                        <!-- Add a custom data attribute to store the username color -->
+                        <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }};">
+                        <!-- Apply the username color to the username text -->
+                        <p>Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a>
+                            <!-- Display icons based on uploaded_photo_count -->
+                            {% for threshold, emoji in thresholds_and_icons %}
+                                {% if photo.user.uploaded_photo_count >= threshold %}
+                                    <span title="{% if threshold == 1 %}1 Photo{% else %}{{ threshold }} Photos{% endif %}">{{ emoji }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <!-- Rest of your image container -->
+                    </div>
+                    <div class="like-section">
+                        <button class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
+                            {% if photo.is_liked_by_current_user %} ❤️ {% else %} ❤️ {% endif %}
+                        </button>
+                        <span class="like-count">{{ photo.likes|length }}</span>
+                    </div>
+                </div>
+                <!-- Comment section -->
+                <div class="comment-section">
+                    <!-- Rest of your comment section -->
+                </div>
+                <br>
+                <br>
+                {% if current_user == photo.user %}
+                <form class="delete-form" action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST">
+                    <button class="delete-button" type="submit">Delete</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% if not photos %}
+            <p>No photos uploaded</p>
+            {% endif %}
+        </center>
+    </div>
+</div>
+<input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
+<script>
+    // JavaScript code to handle follow/unfollow for each user individually
+    document.querySelectorAll('.follow-button').forEach(button => {
+        button.addEventListener('click', async () => {
+            const userId = button.getAttribute('data-user-id');
 
-        socket.on('message', function(data) {
-            var ul = document.getElementById('messages');
-            var li = document.createElement('li');
-            li.appendChild(document.createTextNode(data.username + ': ' + data.message));
-            ul.appendChild(li);
-        });
+            const response = await fetch(`/follow/${userId}`, {
+                method: 'POST',
+            });
 
-        function sendMessage() {
-            var username_input = document.getElementById('username_input');
-            var message_input = document.getElementById('message_input');
-            var username = username_input.value;
-            var message = message_input.value;
-
-            // Check if both username and message are provided before sending
-            if (username && message) {
-                socket.emit('message', { username: username, message: message });
-                message_input.value = '';
-            } else {
-                alert('Please enter both a username and a message.');
+            if (response.ok) {
+                // Toggle the buttons for this specific user
+                button.style.display = 'none';
+                const unfollowButton = document.querySelector(`.unfollow-button[data-user-id="${userId}"]`);
+                unfollowButton.style.display = 'inline-block';
             }
+        });
+    });
+
+    document.querySelectorAll('.unfollow-button').forEach(button => {
+        button.addEventListener('click', async () => {
+            const userId = button.getAttribute('data-user-id');
+
+            const response = await fetch(`/unfollow/${userId}`, {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                // Toggle the buttons for this specific user
+                button.style.display = 'none';
+                const followButton = document.querySelector(`.follow-button[data-user-id="${userId}"]`);
+                followButton.style.display = 'inline-block';
+            }
+        });
+    });
+
+    // Rest of your JavaScript code for handling likes and comments
+    // ...
+
+    // Function to handle image uploads (if needed)
+    function handleImageUpload(input) {
+        if (input.files && input.files[0]) {
+            var formData = new FormData();
+            formData.append('photo', input.files[0]);
+            fetch("{{ url_for('upload_photo') }}", {
+                method: 'POST',
+                body: formData
+            });
         }
-    </script>
+        setTimeout(function () {
+            window.location.reload();
+        }, 1000);
+    }
+</script>
 </body>
 </html>
