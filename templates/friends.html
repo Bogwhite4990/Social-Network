@@ -46,6 +46,7 @@
                <li>
                   {{ friend.username }}
                   <button class="remove-friend-button" onclick="removeFriend('{{ friend.username }}')">Remove Friend</button>
+                  <a href="{{ url_for('chat', username=friend.username) }}">Chat with {{ friend.username }}</a>
                </li>
                {% endfor %}
             </ul>

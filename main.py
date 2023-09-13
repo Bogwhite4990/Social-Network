@@ -152,7 +152,7 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    text = db.Column(db.String(255), nullable=False)
+    text = db.Column(db.String(200), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, sender_id, recipient_id, text):
@@ -613,13 +613,21 @@ def chat(username):
     if friend:
         if request.method == 'POST':
             message = request.form.get('message')
-            # Handle sending the message to the friend and saving it in the database
-            # You may need to use Flask-SocketIO or another real-time library for this
-            # Emit a real-time message to update the chat interface
-            emit('message', {'sender': current_user.username, 'message': message}, room=friend.id)
-        # Render the chat interface
-        return render_template('chat.html', friend=friend)
+            if message:
+                # Create a new message and save it to the database
+                new_message = Message(sender_id=current_user.id, recipient_id=friend.id, text=message)
+                db.session.add(new_message)
+                db.session.commit()
+
+        # Fetch all messages between the current user and the friend
+        messages = Message.query.filter(
+            ((Message.sender_id == current_user.id) & (Message.recipient_id == friend.id)) |
+            ((Message.sender_id == friend.id) & (Message.recipient_id == current_user.id))
+        ).order_by(Message.timestamp).all()
+
+        return render_template('chat.html', friend=friend, messages=messages)
     return 'Friend not found', 404
+
 
 
 @app.route('/search_users', methods=['POST'])
