@@ -128,6 +128,16 @@ body {
     background-color: #f9f9f9;
 }
 
+  .remove-friend-button:hover {
+    background-color: red;
+    color: white; /* Optionally change the text color when hovered */
+  }
+
+  .chat-button:hover {
+    background-color: green;
+    color: white; /* Optionally change the text color when hovered */
+  }
+
 .chat-form {
     display: flex;
     align-items: center;
