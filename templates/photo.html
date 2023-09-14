@@ -14,6 +14,25 @@
     </div>
     <br><br>
     <center>
+        <!-- Social Media Sharing and Copy to Clipboard Buttons -->
+   <div class="share-buttons">
+        <a href="#" onclick="shareFacebook()">
+            <img src="/static/social-images/facebook-icon.png" alt="Share on Facebook">
+        </a>
+        <a href="#" onclick="shareInstagram()">
+            <img src="/static/social-images/instagram-icon.png" alt="Share on Instagram">
+        </a>
+        <a href="#" onclick="shareTwitter()">
+            <img src="/static/social-images/twitter-icon.png" alt="Share on Twitter">
+        </a>
+        <a href="#" onclick="shareWhatsApp()">
+            <img src="/static/social-images/whatsapp-icon.png" alt="Share on WhatsApp">
+        </a>
+        <a href="#" onclick="copyToClipboard()">
+            <img src="/static/social-images/copy-icon.png" alt="Copy Link to Clipboard">
+        </a>
+    </div>
+        <br>
 <!-- Photo Display Section -->
 <div class="photo-container">
     <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="Photo" data-username-color="{{ photo.user.selected_username_color }}" style="{{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }}; max-width: 500px; max-height: 500px;">
@@ -46,6 +65,42 @@
     </div>
         </center>
 <script>
+            // Function to share the page on Facebook
+        function shareFacebook() {
+            const url = window.location.href; // Get the current page URL
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        // Function to share the page on Instagram
+        function shareInstagram() {
+            const url = window.location.href; // Get the current page URL
+            // You can't directly share on Instagram from a web page, so you can redirect the user to your Instagram profile or open the Instagram app.
+            window.open('https://www.instagram.com/', '_blank');
+        }
+
+        // Function to share the page on Twitter
+        function shareTwitter() {
+            const url = window.location.href; // Get the current page URL
+            window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        // Function to share the page on WhatsApp
+        function shareWhatsApp() {
+            const url = window.location.href; // Get the current page URL
+            window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank');
+        }
+
+        // Function to copy the link to clipboard
+        function copyToClipboard() {
+            const url = window.location.href; // Get the current page URL
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Link copied to clipboard!');
+        }
     // Function to update like count and comments in real-time
     async function updatePhotoData() {
         const photoId = "{{ photo.id }}";
