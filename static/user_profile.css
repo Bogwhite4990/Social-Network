@@ -292,6 +292,7 @@
         /* Set the height to 100px */
          object-fit: cover;
          border: 1px solid gold;
+         margin-top: 200px;
     }
      .uploaded-photos-section {
          text-align: center;

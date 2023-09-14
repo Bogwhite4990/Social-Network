@@ -53,6 +53,17 @@
                         Follow
                     {% endif %}
                 </button>
+
+                <!-- Add Friend button -->
+                <!-- Display the "Add Friend" or "Remove Friend" button based on friendship status -->
+  {% if current_user != user %}
+
+      {% if user in current_user.friends %}
+        <button id="remove-friend-button" data-username="{{ user.username }}">Remove Friend</button>
+      {% else %}
+        <button id="add-friend-button" data-username="{{ user.username }}">Add Friend</button>
+      {% endif %}
+  {% endif %}
             </div>
         </div>
         <div class="center-button">
@@ -85,6 +96,56 @@
     </div>
 </div>
 <script>
+    // JavaScript code to handle friend button clicks
+document.addEventListener("DOMContentLoaded", function () {
+  const addFriendButton = document.getElementById("add-friend-button");
+  const removeFriendButton = document.getElementById("remove-friend-button");
+
+  if (addFriendButton) {
+    addFriendButton.addEventListener("click", function () {
+      const username = this.getAttribute("data-username");
+
+      // Send an AJAX POST request to add the user as a friend
+      fetch(`/add_friend/${username}`, {
+        method: "POST",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.message) {
+            // Update the button text and ID
+            this.innerText = "Remove Friend";
+            this.id = "remove-friend-button";
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+  }
+
+  if (removeFriendButton) {
+    removeFriendButton.addEventListener("click", function () {
+      const username = this.getAttribute("data-username");
+
+      // Send an AJAX POST request to remove the user from friends
+      fetch(`/remove_friend/${username}`, {
+        method: "POST",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.message) {
+            // Update the button text and ID
+            this.innerText = "Add Friend";
+            this.id = "add-friend-button";
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+  }
+});
+
     $(document).ready(function () {
         const followBtn = $('#follow-btn');
         const userId = followBtn.data('user-id');
@@ -119,6 +180,26 @@
             }
         });
 
+        // Add Friend button click event
+        $('#add-friend-btn').on('click', function () {
+            const addFriendBtn = $(this);
+            const userId = addFriendBtn.data('user-id');
+            const isFriend = addFriendBtn.data('friend');
+
+            $.post(`/add_friend/${userId}`, function (data) {
+                if (data.success) {
+                    if (isFriend) {
+                        addFriendBtn.text('Add Friend');
+                    } else {
+                        addFriendBtn.text('Remove Friend');
+                    }
+                    addFriendBtn.data('friend', !isFriend);
+                } else {
+                    console.error('Failed to add/remove friend.');
+                }
+            });
+        });
+
         // Add click event to open image popup
         $('.profile-image').on('click', function () {
             const imageSrc = $(this).data('image-src');
@@ -126,13 +207,10 @@
             $('#image-popup').css('display', 'block');
         });
 
-        // Add click event to close image popup
-       // Close the image popup when clicking anywhere inside it
-$('#image-popup').on('click', function () {
-    $('#image-popup').css('display', 'none');
-});
-
-
+        // Close the image popup when clicking anywhere inside it
+        $('#image-popup').on('click', function () {
+            $('#image-popup').css('display', 'none');
+        });
 
         // Close the image popup when clicking anywhere outside the popup
         $(document).on('click', function (e) {
