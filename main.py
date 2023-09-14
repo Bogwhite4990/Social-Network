@@ -14,7 +14,6 @@ from flask_login import (
     current_user,
 )
 from flask_login import logout_user
-from flask_socketio import emit
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash
 import secrets
