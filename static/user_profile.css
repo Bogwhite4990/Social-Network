@@ -201,10 +201,12 @@
      text-align: center;
 }
  .profile-avatar img {
-     max-width: 250px;
-     max-height: 400px;
-     width: auto;
-     height: auto;
+     width: 80px;
+    /* Set the width to 100px */
+     height: 80px;
+    /* Set the height to 100px */
+     object-fit: cover;
+     border: 1px solid gold;
 }
  .time-left-container {
      margin-bottom: 50px;
@@ -283,8 +285,13 @@
          display: none;
     }
     /* Rearrange the elements */
-     .profile-avatar {
-         display: none;
+     .profile-avatar img {
+         width: 80px;
+        /* Set the width to 100px */
+         height: 80px;
+        /* Set the height to 100px */
+         object-fit: cover;
+         border: 1px solid gold;
     }
      .uploaded-photos-section {
          text-align: center;
