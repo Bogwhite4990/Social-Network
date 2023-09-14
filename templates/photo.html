@@ -16,7 +16,7 @@
     <center>
 <!-- Photo Display Section -->
 <div class="photo-container">
-    <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }}; max-width: 500px; max-height: 500px;">
+    <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="Photo" data-username-color="{{ photo.user.selected_username_color }}" style="{{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }}; max-width: 500px; max-height: 500px;">
     <p>Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="username-color" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a></p>
     <!-- Display icons based on uploaded_photo_count -->
     {% for threshold, emoji in thresholds_and_icons %}
@@ -40,12 +40,6 @@
             {% for comment in comments %}
             <li data-comment-color="{{ comment.user.selected_comment_color }}">
                 <strong>{{ comment.user.username }}:</strong> {{ comment.text }}
-                <!-- Add a button to delete the comment if it belongs to the current user -->
-                {% if current_user == comment.user %}
-                <form method="POST" action="{{ url_for('delete_comment', comment_id=comment.id) }}" class="delete-comment-form">
-                    <button type="submit" class="delete-comment-button">Delete</button>
-                </form>
-                {% endif %}
             </li>
             {% endfor %}
         </ul>
