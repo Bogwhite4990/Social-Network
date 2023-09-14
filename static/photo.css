@@ -1,61 +1,87 @@
 /* Style the dashboard button */
-.dashboard-button {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
+ .dashboard-button {
+     background-color: #4caf50;
+     color: #fff;
+     border: none;
+     padding: 5px 10px;
+     cursor: pointer;
 }
-
-.dashboard-button:hover {
-    background-color: #45a049;
+ .dashboard-button:hover {
+     background-color: #45a049;
 }
-
 /* Center the photo container */
-.photo-container {
-    text-align: center;
-    border: 1px solid gold; /* Add a gold border */
-    padding: 20px; /* Add some padding for spacing */
-    max-width: 500px; /* Set a maximum width for the container */
-    margin: 0 auto; /* Center the container horizontally */
+ .photo-container {
+     text-align: center;
+     border: 1px solid gold;
+    /* Add a gold border */
+     padding: 20px;
+    /* Add some padding for spacing */
+     max-width: 500px;
+    /* Set a maximum width for the container */
+     margin: 0 auto;
+    /* Center the container horizontally */
 }
-
 /* Style the "Uploaded by" paragraph */
-.photo-container p {
-    margin-top: 1px;
+ .photo-container p {
+     margin-top: 1px;
 }
-
-
 /* Style the like button */
-.like-button {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-left: 10px;
-    margin-top: 10px;
+ .like-button {
+     background-color: #4caf50;
+     color: #fff;
+     border: none;
+     padding: 5px 10px;
+     cursor: pointer;
+     margin-left: 10px;
+     margin-top: 10px;
 }
-
-.like-button:hover {
-    background-color: #45a049;
+ .like-button:hover {
+     background-color: #45a049;
 }
-
 /* Style the delete comment button */
-.delete-comment-button {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-left: 10px;
+ .delete-comment-button {
+     background-color: #4caf50;
+     color: #fff;
+     border: none;
+     padding: 5px 10px;
+     cursor: pointer;
+     margin-left: 10px;
 }
-
-.delete-comment-button:hover {
-    background-color: #45a049;
+ .delete-comment-button:hover {
+     background-color: #45a049;
 }
-
-.comments-container {
-    margin-top: 10px;
+ .comments-container {
+     margin-top: 10px;
 }
-
+ .share-container {
+     text-align: center;
+    /* Center the share buttons horizontally */
+}
+ .share-buttons {
+     display: flex;
+     gap: 20px;
+     justify-content: center;
+    /* Center the share buttons horizontally */
+}
+ .share-buttons a {
+     text-decoration: none;
+     display: inline-block;
+     width: 30px;
+     height: 30px;
+}
+ .share-buttons img {
+     filter: brightness(1.2);
+     border-bottom: none;
+     max-width: 100%;
+     height: auto;
+     filter: invert(100%);
+}
+/* CSS for mobile screens */
+ @media (max-width: 768px) {
+     .photo-container img {
+         max-width: 100%;
+        /* Adjust the percentage as needed */
+         height: auto;
+        /* Maintain aspect ratio */
+    }
+}
