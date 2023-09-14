@@ -841,6 +841,12 @@ def trivia_game():
         # Check if the user earned a high score
         if feedback == "Correct!" and current_user.trivia_score < current_question_index + 1:
             current_user.trivia_score = current_question_index + 1
+
+            if feedback == "Correct!":
+                current_user.coins += 1
+            else:
+                current_user.coins -= 1
+
             db.session.commit()
 
         return render_template('trivia_game.html', questions=questions,

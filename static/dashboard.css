@@ -1,535 +1,504 @@
-
+ 
 /* Media query for tablets (e.g., iPad) */
-@media (max-width: 768px) {
+ @media (max-width: 768px) {
     /* Adjust the layout for tablets */
-    .image-and-comments {
-        flex-direction: column; /* Stack elements vertically for tablets */
-        align-items: center; /* Center-align all elements */
+     .image-and-comments {
+         flex-direction: column;
+        /* Stack elements vertically for tablets */
+         align-items: center;
+        /* Center-align all elements */
     }
-
-    .like-button {
-        margin-top: 10px; /* Add space between text and like button */
+     .like-button {
+         margin-top: 10px;
+        /* Add space between text and like button */
     }
-
-    .like-count {
-        margin-top: 5px; /* Add space between like button and like count */
+     .like-count {
+         margin-top: 5px;
+        /* Add space between like button and like count */
     }
-
     /* Adjust the layout for tablets */
-    .photo-box {
-        flex-direction: column; /* Stack elements vertically for tablets */
-        align-items: center; /* Center-align all elements */
-        text-align: center; /* Center-align text elements */
+     .photo-box {
+         flex-direction: column;
+        /* Stack elements vertically for tablets */
+         align-items: center;
+        /* Center-align all elements */
+         text-align: center;
+        /* Center-align text elements */
     }
-
-    .comment-section {
-        width: 100%; /* Make it full width */
-        margin-top: 10px; /* Add space between images and comments */
+     .comment-section {
+         width: 100%;
+        /* Make it full width */
+         margin-top: 10px;
+        /* Add space between images and comments */
     }
-
-    .container {
-        width: 90%;
+     .container {
+         width: 90%;
     }
-
-    .like-section {
-        text-align: center; /* Center-align the like button and count */
-        margin-top: 10px; /* Add space between images and like section */
+     .like-section {
+         text-align: center;
+        /* Center-align the like button and count */
+         margin-top: 10px;
+        /* Add space between images and like section */
     }
-
-    .like-button {
-        margin-right: 10px; /* Center-align the like button */
+     .like-button {
+         margin-right: 10px;
+        /* Center-align the like button */
     }
-
-    .like-count {
-        padding-left: 5px; /* Add padding to the left of the likes count */
+     .like-count {
+         padding-left: 5px;
+        /* Add padding to the left of the likes count */
     }
-
-    .comments {
-        max-height: none; /* Remove max height for comments to allow scrolling */
-        margin-top: 10px; /* Add space between images and comments */
+     .comments {
+         max-height: none;
+        /* Remove max height for comments to allow scrolling */
+         margin-top: 10px;
+        /* Add space between images and comments */
     }
-
-    .comment-form {
-        flex-direction: column; /* Stack comment input and post button vertically */
-        align-items: center; /* Center-align input and button */
+     .comment-form {
+         flex-direction: column;
+        /* Stack comment input and post button vertically */
+         align-items: center;
+        /* Center-align input and button */
     }
-
-    .comment-form input[type="text"] {
-        width: 100%; /* Make comment input full width */
-        margin-right: 0; /* Remove right margin */
-        margin-bottom: 5px; /* Add space between input and button */
+     .comment-form input[type="text"] {
+         width: 100%;
+        /* Make comment input full width */
+         margin-right: 0;
+        /* Remove right margin */
+         margin-bottom: 5px;
+        /* Add space between input and button */
     }
-
-    .profile-section {
-        margin-bottom: 10px;
+     .profile-section {
+         margin-bottom: 10px;
     }
-
-    .profile-section label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: gold;
+     .profile-section label {
+         font-weight: bold;
+         margin-bottom: 5px;
+         color: gold;
     }
-
     /* Target specific input fields within .profile-section */
-    .profile-section input[type="text"],
-    .profile-section input[type="email"],
-    .profile-section input[type="password"] {
-        width: 100%; /* You can adjust the width as needed */
-        max-width: 300px; /* Set a maximum width if necessary */
-        padding: 8px;
-        border: 2px solid gold;
-        border-radius: 5px;
-        background-color: #222;
-        color: white;
+     .profile-section input[type="text"], .profile-section input[type="email"], .profile-section input[type="password"] {
+         width: 100%;
+        /* You can adjust the width as needed */
+         max-width: 300px;
+        /* Set a maximum width if necessary */
+         padding: 8px;
+         border: 2px solid gold;
+         border-radius: 5px;
+         background-color: #222;
+         color: white;
     }
-
     /* Hide the logout button on tablets */
-    .logout-button {
-        display: none;
+     .logout-button {
+         display: none;
     }
-
     /* Hide the elements on tablets */
-    a.separator {
-        display: none;
+     a.separator {
+         display: none;
     }
-
-    .back-button {
-    padding_right: 10px;
+     .back-button {
+         padding_right: 10px;
     }
-
-    body {
-        font-size: 14px;
+     body {
+         font-size: 14px;
     }
-
-    .container {
-        width: 90%;
+     .container {
+         width: 90%;
     }
-
     /* Add more specific styles for tablet layout if needed */
-    .navbar {
-        text-align: left; /* Align the text to the left on tablets */
+     .navbar {
+         text-align: left;
+        /* Align the text to the left on tablets */
     }
-
-    .game-button{
-        display: flex;
-        margin-left: 0px;
+     .game-button{
+         display: flex;
+         margin-left: 0px;
     }
-
-    .shop-button{
-        display: flex;
-        margin-left: 0px;
+     .shop-button{
+         display: flex;
+         margin-left: 0px;
     }
-
-    .friends-button{
-        display: flex;
-        margin-left: 0px;
+     .friends-button{
+         display: flex;
+         margin-left: 0px;
     }
 }
-
 /* Media query for mobile devices */
-@media (max-width: 480px) {
+ @media (max-width: 480px) {
     /* Adjust the layout for mobile */
-    .profile-section {
-        margin-bottom: 10px;
+     .profile-section {
+         margin-bottom: 10px;
     }
-
-    .profile-section label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: gold;
+     .profile-section label {
+         font-weight: bold;
+         margin-bottom: 5px;
+         color: gold;
     }
-
     /* Target specific input fields within .profile-section */
-    .profile-section input[type="text"],
-    .profile-section input[type="email"],
-    .profile-section input[type="password"] {
-        width: 100%; /* You can adjust the width as needed */
-        max-width: 250px; /* Set a maximum width if necessary */
-        padding: 8px;
-        border: 2px solid gold;
-        border-radius: 5px;
-        background-color: #222;
-        color: white;
+     .profile-section input[type="text"], .profile-section input[type="email"], .profile-section input[type="password"] {
+         width: 100%;
+        /* You can adjust the width as needed */
+         max-width: 250px;
+        /* Set a maximum width if necessary */
+         padding: 8px;
+         border: 2px solid gold;
+         border-radius: 5px;
+         background-color: #222;
+         color: white;
     }
-
     /* Hide the logout button on mobile devices */
-    .logout-button {
-        display: none;
+     .logout-button {
+         display: none;
     }
-
     /* Hide the elements on tablets */
-    a.separator {
-        display: none;
+     a.separator {
+         display: none;
     }
-
-    body {
-        font-size: 12px;
+     body {
+         font-size: 12px;
     }
-
-    .container {
-        width: 100%;
-        padding: 10px;
+     .container {
+         width: 100%;
+         padding: 10px;
     }
-
     /* Adjust other styles for mobile layout */
-    .navbar {
-        text-align: left; /* Align the text to the left on mobile */
+     .navbar {
+         text-align: left;
+        /* Align the text to the left on mobile */
     }
-
-    .like-button {
-        margin-right: 5px; /* Add margin-right to like button */
+     .like-button {
+         margin-right: 5px;
+        /* Add margin-right to like button */
     }
-
-    .like-count {
-        padding-left: 3px; /* Add padding to the left of the likes count */
+     .like-count {
+         padding-left: 3px;
+        /* Add padding to the left of the likes count */
     }
-
-        .game-button{
-        display: flex;
-        margin-left: 0px;
+     .game-button{
+         display: flex;
+         margin-left: 0px;
     }
-
-    .shop-button{
-        display: flex;
-        margin-left: 0px;
+     .shop-button{
+         display: flex;
+         margin-left: 0px;
     }
-
-    .friends-button{
-        display: flex;
-        margin-left: 0px;
+     .friends-button{
+         display: flex;
+         margin-left: 0px;
     }
 }
-
-
 /* Browser CSS ---------------------------------------------- */
-@media (min-width: 769px) {
+ @media (min-width: 769px) {
     /* Adjust the layout for desktop PCs */
-    .navbar {
-        justify-content: space-between; /* Place content at both ends */
+     .navbar {
+         justify-content: space-between;
+        /* Place content at both ends */
     }
-
-    .friends-button {
-        margin-left: 20px; /* Add space between "Friends" and "Welcome, username!" */
+     .friends-button {
+         margin-left: 20px;
+        /* Add space between "Friends" and "Welcome, username!" */
     }
-
-    .centered-content {
-        flex-grow: 1; /* Allow the centered content to expand and take available space */
-        display: flex;
-        justify-content: center; /* Center-align its children horizontally */
+     .centered-content {
+         flex-grow: 1;
+        /* Allow the centered content to expand and take available space */
+         display: flex;
+         justify-content: center;
+        /* Center-align its children horizontally */
     }
-
-    .upload-button {
-        margin: 1 auto; /* Center-align the "Upload" button horizontally */
+     .upload-button {
+         margin: 1 auto;
+        /* Center-align the "Upload" button horizontally */
     }
-
-    .game-button{
-        display: flex;
-        margin-left: 0px;
+     .game-button{
+         display: flex;
+         margin-left: 0px;
     }
-
-    .shop-button{
-        display: flex;
-        margin-left: 0px;
+     .shop-button{
+         display: flex;
+         margin-left: 0px;
     }
 }
-
-
-
-body, h1, h2, h3, p, ul, li {
-    margin: 0;
-    padding: 0;
-    color: white;
+ body, h1, h2, h3, p, ul, li {
+     margin: 0;
+     padding: 0;
+     color: white;
 }
-
 /* Style for the entire page */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #131516;
+ body {
+     font-family: Arial, sans-serif;
+     background-color: #131516;
 }
-
 /* dashboard.css */
-.navbar {
-    background-color: black;
-    color: white;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-    border-bottom: 2px solid gold;
-    text-align: right;
+ .navbar {
+     background-color: black;
+     color: white;
+     padding: 10px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     font-weight: bold;
+     border-bottom: 2px solid gold;
+     text-align: right;
 }
-
-.navbar .username {
-    cursor: pointer;
-    text-decoration: underline;
+ .navbar .username {
+     cursor: pointer;
+     text-decoration: underline;
 }
-
-.navbar .upload-button {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin-right: 10px;
-    cursor: pointer;
+ .navbar .upload-button {
+     background-color: #4caf50;
+     color: #fff;
+     border: none;
+     padding: 5px 10px;
+     margin-right: 10px;
+     cursor: pointer;
 }
-
-.navbar .back-button {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin-right: 10px;
-    cursor: pointer;
+ .navbar .back-button {
+     background-color: #4caf50;
+     color: #fff;
+     border: none;
+     padding: 5px 10px;
+     margin-right: 10px;
+     cursor: pointer;
 }
-
-.navbar .logout-button {
-    background-color: #f44336;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
+ .navbar .logout-button {
+     background-color: #f44336;
+     color: #fff;
+     border: none;
+     padding: 5px 10px;
+     cursor: pointer;
 }
-
-
-.username {
-    color: gold;
-    cursor: pointer; /* Add cursor pointer on hover */
+ .username {
+     color: gold;
+     cursor: pointer;
+    /* Add cursor pointer on hover */
 }
-
-.logout-button {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s; /* Add transition effect for color change */
+ .logout-button {
+     color: white;
+     text-decoration: none;
+     transition: color 0.3s;
+    /* Add transition effect for color change */
 }
-
-.logout-button:hover {
-    color: lightgray; /* Change color on hover */
+ .logout-button:hover {
+     color: lightgray;
+    /* Change color on hover */
 }
-
-.dashboard-content {
-    padding: 20px;
+ .dashboard-content {
+     padding: 20px;
 }
-
-.back-button {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s; /* Add transition effect for color change */
+ .back-button {
+     color: white;
+     text-decoration: none;
+     transition: color 0.3s;
+    /* Add transition effect for color change */
 }
-
-
-.back-button:hover {
-    color: lightgray; /* Change color on hover */
+ .back-button:hover {
+     color: lightgray;
+    /* Change color on hover */
 }
-
-.profile-content {
-    padding: 40px;
+ .profile-content {
+     padding: 40px;
 }
-
-.profile-photo {
-    text-align: center;
-    margin-bottom: 20px;
+ .profile-photo {
+     text-align: center;
+     margin-bottom: 20px;
 }
-
-.profile-photo img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid gold;
+ .profile-photo img {
+     width: 100px;
+     height: 100px;
+     object-fit: cover;
+     border-radius: 50%;
+     border: 2px solid gold;
 }
-
-.profile-photo input[type="file"] {
-    display: block;
-    margin-top: 10px;
-    color: gold;
+ .profile-photo input[type="file"] {
+     display: block;
+     margin-top: 10px;
+     color: gold;
 }
-
-.profile-section {
-    margin-bottom: 20px;
+ .profile-section {
+     margin-bottom: 20px;
 }
-
-.profile-section label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: gold;
+ .profile-section label {
+     font-weight: bold;
+     margin-bottom: 5px;
+     color: gold;
 }
-
-.profile-section input[type="text"],
-.profile-section input[type="email"],
-.profile-section input[type="password"],
-.profile-section textarea {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid gold;
-    border-radius: 5px;
-    background-color: #222;
-    color: white;
+ .profile-section input[type="text"], .profile-section input[type="email"], .profile-section input[type="password"], .profile-section textarea {
+     width: 100%;
+     padding: 10px;
+     border: 2px solid gold;
+     border-radius: 5px;
+     background-color: #222;
+     color: white;
 }
-
-.save-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
+ .save-button {
+     padding: 10px 20px;
+     background-color: #007bff;
+     color: white;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+     font-weight: bold;
+     transition: background-color 0.3s, color 0.3s;
 }
-
-.save-button:hover {
-    background-color: #0056b3;
+ .save-button:hover {
+     background-color: #0056b3;
 }
-
 /* Style for the dashboard content */
-.dashboard-content {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #131516;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    border: 1px solid #white;
+ .dashboard-content {
+     max-width: 800px;
+     margin: 20px auto;
+     padding: 20px;
+     background-color: #131516;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+     border: 1px solid #white;
 }
-
 /* Style for the photo section */
-.photo-section {
-    text-align: center;
+ .photo-section {
+     text-align: center;
 }
-
 /* Style for photo boxes */
-.photo-box {
-    display: flex;
-    background-color: #131516;
-    margin: 20px 0;
-    border: 1px solid #white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: 1px solid #090A0B;
+ .photo-box {
+     display: flex;
+     background-color: #131516;
+     margin: 20px 0;
+     border: 1px solid #white;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     border: 1px solid #090A0B;
 }
-
 /* Style for comment section on the left of the photo */
-.comment-section {
-    width: 300px;
-    padding: 10px;
+ .comment-section {
+     width: 300px;
+     padding: 10px;
 }
-
 /* Style for comment input form */
-.comment-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    align-items: center;
+ .comment-form {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 5px;
+     align-items: center;
 }
-
-.delete-comment-button {
-    padding_right: 100px;
+ .delete-comment-button {
+     padding_right: 100px;
 }
-
-.comment-form input[type="text"] {
-    flex-grow: 1;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
+ .comment-form input[type="text"] {
+     flex-grow: 1;
+     padding: 5px;
+     border: 1px solid #ddd;
+     border-radius: 3px;
 }
-
-.comment-form button[type="submit"] {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
+ .comment-form button[type="submit"] {
+     background-color: #4caf50;
+     color: #fff;
+     border: none;
+     padding: 5px 10px;
+     cursor: pointer;
 }
-
-.comment-form input[type="text"], .comment-form button[type="submit"] {
-    margin-right: 5px;
+ .comment-form input[type="text"], .comment-form button[type="submit"] {
+     margin-right: 5px;
 }
-
 /* Style for the photo content (photo and like section) */
-.photo-content {
-    flex-grow: 1;
-    padding: 10px;
-    text-align: left;
+ .photo-content {
+     flex-grow: 1;
+     padding: 10px;
+     text-align: left;
 }
-
 /* Style for the image and comments section */
-.image-and-comments {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+ .image-and-comments {
+     display: flex;
+     align-items: center;
+     gap: 10px;
 }
-
 /* Style for the image container */
-.image-container {
-    position: relative;
+ .image-container {
+     position: relative;
 }
-
-.uploaded-image {
-    width: 323px; /* Set the desired width */
-    height: 308px; /* Set the desired height */
-    border: 1px solid gold;
+ .uploaded-image {
+     width: 323px;
+    /* Set the desired width */
+     height: 308px;
+    /* Set the desired height */
+     border: 1px solid gold;
 }
-
 /* CSS for custom border color */
-.custom-border {
-    border: 1px solid gold; /* Default border color */
+ .custom-border {
+     border: 1px solid gold;
+    /* Default border color */
 }
-
 /* Style for the like section */
-.like-section {
-    text-align: right;
+ .like-section {
+     text-align: right;
 }
-
-.like-button {
-    background-color: #24a0ed;
-    border: none;
-    padding: 5px 10px;
-    margin-right: 10px;
-    cursor: pointer;
+ .like-button {
+     background-color: #24a0ed;
+     border: none;
+     padding: 5px 10px;
+     margin-right: 10px;
+     cursor: pointer;
 }
-
-.delete-button {
-    background-color: red;
-    border: none;
-    padding: 5px 10px;
-    margin-right: 10px;
-    cursor: pointer;
-    margin-top: 10px; /* Add margin-top to move the button lower */
+ .delete-button {
+     background-color: red;
+     border: none;
+     padding: 5px 10px;
+     margin-right: 10px;
+     cursor: pointer;
+     margin-top: 10px;
+    /* Add margin-top to move the button lower */
 }
-
 /* Add any additional styles for like button and count as needed */
-
 /* Style for the comments section */
-.comments {
-    max-height: 100%;
-    overflow-y: auto;
+ .comments {
+     max-height: 100%;
+     overflow-y: auto;
 }
-
 /* Style for individual comments */
-.comment {
-    display: flex;
-    align-items: left;
-    margin: 5px 0;
+ .comment {
+     display: flex;
+     align-items: left;
+     margin: 5px 0;
 }
-
-.comment-text {
-    flex-grow: 1;
-    margin-right: 120px;
+ .comment-text {
+     flex-grow: 1;
+     margin-right: 120px;
 }
-
-.comment-actions {
+ .comment-actions {
     /* Add any additional styles for comment actions here */
 }
-
-.user-profile-link {
-    color: #7393B3;
+ .user-profile-link {
+     color: #7393B3;
 }
-
-.game-button{
-    display: flex;
-    margin-left: 10px;
+ .game-button{
+     display: flex;
+     margin-left: 10px;
 }
-
-.shop-button{
-    display: flex;
-    margin-left: 10px;
+ .shop-button{
+     display: flex;
+     margin-left: 10px;
+}
+/* Add CSS for the modal */
+ .modal {
+     display: none;
+     position: fixed;
+     z-index: 1;
+     padding-top: 50px;
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     overflow: auto;
+     background-color: rgba(0,0,0,0.9);
+}
+ .modal-content {
+     margin: auto;
+     display: block;
+     max-width: 80%;
+     max-height: 80%;
+}
+ .close {
+     position: absolute;
+     top: 15px;
+     right: 15px;
+     color: white;
+     font-size: 30px;
+     font-weight: bold;
+     cursor: pointer;
 }

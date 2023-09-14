@@ -1,367 +1,349 @@
 /* Media query for tablets (e.g., iPad) */
-@media (max-width: 768px) {
-    body {
-        font-size: 14px;
-
+ @media (max-width: 768px) {
+     body {
+         font-size: 14px;
     }
-
-    .container {
-        width: 90%;
+     .container {
+         width: 90%;
     }
-
     /* Add more specific styles for tablet layout if needed */
-    .like-button {
-        margin-right: 10px;
+     .like-button {
+         margin-right: 10px;
     }
-
-    .like-count {
-        padding-left: 5px;
+     .like-count {
+         padding-left: 5px;
     }
-
     /* Style the Friends button */
-    .friends-button {
-        background-color: gray;
-        color: #fff;
-        border: none;
-        padding: 5px 10px;
-        margin-right: 10px;
-        cursor: pointer;
-        text-decoration: none;
+     .friends-button {
+         background-color: gray;
+         color: #fff;
+         border: none;
+         padding: 5px 10px;
+         margin-right: 10px;
+         cursor: pointer;
+         text-decoration: none;
     }
-
     /* Adjust the space between the Friends button and the text */
-    .navbar .username {
-        margin-right: 10px;
+     .navbar .username {
+         margin-right: 10px;
     }
-
     /* Hide the Friends button on tablets */
-    .desktop-friends-button {
-        display: none;
+     .desktop-friends-button {
+         display: none;
     }
-
     /* Center the Back button */
-    .back-button {
-        margin: 10px auto;
+     .back-button {
+         margin: 10px auto;
     }
 }
-
 /* Media query for mobile devices */
-@media (max-width: 480px) {
-    body {
-        font-size: 12px;
+ @media (max-width: 480px) {
+     body {
+         font-size: 12px;
     }
-
-    .container {
-        width: 100%;
-        padding: 10px;
+     .container {
+         width: 100%;
+         padding: 10px;
     }
-
     /* Adjust other styles for mobile layout */
-    .like-button {
-        margin-right: 5px;
+     .like-button {
+         margin-right: 5px;
     }
-
-    .like-count {
-        padding-left: 3px;
+     .like-count {
+         padding-left: 3px;
     }
-
     /* Style the Friends button */
-    .friends-button {
-        background-color: gray;
-        color: #fff;
-        border: none;
-        padding: 5px 10px;
-        margin-right: 10px;
-        cursor: pointer;
-        text-decoration: none;
+     .friends-button {
+         background-color: gray;
+         color: #fff;
+         border: none;
+         padding: 5px 10px;
+         margin-right: 10px;
+         cursor: pointer;
+         text-decoration: none;
     }
-
     /* Adjust the space between the Friends button and the text */
-    .navbar .username {
-        margin-right: 10px;
+     .navbar .username {
+         margin-right: 10px;
     }
-
     /* Hide the Friends button on mobile */
-    .desktop-friends-button {
-        display: none;
+     .desktop-friends-button {
+         display: none;
     }
-
     /* Center the Back button */
-    .back-button {
-        margin: 10px auto;
+     .back-button {
+         margin: 10px auto;
     }
 }
-
 /* user_profile.css */
-body {
-    background-color: #131516;
+ body {
+     background-color: #131516;
 }
-
-h1, h2 {
-    color: white;
+ h1, h2 {
+     color: white;
 }
-
-#reputation-message {
-    color: white;
+ #reputation-message {
+     color: white;
 }
-
-.navbar {
-    background-color: black;
-    color: white;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-    border-bottom: 2px solid gold;
-    text-align: right;
+ .navbar {
+     background-color: black;
+     color: white;
+     padding: 10px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     font-weight: bold;
+     border-bottom: 2px solid gold;
+     text-align: right;
 }
-
-.navbar .username {
-    cursor: pointer;
-    text-decoration: underline;
+ .navbar .username {
+     cursor: pointer;
+     text-decoration: underline;
 }
-
-.navbar .logout-button {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin-right: 10px;
-    cursor: pointer;
-    text-decoration: none;
-
+ .navbar .logout-button {
+     background-color: #4caf50;
+     color: #fff;
+     border: none;
+     padding: 5px 10px;
+     margin-right: 10px;
+     cursor: pointer;
+     text-decoration: none;
 }
-
 /* Adjust the position of the username and Friends button */
-.navbar-content {
-    display: flex;
-    align-items: center;
-
+ .navbar-content {
+     display: flex;
+     align-items: center;
 }
-
-.navbar .friends-button {
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    text-decoration: none;
-    margin-left: 10px; /* Add margin to separate username and Friends button if needed */
+ .navbar .friends-button {
+     background-color: #4caf50;
+     color: #fff;
+     border: none;
+     padding: 5px 10px;
+     cursor: pointer;
+     text-decoration: none;
+     margin-left: 10px;
+    /* Add margin to separate username and Friends button if needed */
 }
-
-
-.navbar .logout-button {
-    background-color: #f44336;
+ .navbar .logout-button {
+     background-color: #f44336;
 }
-
-.username {
-    color: gold;
-    cursor: pointer;
+ .username {
+     color: gold;
+     cursor: pointer;
 }
-
-.logout-button {
-    text-decoration: none;
-    transition: color 0.3s;
+ .logout-button {
+     text-decoration: none;
+     transition: color 0.3s;
 }
-
-.logout-button:hover {
-    color: lightgray;
+ .logout-button:hover {
+     color: lightgray;
 }
-
-.profile-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 50vh;
+ .profile-container {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     height: 50vh;
 }
-
-.reputation-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+ .reputation-section {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
 }
-
-.back-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
+ .back-button {
+     padding: 10px 20px;
+     background-color: #007bff;
+     color: white;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+     font-weight: bold;
+     transition: background-color 0.3s, color 0.3s;
 }
-
-.back-button:hover {
-    background-color: #0056b3;
+ .back-button:hover {
+     background-color: #0056b3;
 }
-
-.center-button {
-    text-align: center;
+ .center-button {
+     text-align: center;
 }
-
 /* Add this CSS to your user_profile.css file */
-.follower-following-counts {
-    text-align: center;
-    margin-top: 10px; /* Adjust margin as needed */
+ .follower-following-counts {
+     text-align: center;
+     margin-top: 10px;
+    /* Adjust margin as needed */
 }
-
-.follower-count,
-.following-count {
-    display: inline-block;
-    color: white;
-    font-size: 18px; /* Adjust the font size as needed */
-    margin: 0 10px; /* Add margin to separate the counts */
+ .follower-count, .following-count {
+     display: inline-block;
+     color: white;
+     font-size: 18px;
+    /* Adjust the font size as needed */
+     margin: 0 10px;
+    /* Add margin to separate the counts */
 }
-
 /* Add this CSS to your user_profile.css file */
-.profile-info h1 {
-    text-align: center;
-    color: white;
-    font-size: 24px; /* Adjust the font size as needed */
-    margin-top: 10px; /* Add margin-top to center the text vertically */
+ .profile-info h1 {
+     text-align: center;
+     color: white;
+     font-size: 24px;
+    /* Adjust the font size as needed */
+     margin-top: 10px;
+    /* Add margin-top to center the text vertically */
 }
-
 /* Add this CSS to your user_profile.css file */
-#follow-btn {
-    margin-top: 20px; /* Add space above the button */
-    margin-bottom: 20px; /* Add space below the button */
-
+ #follow-btn {
+     margin-top: 20px;
+    /* Add space above the button */
+     margin-bottom: 20px;
+    /* Add space below the button */
 }
-
-.follow-unfollow-button {
-    text-align: center;
+ .follow-unfollow-button {
+     text-align: center;
 }
-
-.profile-avatar img {
-    max-width: 250px;
-    max-height: 400px;
-    width: auto;
-    height: auto;
+ .profile-avatar img {
+     max-width: 250px;
+     max-height: 400px;
+     width: auto;
+     height: auto;
 }
-
-.time-left-container {
-    margin-bottom: 50px;
+ .time-left-container {
+     margin-bottom: 50px;
 }
-
 /* Style for the uploaded photo box */
-.uploaded-photo-box {
-    display: inline-block; /* Display photos in a line */
-    margin: 5px; /* Add spacing around each photo */
-    width: 268px; /* Set the fixed width for each photo box */
-    height: 238px; /* Set the fixed height for each photo box */
-    border: 1px solid gold; /* Add a golden 1px border to each photo box */
-    overflow: hidden; /* Hide overflowing parts of photos */
+ .uploaded-photo-box {
+     display: inline-block;
+    /* Display photos in a line */
+     margin: 5px;
+    /* Add spacing around each photo */
+     width: 268px;
+    /* Set the fixed width for each photo box */
+     height: 238px;
+    /* Set the fixed height for each photo box */
+     border: 1px solid gold;
+    /* Add a golden 1px border to each photo box */
+     overflow: hidden;
+    /* Hide overflowing parts of photos */
 }
-
 /* Style for individual uploaded photos */
-.uploaded-photo {
-    width: 100%; /* Stretch the image to fill the photo box width */
-    height: 100%; /* Stretch the image to fill the photo box height */
-    display: block; /* Prevent inline spacing issues */
-    object-fit: contain; /* Fit the entire image within the photo box */
+ .uploaded-photo {
+     width: 100%;
+    /* Stretch the image to fill the photo box width */
+     height: 100%;
+    /* Stretch the image to fill the photo box height */
+     display: block;
+    /* Prevent inline spacing issues */
+     object-fit: contain;
+    /* Fit the entire image within the photo box */
 }
-
-.uploaded-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* This will make the image cover the entire container, maintaining its aspect ratio */
-    border: 1px solid gold; /* Add a golden 1px border */
+ .uploaded-photo img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+    /* This will make the image cover the entire container, maintaining its aspect ratio */
+     border: 1px solid gold;
+    /* Add a golden 1px border */
 }
-
-
 /* Clear the line after every 3 photos on PC */
-@media (min-width: 768px) {
-    .uploaded-photo-box:nth-child(3n+1) {
-        clear: left;
+ @media (min-width: 768px) {
+     .uploaded-photo-box:nth-child(3n+1) {
+         clear: left;
     }
 }
-
 /* On tablets and mobile, display photos in a single column */
-@media (max-width: 768px) {
-    .uploaded-photo-box {
-        display: block;
-        clear: both; /* Clear each photo to a new line */
-        text-align: center; /* Center-align photos on small screens */
-        margin: 20px auto; /* Center-align photos and add spacing */
+ @media (max-width: 768px) {
+     .uploaded-photo-box {
+         display: block;
+         clear: both;
+        /* Clear each photo to a new line */
+         text-align: center;
+        /* Center-align photos on small screens */
+         margin: 20px auto;
+        /* Center-align photos and add spacing */
     }
-
     /* Move reputation text below navbar */
-    .reputation-text {
-        display: block; /* Show the reputation text */
-        text-align: center; /* Center-align the reputation text */
-        margin-top: 20px; /* Add some spacing below the navbar */
+     .reputation-text {
+         display: block;
+        /* Show the reputation text */
+         text-align: center;
+        /* Center-align the reputation text */
+         margin-top: 20px;
+        /* Add some spacing below the navbar */
     }
-
     /* Rearrange and center-align the following elements */
-    .follower-following-counts,
-    #reputation-count,
-    .reputation-text,
-    #reputation-message,
-    .time-left-container
-    .back-button {
-        text-align: center; /* Center-align these elements */
-        margin-top: 110px; /* Add spacing between the elements */
+     .follower-following-counts, #reputation-count, .reputation-text, #reputation-message, .time-left-container .back-button {
+         text-align: center;
+        /* Center-align these elements */
+         margin-top: 110px;
+        /* Add spacing between the elements */
     }
-
      .username-info {
-        text-align: center;
+         text-align: center;
     }
-
-    #give-reputation-button{
-        display: none;
+     #give-reputation-button{
+         display: none;
     }
-
     /* Rearrange the elements */
-    .profile-avatar {
-        display: none;
+     .profile-avatar {
+         display: none;
     }
-
-    .uploaded-photos-section {
-        text-align: center;
+     .uploaded-photos-section {
+         text-align: center;
     }
 }
-
-
 /* Media query for mobile devices */
-@media (max-width: 480px) {
-    body {
-        font-size: 12px;
+ @media (max-width: 480px) {
+     body {
+         font-size: 12px;
     }
-
-    .container {
-        width: 100%;
-        padding: 10px;
+     .container {
+         width: 100%;
+         padding: 10px;
     }
-
     /* Adjust other styles for mobile layout */
-    .like-button,
-    .like-count,
-    .friends-button,
-    .navbar .username,
-    .navbar .logout-button,
-    .back-button,
-    .uploaded-photo-box {
-        margin-right: 0; /* Remove horizontal margin */
-        margin-bottom: 10px; /* Add vertical margin to separate elements */
-        display: block; /* Change the display property to stack elements vertically */
+     .like-button, .like-count, .friends-button, .navbar .username, .navbar .logout-button, .back-button, .uploaded-photo-box {
+         margin-right: 0;
+        /* Remove horizontal margin */
+         margin-bottom: 10px;
+        /* Add vertical margin to separate elements */
+         display: block;
+        /* Change the display property to stack elements vertically */
     }
-
     /* Hide the Friends button on mobile */
-    .desktop-friends-button {
-        display: none;
+     .desktop-friends-button {
+         display: none;
     }
-
     /* Center the Back button */
-    .back-button {
-        margin: 10px auto;
+     .back-button {
+         margin: 10px auto;
     }
 }
-
-
-
-
-
+/* Add styles for the image popup */
+ .image-popup {
+     display: none;
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.9);
+     z-index: 1;
+     overflow: hidden;
+}
+ .popup-content {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     height: 100%;
+}
+ #popup-image {
+     max-width: 90%;
+     max-height: 90%;
+}
+ .close-button {
+     position: absolute;
+     top: 10px;
+     right: 10px;
+     font-size: 30px;
+     color: white;
+     cursor: pointer;
+}

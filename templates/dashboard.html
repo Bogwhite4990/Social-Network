@@ -28,7 +28,8 @@
                 <div class="image-and-comments">
                     <div class="image-container">
                         <!-- Add a custom data attribute to store the username color -->
-                        <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }};">
+                        <!-- Add an onclick event to open the modal when the image is clicked -->
+                        <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }};" onclick="openModal('{{ url_for('static', filename='uploads/' ~ photo.filename) }}')">
                         <!-- Apply the username color to the username text -->
                         <p>Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a>
                             <!-- Display icons based on uploaded_photo_count -->
@@ -88,6 +89,11 @@
             {% endif %}
         </center>
     </div>
+</div>
+<!-- Add the modal element to your HTML -->
+<div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img id="modalImage" class="modal-content" src="" alt="Enlarged Photo">
 </div>
 <input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
 <script>
@@ -177,6 +183,39 @@
                 usernameElement.style.color = usernameColor; // Set the username color
             }
         });
+    }
+
+    // Function to open the modal and display the larger image
+function openModal(imageSrc) {
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+
+    modal.style.display = "block";
+    modalImage.src = imageSrc;
+
+    // Add an event listener to close the modal if the user clicks on the modal image
+    modalImage.addEventListener('click', closeModal);
+
+    // Add an event listener to close the modal if the user clicks outside of it
+    document.addEventListener('click', closeModalOutside);
+}
+
+
+    // Function to close the modal
+    function closeModal() {
+        const modal = document.getElementById("imageModal");
+        modal.style.display = "none";
+
+        // Remove the event listener when the modal is closed
+        document.removeEventListener('click', closeModalOutside);
+    }
+
+    // Function to close the modal if the user clicks outside of it
+    function closeModalOutside(event) {
+        const modal = document.getElementById("imageModal");
+        if (event.target === modal) {
+            closeModal();
+        }
     }
 
     // Call these functions when the dashboard page loads

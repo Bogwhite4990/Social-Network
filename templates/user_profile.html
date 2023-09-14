@@ -21,8 +21,8 @@
     </button>
     <p id="reputation-message"></p>
     <div class="time-left-container">
-    <span id="time-left" data-time-left="86400"></span>
-        </div>
+        <span id="time-left" data-time-left="86400"></span>
+    </div>
 </div>
 <div class="profile-container">
     <div class="profile-avatar">
@@ -40,43 +40,49 @@
             </div>
             <!-- Follow/Unfollow button -->
             <div class="follow-unfollow-button">
-            <button
-                id="follow-btn"
-                data-user-id="{{ user.id }}"
-                {% if user in current_user.following %}
-                    data-following="true"
-                {% endif %}
-            >
-                {% if user in current_user.following %}
-                    Unfollow
-                {% else %}
-                    Follow
-                {% endif %}
-            </button>
-                </div>
+                <button
+                    id="follow-btn"
+                    data-user-id="{{ user.id }}"
+                    {% if user in current_user.following %}
+                        data-following="true"
+                    {% endif %}
+                >
+                    {% if user in current_user.following %}
+                        Unfollow
+                    {% else %}
+                        Follow
+                    {% endif %}
+                </button>
+            </div>
         </div>
         <div class="center-button">
             <button class="back-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Back</button>
         </div>
         <div class="dashboard-content">
-    <div class="photo-section">
-        <!-- ... -->
-    </div>
-<div class="uploaded-photos-section">
-    <h2>Uploaded Photos</h2>
-    <div class="uploaded-photos-grid">
-        {% for uploaded_photo in user_uploaded_photos %}
-            <div class="uploaded-photo-box">
-                <div class="uploaded-photo">
-                    <img src="{{ url_for('static', filename='uploads/' ~ uploaded_photo.filename) }}" alt="Uploaded Photo">
+            <div class="photo-section">
+                <!-- ... -->
+            </div>
+            <div class="uploaded-photos-section">
+                <h2>Uploaded Photos</h2>
+                <div class="uploaded-photos-grid">
+                    {% for uploaded_photo in user_uploaded_photos %}
+                        <div class="uploaded-photo-box">
+                            <div class="uploaded-photo">
+                                <img src="{{ url_for('static', filename='uploads/' ~ uploaded_photo.filename) }}" alt="Uploaded Photo" class="profile-image" data-image-src="{{ url_for('static', filename='uploads/' ~ uploaded_photo.filename) }}">
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
-        {% endfor %}
+        </div>
     </div>
 </div>
-
+<!-- Add the image popup container -->
+<div class="image-popup" id="image-popup">
+    <div class="popup-content">
+        <img src="" alt="Popup Image" id="popup-image">
+        <span class="close-button" id="close-popup">&times;</span>
     </div>
-</div>
 </div>
 <script>
     $(document).ready(function () {
@@ -110,6 +116,28 @@
                     setButtonText();
                     console.log(data);
                 });
+            }
+        });
+
+        // Add click event to open image popup
+        $('.profile-image').on('click', function () {
+            const imageSrc = $(this).data('image-src');
+            $('#popup-image').attr('src', imageSrc);
+            $('#image-popup').css('display', 'block');
+        });
+
+        // Add click event to close image popup
+       // Close the image popup when clicking anywhere inside it
+$('#image-popup').on('click', function () {
+    $('#image-popup').css('display', 'none');
+});
+
+
+
+        // Close the image popup when clicking anywhere outside the popup
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.popup-content').length && !$(e.target).hasClass('profile-image')) {
+                $('#image-popup').css('display', 'none');
             }
         });
     });
