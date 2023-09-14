@@ -130,7 +130,6 @@ shop_items = [
 
 # ----------------------
 
-
 # Add this model for tracking likes
 class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -572,6 +571,11 @@ def add_friend(username):
         # Create a new friendship record
         new_friendship = Friendship(user_id=current_user.id, friend_id=friend.id)
         db.session.add(new_friendship)
+
+        # Automatically add the user to the friend's friend list
+        reverse_friendship = Friendship(user_id=friend.id, friend_id=current_user.id)
+        db.session.add(reverse_friendship)
+
         db.session.commit()
 
         return jsonify({'message': f'You are now friends with {friend.username}'})
@@ -581,7 +585,7 @@ def add_friend(username):
 
 @app.route('/remove_friend/<username>', methods=['POST'])
 @login_required
-def removeFriend(username):
+def remove_friend(username):
     try:
         friend = User.query.filter_by(username=username).first()
         if friend:
@@ -589,6 +593,10 @@ def removeFriend(username):
             if current_user.is_friend_with(friend):
                 # Remove the friend from the user's list
                 current_user.friends.remove(friend)
+
+                # Also, remove the user from the friend's list
+                friend.friends.remove(current_user)
+
                 db.session.commit()  # Commit the changes to the database
                 cache.clear()  # Clear the cache
                 flash(f'{username} has been removed from your friends list.', 'success')
@@ -601,8 +609,8 @@ def removeFriend(username):
         flash('An error occurred while removing the friend. Please try again.', 'error')
         app.logger.error(f'Error removing friend: {str(e)}')
 
-
     return redirect(url_for('friends'))
+
 
 
 @app.route('/chat/<username>', methods=['GET', 'POST'])
