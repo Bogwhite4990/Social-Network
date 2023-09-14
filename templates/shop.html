@@ -9,7 +9,7 @@
   </head>
   <body>
     <div class="navbar">
-      <span>Welcome, <span class="username" id="user-username" data-selected-color="{{ current_user.selected_color }}">{{ current_user.username }}</span>! </span>
+      <span>Welcome, <span class="username" id="user-username" data-selected-color="{{ current_user.selected_color }}" onclick="window.location.href='{{ url_for('profile') }}'">{{ current_user.username }}</span>! </span>
       <h1 class="shop-title">Shop</h1>
       <button class="dashboard-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Dashboard</button>
     </div>
