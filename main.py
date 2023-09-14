@@ -447,6 +447,21 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+@app.route('/photo/<int:photo_id>')
+@login_required
+def view_photo(photo_id):
+    # Retrieve the photo from the database based on the photo_id
+    photo = Photo.query.get(photo_id)
+    if photo:
+        # You can also fetch comments, likes, or any other relevant data associated with the photo
+        comments = Comment.query.filter_by(photo_id=photo_id).all()
+        # Render the individual photo page template and pass the photo and comments
+        return render_template('photo.html', photo=photo, comments=comments)
+    else:
+        flash('Photo not found.', 'error')
+        return redirect(url_for('dashboard'))
+
+
 @app.route("/like_photo/<int:photo_id>", methods=["POST"])
 @login_required
 def like_photo(photo_id):

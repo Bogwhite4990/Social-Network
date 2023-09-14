@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Page</title>
+    <link rel="stylesheet" type="text/css" href="/static/photo.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    <div class="navbar">
+      <span>Welcome, <span class="username" id="user-username" data-selected-color="{{ current_user.selected_color }}" onclick="window.location.href='{{ url_for('profile') }}'">{{ current_user.username }}</span>! </span>
+      <button class="dashboard-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Dashboard</button>
+    </div>
+    <br><br>
+    <center>
+<!-- Photo Display Section -->
+<div class="photo-container">
+    <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }}; max-width: 500px; max-height: 500px;">
+    <p>Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="username-color" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a></p>
+    <!-- Display icons based on uploaded_photo_count -->
+    {% for threshold, emoji in thresholds_and_icons %}
+        {% if photo.user.uploaded_photo_count >= threshold %}
+            <span title="{% if threshold == 1 %}1 Photo{% else %}{{ threshold }} Photos{% endif %}">{{ emoji }}</span>
+        {% endif %}
+    {% endfor %}
+</div>
+    <!-- Like Button -->
+    <form method="POST" action="{{ url_for('like_photo', photo_id=photo.id) }}" id="like-form">
+        <button type="submit" class="like-button" data-photo-id="{{ photo.id }}" data-liked="{{ photo.is_liked_by_current_user }}">
+            {% if photo.is_liked_by_current_user %} ❤️ {% else %} ❤️ {% endif %}
+        </button>
+        <span class="like-count">{{ photo.likes|length }}</span>
+    </form>
+
+    <!-- Comments Section -->
+    <div class="comments-container">
+        <h2>Comments</h2>
+        <ul id="comments-list">
+            {% for comment in comments %}
+            <li data-comment-color="{{ comment.user.selected_comment_color }}">
+                <strong>{{ comment.user.username }}:</strong> {{ comment.text }}
+                <!-- Add a button to delete the comment if it belongs to the current user -->
+                {% if current_user == comment.user %}
+                <form method="POST" action="{{ url_for('delete_comment', comment_id=comment.id) }}" class="delete-comment-form">
+                    <button type="submit" class="delete-comment-button">Delete</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+        </center>
+<script>
+    // Function to update like count and comments in real-time
+    async function updatePhotoData() {
+        const photoId = "{{ photo.id }}";
+        const response = await fetch(`/get_photo_data/${photoId}`);
+        if (response.ok) {
+            const data = await response.json();
+            // Update like count
+            document.querySelector('.like-count').textContent = data.like_count;
+            // Update comments
+            const commentsList = document.getElementById('comments-list');
+            commentsList.innerHTML = ''; // Clear existing comments
+            data.comments.forEach(comment => {
+                const li = document.createElement('li');
+                li.setAttribute('data-comment-color', comment.user.selected_comment_color);
+                li.innerHTML = `<strong>${comment.user.username}:</strong> ${comment.text}`;
+                commentsList.appendChild(li);
+            });
+        }
+    }
+
+    // Handle like button click
+    const likeForm = document.getElementById('like-form');
+    likeForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const photoId = likeForm.querySelector('.like-button').getAttribute('data-photo-id');
+        const liked = likeForm.querySelector('.like-button').getAttribute('data-liked') === 'true';
+
+        // Send an AJAX request to like/unlike the photo
+        const response = await fetch(`/like_photo/${photoId}`, {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            // Update like count
+            document.querySelector('.like-count').textContent = data.like_count;
+            // Change the button emoji according to the current state (liked)
+            const likeButton = likeForm.querySelector('.like-button');
+            likeButton.textContent = liked ? '❤️' : '❤️';
+            likeButton.setAttribute('data-liked', !liked);
+        }
+    });
+
+    // Handle comment submission
+    const commentForm = document.getElementById('comment-form');
+    const commentText = document.getElementById('comment-text');
+
+    commentForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(commentForm);
+        formData.append('comment_text', commentText.value);
+
+        const photoId = "{{ photo.id }}";
+        const response = await fetch(`/add_comment/${photoId}`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            // Update comments
+            updatePhotoData();
+            commentText.value = ''; // Clear the comment input field
+        }
+    });
+
+    // Handle comment deletion
+    const deleteCommentForms = document.querySelectorAll('.delete-comment-form');
+    deleteCommentForms.forEach(form => {
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const response = await fetch(form.action, {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                // Update comments
+                updatePhotoData();
+            }
+        });
+    });
+
+    // Initial data load
+    updatePhotoData();
+</script>
+</body>
+</html>
