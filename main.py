@@ -3,6 +3,7 @@ import os
 import html
 import random
 import uuid
+from functools import wraps
 
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
@@ -272,6 +273,14 @@ db.create_all()  # Create database tables if they don't exist
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
+def admin_required(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if current_user.id != 1:
+            flash('Access denied. You do not have permission to access this page.', 'danger')
+            return redirect(url_for('dashboard'))  # Redirect unauthorized users
+        return func(*args, **kwargs)
+    return decorated_function
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -940,24 +949,26 @@ def buy_item(item_id):
 def get_balance():
     return jsonify({'balance': current_user.coins})
 
-# @app.route('/modify_coins', methods=['GET', 'POST'])
-# @login_required
-# def modify_coins():
-#     if request.method == 'POST':
-#         user_id = int(request.form['user_id'])
-#         coins = int(request.form['coins'])
-#
-#         # Retrieve the user from the database
-#         user = User.query.get(user_id)
-#
-#         if user:
-#             user.coins = coins
-#             db.session.commit()
-#             flash(f'Coins for user {user.username} modified to {coins}', 'success')
-#         else:
-#             flash('User not found', 'danger')
-#
-#     return render_template('modify_coins.html')
+@app.route('/modify_coins', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def modify_coins():
+    if request.method == 'POST':
+        user_id = int(request.form['user_id'])
+        coins = int(request.form['coins'])
+
+        # Retrieve the user from the database
+        user = User.query.get(user_id)
+
+        if user:
+            user.coins = coins
+            db.session.commit()
+            flash(f'Coins for user {user.username} modified to {coins}', 'success')
+        else:
+            flash('User not found', 'danger')
+
+    return render_template('modify_coins.html')
+
 
 @app.route('/follow/<int:user_id>', methods=['POST'])
 @login_required
