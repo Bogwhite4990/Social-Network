@@ -29,9 +29,9 @@
                     <div class="image-container">
                         <!-- Add a custom data attribute to store the username color -->
                         <!-- Add an onclick event to open the modal when the image is clicked -->
-                        <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }};" onclick="openModal('{{ url_for('static', filename='uploads/' ~ photo.filename) }}')">
+                        <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }}" onclick="openModal('{{ url_for('static', filename='uploads/' ~ photo.filename) }}')">
                         <!-- Apply the username color to the username text -->
-                        <p>Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a>
+                        <p><span class="user-status"> • </span> Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a>
                             <!-- Display icons based on uploaded_photo_count -->
                             {% for threshold, emoji in thresholds_and_icons %}
                                 {% if photo.user.uploaded_photo_count >= threshold %}
@@ -99,7 +99,32 @@
     <img id="modalImage" class="modal-content" src="" alt="Enlarged Photo">
 </div>
 <input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function updateStatus() {
+    $('.user-status').each(function() {
+        const lastSeen = new Date($(this).data('last-seen'));
+        const currentTime = new Date();
+        const fiveMinutesAgo = new Date(currentTime - 5 * 60 * 1000); // 5 minutes ago
+
+        if (lastSeen >= fiveMinutesAgo) {
+            // User is online
+            $(this).removeClass('offline').addClass('online').text(' • Online');
+        } else {
+            // User is offline
+            $(this).removeClass('online').addClass('offline').text(' • Offline');
+        }
+    });
+}
+
+
+$(document).ready(function() {
+    updateStatus();
+
+    // Update user status every minute (you can adjust the interval as needed)
+    setInterval(updateStatus, 60000); // 1 minute
+});
+
         function viewPhoto(photoId) {
         // Construct the URL for the view_photo page with the photoId
         var url = "/photo/" + photoId; // Update the URL pattern as needed

@@ -240,6 +240,7 @@ class User(db.Model, UserMixin):
     selected_username_comment = db.Column(db.String(7)) # Store color for comment
     uploaded_photo_count = db.Column(db.Integer, default=0)  # Initialize with 0
     trivia_score = db.Column(db.Integer, default=0)  # Add this line to store the trivia score
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     followers = db.relationship('User', secondary='followers', primaryjoin='User.id==followers.c.followee_id',
                                 secondaryjoin='User.id==followers.c.follower_id', backref='following')
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
@@ -276,6 +277,11 @@ login_manager.login_view = "login"
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@app.before_request
+def update_last_seen():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
 
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -1028,7 +1034,8 @@ def dashboard():
                     photos=photos,
                     comments=comments,
                     thresholds_and_icons=thresholds_and_icons,
-                    user_uploaded_photos=user_uploaded_photos,  # Pass the user's uploaded photos
+                    user_uploaded_photos=user_uploaded_photos,
+                    user=current_user, # Pass the user's uploaded photos
                 )  # Pass the comments to the template
 
     return render_template(
@@ -1039,11 +1046,12 @@ def dashboard():
         comments=comments,
         shop_items=shop_items,
         thresholds_and_icons=thresholds_and_icons,
-        user_uploaded_photos=user_uploaded_photos,  # Pass the user's uploaded photos
+        user_uploaded_photos=user_uploaded_photos,
+        user=current_user, # Pass the user's uploaded photos
     )  # Pass the comments to the template
 
 if __name__ == "__main__":
     login_manager.init_app(app)
     # reset_reputation() Reset reputation only once
-    app.run(debug=True)
-    # app.run(host='192.168.1.135', port=5000, debug=True)
+    # app.run(debug=True)
+    app.run(host='192.168.1.135', port=5000, debug=True)
