@@ -118,14 +118,9 @@
             const currentTime = new Date();
             const fiveMinutesAgo = new Date(currentTime - 5 * 60 * 1000); // 5 minutes ago
 
-            console.log('Last Seen (Local Time):', lastSeenLocalTime);
-            console.log('Current Time:', currentTime);
-
             if (lastSeenLocalTime >= fiveMinutesAgo) {
-                console.log('User is Online');
                 $(this).addClass('online').removeClass('offline').text(' • Online'); // Add Online status
             } else {
-                console.log('User is Offline');
                 $(this).addClass('offline').removeClass('online').text(' • Offline'); // Add Offline status
             }
         });

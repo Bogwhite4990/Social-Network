@@ -31,7 +31,11 @@
     </div>
     <div class="profile-info">
         <!-- Display the user's name -->
-        <h1 class="username-info">{{ user.username }}</h1>
+        <h1 class="username-info">
+    {{ user.username }}
+    <span class="user-status" data-last-seen="{{ user.last_seen }}"></span>
+</h1>
+
         <div class="profile-header">
             <!-- Display follower and following counts -->
             <div class="follower-following-counts">
@@ -96,6 +100,41 @@
     </div>
 </div>
 <script>
+        // Function to convert UTC to local time and add 3 hours
+    function convertUtcToLocalWithOffset(utcTimestamp, offsetHours) {
+        const utcDate = new Date(utcTimestamp);
+        const localDate = new Date(utcDate.toLocaleString("en-US", { timeZone: "Europe/Bucharest" })); // Replace "Europe/Bucharest" with the correct user's time zone
+        localDate.setHours(localDate.getHours() + offsetHours); // Add 3 hours
+        return localDate;
+    }
+
+    function updateStatus() {
+        $('.user-status').each(function() {
+            const lastSeenUtcTimestamp = $(this).data('last-seen'); // Get the UTC timestamp from the data attribute
+            const lastSeenLocalTime = convertUtcToLocalWithOffset(lastSeenUtcTimestamp, 3); // Convert to local time and add 3 hours
+
+            const currentTime = new Date();
+            const fiveMinutesAgo = new Date(currentTime - 5 * 60 * 1000); // 5 minutes ago
+
+            console.log('Last Seen (Local Time +3 hours):', lastSeenLocalTime);
+            console.log('Current Time:', currentTime);
+
+            if (lastSeenLocalTime >= fiveMinutesAgo) {
+                console.log('User is Online');
+                $(this).addClass('online').removeClass('offline').text(' • Online'); // Add Online status
+            } else {
+                console.log('User is Offline');
+                $(this).addClass('offline').removeClass('online').text(' • Offline'); // Add Offline status
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        updateStatus();
+
+        // Update user status every minute (you can adjust the interval as needed)
+        setInterval(updateStatus, 60000); // 1 minute
+    });
     // JavaScript code to handle friend button clicks
 document.addEventListener("DOMContentLoaded", function () {
   const addFriendButton = document.getElementById("add-friend-button");

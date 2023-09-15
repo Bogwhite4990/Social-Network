@@ -355,3 +355,13 @@
      color: white;
      cursor: pointer;
 }
+
+/* Style for online status */
+.user-status.online {
+    color: green; /* You can customize this as needed */
+}
+
+/* Style for offline status */
+.user-status.offline {
+    color: grey; /* You can customize this as needed */
+}
