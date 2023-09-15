@@ -949,25 +949,101 @@ def buy_item(item_id):
 def get_balance():
     return jsonify({'balance': current_user.coins})
 
+
 @app.route('/modify_coins', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def modify_coins():
+def modify_user():
+    found_user = None
+
     if request.method == 'POST':
-        user_id = int(request.form['user_id'])
-        coins = int(request.form['coins'])
+        if 'search_user' in request.form:
+            user_id = request.form.get('user_id')
+            coins = request.form.get('coins')
 
-        # Retrieve the user from the database
-        user = User.query.get(user_id)
+            if user_id and coins:
+                user_to_modify = User.query.get(int(user_id))
+                if user_to_modify:
+                    user_to_modify.coins = int(coins)
+                    db.session.commit()
+                    flash(f'Coins for user {user_to_modify.username} modified to {coins}', 'success')
+                else:
+                    flash('User not found', 'danger')
+            else:
+                flash('Please provide both user ID and new coins value', 'danger')
 
-        if user:
-            user.coins = coins
-            db.session.commit()
-            flash(f'Coins for user {user.username} modified to {coins}', 'success')
-        else:
-            flash('User not found', 'danger')
+        elif 'modify_username' in request.form:
+            # Modify the username of the found user
+            new_username = request.form.get('new_username')
+            user_id_modify_username = request.form.get('user_id_modify_username')
 
-    return render_template('modify_coins.html')
+            if new_username and user_id_modify_username:
+                found_user = User.query.get(int(user_id_modify_username))
+                if found_user:
+                    found_user.username = new_username
+                    db.session.commit()
+                    flash('Username modified successfully', 'success')
+                else:
+                    flash('User not found', 'danger')
+            else:
+                flash('Please provide both user ID and new username', 'danger')
+
+        elif 'modify_password' in request.form:
+            # Modify the password of the found user
+            new_password = request.form.get('new_password')
+            confirm_password = request.form.get('confirm_password')
+            user_id_modify_password = request.form.get('user_id_modify_password')
+
+            if new_password == confirm_password:
+                if new_password and user_id_modify_password:
+                    found_user = User.query.get(int(user_id_modify_password))
+                    if found_user:
+                        # Hash and set the new password (implement your own logic here)
+                        found_user.set_password(new_password)
+                        db.session.commit()
+                        flash('Password modified successfully', 'success')
+                    else:
+                        flash('User not found', 'danger')
+                else:
+                    flash('Please provide both user ID and new password', 'danger')
+            else:
+                flash('Passwords do not match', 'danger')
+
+        elif 'modify_email' in request.form:
+            # Modify the email of the found user
+            new_email = request.form.get('new_email')
+            user_id_modify_email = request.form.get('user_id_modify_email')
+
+            if new_email and user_id_modify_email:
+                found_user = User.query.get(int(user_id_modify_email))
+                if found_user:
+                    found_user.email = new_email
+                    db.session.commit()
+                    flash('Email modified successfully', 'success')
+                else:
+                    flash('User not found', 'danger')
+            else:
+                flash('Please provide both user ID and new email', 'danger')
+
+        elif 'delete_user' in request.form:
+            # Delete the found user
+            user_id_delete = request.form.get('user_id_delete')
+
+            if user_id_delete:
+                found_user = User.query.get(int(user_id_delete))
+                if found_user:
+                    db.session.delete(found_user)
+                    db.session.commit()
+                    flash('User deleted successfully', 'success')
+                else:
+                    flash('User not found', 'danger')
+            else:
+                flash('Please provide a user ID for deletion', 'danger')
+
+    # Clear the session after processing the request
+    session.pop('found_user', None)
+
+    return render_template('modify_coins.html', found_user=found_user)
 
 
 @app.route('/follow/<int:user_id>', methods=['POST'])
