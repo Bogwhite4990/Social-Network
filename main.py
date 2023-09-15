@@ -20,7 +20,7 @@ import secrets
 import warnings
 import requests
 import sqlite3
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # Suppressing the warning.
 from werkzeug.utils import secure_filename
@@ -280,7 +280,7 @@ def load_user(user_id):
 @app.before_request
 def update_last_seen():
     if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
+        current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
 
 @app.route("/", methods=["GET", "POST"])

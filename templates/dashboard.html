@@ -31,7 +31,7 @@
                         <!-- Add an onclick event to open the modal when the image is clicked -->
                         <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo" data-username-color="{{ photo.user.selected_username_color }}" style="border: 1px solid {{ photo.user.selected_border_color if photo.user.selected_border_color else 'gold' }}" onclick="openModal('{{ url_for('static', filename='uploads/' ~ photo.filename) }}')">
                         <!-- Apply the username color to the username text -->
-                        <p><span class="user-status"> • </span> Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a>
+                        <p><span class="user-status" data-last-seen="{{ photo.user.last_seen }}"></span> Uploaded by, <a href="{{ url_for('user_profile', username=photo.user.username) }}" class="user-profile-link username-color" data-user-id="{{ photo.user.id }}" style="color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }}">{{ photo.user.username }}</a>
                             <!-- Display icons based on uploaded_photo_count -->
                             {% for threshold, emoji in thresholds_and_icons %}
                                 {% if photo.user.uploaded_photo_count >= threshold %}
@@ -101,29 +101,43 @@
 <input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function convertUtcToLocal(utcTimestamp) {
+        const utcDate = new Date(utcTimestamp);
+        const localDate = new Date(utcDate.toLocaleString("en-US", { timeZone: "Europe/Bucharest" })); // Replace "Europe/Bucharest" with the correct user's time zone
+        return localDate;
+    }
+
     function updateStatus() {
-    $('.user-status').each(function() {
-        const lastSeen = new Date($(this).data('last-seen'));
-        const currentTime = new Date();
-        const fiveMinutesAgo = new Date(currentTime - 5 * 60 * 1000); // 5 minutes ago
+        $('.user-status').each(function() {
+            const lastSeenUtcTimestamp = $(this).data('last-seen'); // Get the UTC timestamp from the data attribute
+            const lastSeenLocalTime = convertUtcToLocal(lastSeenUtcTimestamp); // Convert to local time
 
-        if (lastSeen >= fiveMinutesAgo) {
-            // User is online
-            $(this).removeClass('offline').addClass('online').text(' • Online');
-        } else {
-            // User is offline
-            $(this).removeClass('online').addClass('offline').text(' • Offline');
-        }
+            // Add 3 hours to the lastSeenLocalTime
+            lastSeenLocalTime.setHours(lastSeenLocalTime.getHours() + 3);
+
+            const currentTime = new Date();
+            const fiveMinutesAgo = new Date(currentTime - 5 * 60 * 1000); // 5 minutes ago
+
+            console.log('Last Seen (Local Time):', lastSeenLocalTime);
+            console.log('Current Time:', currentTime);
+
+            if (lastSeenLocalTime >= fiveMinutesAgo) {
+                console.log('User is Online');
+                $(this).addClass('online').removeClass('offline').text(' • Online'); // Add Online status
+            } else {
+                console.log('User is Offline');
+                $(this).addClass('offline').removeClass('online').text(' • Offline'); // Add Offline status
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        updateStatus();
+
+        // Update user status every minute (you can adjust the interval as needed)
+        setInterval(updateStatus, 60000); // 1 minute
     });
-}
 
-
-$(document).ready(function() {
-    updateStatus();
-
-    // Update user status every minute (you can adjust the interval as needed)
-    setInterval(updateStatus, 60000); // 1 minute
-});
 
         function viewPhoto(photoId) {
         // Construct the URL for the view_photo page with the photoId
