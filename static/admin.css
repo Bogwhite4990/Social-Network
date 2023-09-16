@@ -1,0 +1,130 @@
+/* Base styles for tablets (e.g., iPad) */
+@media (max-width: 768px) {
+    /* Add tablet-specific styles here */
+}
+
+/* Base styles for mobile devices */
+@media (max-width: 480px) {
+    /* Add mobile-specific styles here */
+}
+
+/* Base styles for desktop PCs */
+@media (min-width: 769px) {
+    /* Add desktop-specific styles here */
+}
+
+/* Global reset and base styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Global styles for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #131516;
+    color: white;
+}
+
+/* Navigation bar styles */
+.navbar {
+    background-color: black;
+    padding: 10px;
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center;
+    font-weight: bold;
+    border-bottom: 2px solid gold;
+    text-align: center; /* Center the text horizontally */
+}
+
+.navbar .username {
+    cursor: pointer;
+    text-decoration: underline;
+    color: gold; /* Change text color to gold */
+}
+
+.navbar .upload-button,
+.navbar .back-button,
+.navbar .logout-button {
+    background-color: #4caf50;
+    color: #131516; /* Change text color to dark */
+    border: none;
+    padding: 5px 10px;
+    margin: 0 5px; /* Add spacing between buttons */
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.navbar .upload-button:hover,
+.navbar .back-button:hover,
+.navbar .logout-button:hover {
+    background-color: #43a047;
+}
+
+.logout-button {
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.logout-button:hover {
+    color: lightgray;
+}
+
+/* Centered admin panel name */
+h1 {
+    text-align: center;
+}
+
+/* Form input styles */
+form label {
+    display: block;
+    margin-bottom: 5px;
+    color: lightgray; /* Change label text color */
+}
+
+form input[type="number"],
+form input[type="text"],
+form input[type="password"],
+form input[type="email"] {
+    width: 50%; /* Set the width to 50% of their current width */
+    padding: 8px;
+    background-color: #f2f2f2; /* Light gray background */
+    border: none;
+    margin-bottom: 10px;
+    color: #131516; /* Dark text color */
+}
+
+/* Beautiful buttons with hover effect */
+form button[type="submit"] {
+    background-color: #4caf50;
+    color: #131516;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+form button[type="submit"]:hover {
+    background-color: #43a047;
+}
+
+/* Red delete button */
+form button[name="delete_user"] {
+    background-color: red;
+    color: white;
+}
+
+/* Red logout button in the navbar */
+.navbar .logout-button {
+    background-color: red;
+    color: white;
+}
+
+/* Horizontal rule styles */
+hr {
+    border-color: #fff; /* Change horizontal rule color to white */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

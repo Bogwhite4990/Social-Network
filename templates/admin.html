@@ -1,20 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Modify Coins</title>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
 </head>
 <body>
-    <h1>Modify Coins</h1>
-    <p>Welcome, {{ current_user.username }}!</p>
+        <div class="navbar">
+        <div class="button-group">
+            <a href="{{ url_for('dashboard') }}" class="back-button">Dashboard</a>
+            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        </div>
+    </div>
+        <br>
+    <h1>Admin Panel</h1>
+    <p>Welcome, {{ current_user.username }}!</p><br>
 
     <form method="POST">
         <label for="user_id">User ID:</label>
         <input type="number" id="user_id" name="user_id" required><br><br>
         <label for="coins">New Coins:</label>
         <input type="number" id="coins" name="coins" required><br><br>
-        <button type="submit" name="search_user">Search User and Modify Coins</button>
+        <button type="submit" name="search_user">Modify Coins</button>
     </form>
     <hr>
+
+   <!-- Search User by Username Form -->
+<form id="searchByUsernameForm">
+    <h3>Search User by Username</h3>
+    <label for="search_username">Username:</label>
+    <input type="text" id="search_username" name="search_username" required>
+    <button type="submit" name="search_user_by_username">Search User</button> <!-- Moved the button here -->
+</form>
+
+    <!-- Display User ID -->
+    <div id="user_id_display">
+        <p>User ID for '<span id="found_username"></span>': <span id="found_user_id"></span></p>
+    </div>
+        <hr>
+
 
     <!-- Modify Username Form -->
     <form method="POST">
@@ -25,6 +48,7 @@
         <input type="text" name="new_username" id="new_username" required>
         <button type="submit" name="modify_username">Modify Username</button>
     </form>
+        <hr>
 
     <!-- Modify Password Form -->
     <form method="POST">
@@ -37,6 +61,7 @@
         <input type="password" name="confirm_password" id="confirm_password" required>
         <button type="submit" name="modify_password">Modify Password</button>
     </form>
+        <hr>
 
     <!-- Modify Email Form -->
     <form method="POST">
@@ -47,6 +72,7 @@
         <input type="email" name="new_email" id="new_email" required>
         <button type="submit" name="modify_email">Modify Email</button>
     </form>
+        <hr>
 
     <!-- Delete User Form -->
     <form method="POST">
@@ -56,8 +82,7 @@
         <input type="number" id="user_id_delete" name="user_id_delete" required><br><br>
         <button type="submit" name="delete_user">Delete User</button>
     </form>
-
-    <a href="{{ url_for('logout') }}">Logout</a>
+        <hr>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -68,5 +93,43 @@
             </ul>
         {% endif %}
     {% endwith %}
+
+<script>
+    document.getElementById("searchByUsernameForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Get the username entered by the user
+        var username = document.getElementById("search_username").value;
+
+        // Make an asynchronous request to the server to search for the user by username
+        fetch("/search_user_by_username", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username: username })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Check if a user was found
+            if (data.user_id !== null) {
+                // Display the found user ID in the console
+                console.log("User ID for '" + username + "': " + data.user_id);
+
+                // Display the found user ID and username on the webpage
+                document.getElementById("found_user_id").textContent = data.user_id;
+                document.getElementById("found_username").textContent = username;
+            } else {
+                // Handle the case when the user was not found
+                console.log("User not found for username: " + username);
+                document.getElementById("found_user_id").textContent = "Not found";
+                document.getElementById("found_username").textContent = username;
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    });
+</script>
 </body>
 </html>

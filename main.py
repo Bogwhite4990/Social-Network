@@ -960,6 +960,7 @@ def modify_user():
         if 'search_user' in request.form:
             user_id = request.form.get('user_id')
             coins = request.form.get('coins')
+            username_to_search = request.form.get('search_username')
 
             if user_id and coins:
                 user_to_modify = User.query.get(int(user_id))
@@ -971,6 +972,14 @@ def modify_user():
                     flash('User not found', 'danger')
             else:
                 flash('Please provide both user ID and new coins value', 'danger')
+
+            if username_to_search:
+                found_user = User.query.filter_by(username=username_to_search).first()
+                if found_user:
+                    flash(f'User found: {found_user.username}, ID: {found_user.id}', 'success')
+                    session['found_user_id'] = found_user.id
+                else:
+                    flash('User not found', 'danger')
 
         elif 'modify_username' in request.form:
             # Modify the username of the found user
@@ -1043,8 +1052,22 @@ def modify_user():
     # Clear the session after processing the request
     session.pop('found_user', None)
 
-    return render_template('admin.html', found_user=found_user)
+    return render_template('admin.html', found_user=found_user, found_user_id=session.get('found_user_id'))
 
+@app.route('/search_user_by_username', methods=['POST'])
+def search_user_by_username():
+    username = request.json.get('username')
+
+    # Perform the user search by username logic here
+    # Replace the following with your actual logic
+    found_user = User.query.filter_by(username=username).first()
+
+    if found_user:
+        response_data = {'user_id': found_user.id}
+    else:
+        response_data = {'user_id': None}
+
+    return jsonify(response_data)
 
 @app.route('/follow/<int:user_id>', methods=['POST'])
 @login_required
