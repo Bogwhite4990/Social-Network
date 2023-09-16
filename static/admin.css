@@ -87,7 +87,7 @@ form input[type="number"],
 form input[type="text"],
 form input[type="password"],
 form input[type="email"] {
-    width: 50%; /* Set the width to 50% of their current width */
+    width: 5%; /* Set the width to 50% of their current width */
     padding: 8px;
     background-color: #f2f2f2; /* Light gray background */
     border: none;
