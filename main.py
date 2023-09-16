@@ -950,7 +950,7 @@ def get_balance():
     return jsonify({'balance': current_user.coins})
 
 
-@app.route('/modify_coins', methods=['GET', 'POST'])
+@app.route('/admin', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def modify_user():
@@ -1043,7 +1043,7 @@ def modify_user():
     # Clear the session after processing the request
     session.pop('found_user', None)
 
-    return render_template('modify_coins.html', found_user=found_user)
+    return render_template('admin.html', found_user=found_user)
 
 
 @app.route('/follow/<int:user_id>', methods=['POST'])
