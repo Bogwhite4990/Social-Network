@@ -31,9 +31,18 @@ label {
 }
 
 input[type="text"],
-input[type="password"],
 input[type="email"] {
     width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
+}
+
+input[type="password"] {
+    width: 83%;
     padding: 10px;
     margin-bottom: 15px;
     border: none;
