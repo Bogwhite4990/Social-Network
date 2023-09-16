@@ -129,7 +129,7 @@ shop_items = [
     {"id": 3, "name": "Color Comment", "price": 9999, "image_url": "/static/images/item3.jpg"},
 ]
 
-# ----------------------
+# ---------------------
 
 # Add this model for tracking likes
 class Like(db.Model):
