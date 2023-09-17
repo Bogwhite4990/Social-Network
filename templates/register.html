@@ -6,6 +6,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://hcaptcha.com/1/api.js" async defer></script>
     <title>Register</title>
+    <style>
+        .password-toggle {
+            position: relative;
+        }
+
+        .password-toggle input[type="password"] {
+            padding-right: 0px;
+        }
+
+        .password-toggle .toggle-eye {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -16,8 +33,11 @@
         <form method="POST">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <div class="password-toggle">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <span class="toggle-eye" onclick="togglePasswordVisibility('password')">👀️</span>
+            </div>
             <p id="password-status"></p>
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required><br>
@@ -26,5 +46,15 @@
         </form>
     </div>
     <script src="{{ url_for('static', filename='register.js') }}"></script>
+    <script>
+        function togglePasswordVisibility(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+    </script>
 </body>
 </html>
