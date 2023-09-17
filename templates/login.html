@@ -42,7 +42,7 @@
         </form>
         <br>
         <p class="small-text">Don't have an account? <a class="register-link" href="{{ url_for('register') }}">Register here</a></p>
-        <p>Forgot your password? <a href="{{ url_for('forgot_password') }}">Reset it here</a>.</p>
+        <p class="small-text">Forgot your password? <a href="{{ url_for('forgot_password') }}">Reset it here</a></p>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
