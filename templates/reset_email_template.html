@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Password Reset Request</title>
+</head>
+<body>
+    <p>Hello {{ user.username }},</p>
+    <p>We received a request to reset your password. To reset your password, please click the following link:</p>
+    <p><a href="{{ reset_link }}">Reset Password</a></p>
+    <p>If you did not make this request, you can ignore this email.</p>
+</body>
+</html>

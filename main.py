@@ -29,6 +29,11 @@ from werkzeug.utils import secure_filename
 # Import
 from sqlalchemy import UniqueConstraint
 from flask_caching import Cache
+from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
+from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Message, Mail
+import smtplib
+import logging
 
 
 
@@ -224,6 +229,17 @@ followers = db.Table(
     db.Column('followee_id', db.Integer, db.ForeignKey('user.id'))
 )
 
+class PasswordReset(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    token = db.Column(db.String(100), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, user_id, token):
+        self.user_id = user_id
+        self.token = token
+
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -242,6 +258,7 @@ class User(db.Model, UserMixin):
     uploaded_photo_count = db.Column(db.Integer, default=0)  # Initialize with 0
     trivia_score = db.Column(db.Integer, default=0)  # Add this line to store the trivia score
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    reset_token = db.Column(db.String(100), nullable=True)
     followers = db.relationship('User', secondary='followers', primaryjoin='User.id==followers.c.followee_id',
                                 secondaryjoin='User.id==followers.c.follower_id', backref='following')
     friends = relationship('User', secondary='friendship', primaryjoin=id == Friendship.user_id,
@@ -259,6 +276,7 @@ class User(db.Model, UserMixin):
         self.selected_border_color = None  # Initialize selected border color to None
         self.trivia_score = 0  # Initialize the trivia score to 0
 
+
     def is_friend_with(self, other_user):
         """
         Check if this user is friends with another user.
@@ -267,6 +285,22 @@ class User(db.Model, UserMixin):
             (Friendship.user_id == self.id) & (Friendship.friend_id == other_user.id)
         ).first()
         return friendship is not None
+
+    def generate_reset_token(self, expires_sec=1800):
+        s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        self.reset_token = s.dumps({'user_id': self.id}, salt='reset')
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
+
+    def get_reset_token(self):
+        return self.reset_token
 
 db.create_all()  # Create database tables if they don't exist
 
@@ -308,6 +342,102 @@ def login():
             return render_template("login.html", error="Invalid username or password")
 
     return render_template("login.html", error=None)
+
+# Reset password -------------- ATTENTION/DANGER CHANGE HERE ----- DANCER
+app.config['MAIL_SERVER'] = 'mail.adrian-bogdan.com'
+app.config['MAIL_PORT'] = 26
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'instaclone@adrian-bogdan.com'
+app.config['MAIL_PASSWORD'] = 'Test123Test!@!'
+app.config['MAIL_DEFAULT_SENDER'] = ('Admin', 'noreply@example.com')
+
+mail = Mail(app)
+
+
+def send_reset_email(user, reset_link):
+    subject = 'Password Reset Request'
+    sender_email = app.config['MAIL_USERNAME']
+    sender_password = app.config['MAIL_PASSWORD']
+    recipient_email = user.email
+
+    message = f"""Subject: {subject}
+From: {sender_email}
+To: {recipient_email}
+
+To reset your password, visit the following link:
+{reset_link}
+
+If you did not make this request, simply ignore this email, and no changes will be made.
+"""
+
+    try:
+        smtp_server = smtplib.SMTP(app.config['MAIL_SERVER'], app.config['MAIL_PORT'])
+        smtp_server.starttls()
+        smtp_server.login(sender_email, sender_password)
+        smtp_server.sendmail(sender_email, recipient_email, message)
+        smtp_server.quit()
+        flash('An email has been sent to reset your password.', 'success')
+    except Exception as e:
+        logging.error(f"Email could not be sent: {str(e)}")
+        flash('Email could not be sent. Please try again later.', 'danger')
+
+
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            # Generate a unique reset token
+            token = secrets.token_urlsafe(32)
+
+            # Create a PasswordReset record
+            reset_record = PasswordReset(user_id=user.id, token=token)
+            db.session.add(reset_record)
+            db.session.commit()
+
+            # Send an email with the reset link
+            reset_link = url_for('reset_password', token=token, _external=True)
+            send_reset_email(user, reset_link)
+
+            flash('An email has been sent to reset your password.', 'success')
+            return redirect(url_for('login'))
+
+        flash('Email address not found.', 'danger')
+
+    return render_template('forgot_password.html')
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    reset_record = PasswordReset.query.filter_by(token=token).first()
+
+    if not reset_record:
+        flash('Invalid or expired token.', 'danger')
+        return redirect(url_for('forgot_password'))
+
+    user = User.query.get(reset_record.user_id)
+
+    if request.method == 'POST':
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if new_password == confirm_password:
+            # Update the user's password
+            user.password = new_password
+            db.session.delete(reset_record)
+            db.session.commit()
+
+            flash('Your password has been reset. You can now log in with your new password.', 'success')
+            return redirect(url_for('login'))
+
+        flash('Passwords do not match.', 'danger')
+
+    return render_template('reset_password.html', token=token)
+
 
 
 @app.route("/logout")
