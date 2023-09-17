@@ -1,0 +1,94 @@
+body {
+    background-color: #131516;
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+#email {
+    width: 90%; /* Adjust the width as needed */
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+}
+
+.title {
+    font-size: 24px;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.message-list {
+    list-style: none;
+    padding: 0;
+}
+
+.message {
+    font-size: 14px;
+    color: red;
+    margin: 5px 0;
+}
+
+.label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+}
+
+.reset-button,
+.save-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease; /* Add a smooth hover transition */
+}
+
+.reset-button:hover,
+.save-button:hover {
+    background-color: #0056b3; /* Change color on hover */
+}
+
+/* Style for the Back button */
+.back-button {
+    display: block;
+    margin-top: 20px;
+    text-decoration: none;
+    background-color: #007bff;
+    color: white;
+    padding: 2px 2px;
+    border-radius: 5px;
+    width: fit-content; /* Adjust the width based on content */
+    text-align: center;
+    font-weight: bold;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
