@@ -1,3 +1,4 @@
+import base64
 import colorsys
 import os
 import html
@@ -344,12 +345,22 @@ def login():
     return render_template("login.html", error=None)
 
 # Reset password -------------- ATTENTION/DANGER CHANGE HERE ----- DANCER
+# Decode the pass and mail
+
+email_b = 'aW5zdGFjbG9uZUBhZHJpYW4tYm9nZGFuLmNvbQ=='
+pass_b = 'VGVzdDEyM1Rlc3QhQCE='
+
+decoded_bytes = base64.b64decode(email_b)
+decoded_bytes_pass = base64.b64decode(pass_b)
+decoded_string_mail = decoded_bytes.decode('utf-8')
+decoded_string_pass = decoded_bytes_pass.decode('utf-8')
+
 app.config['MAIL_SERVER'] = 'mail.adrian-bogdan.com'
 app.config['MAIL_PORT'] = 26
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = 'instaclone@adrian-bogdan.com'
-app.config['MAIL_PASSWORD'] = 'Test123Test!@!'
+app.config['MAIL_USERNAME'] = decoded_string_mail
+app.config['MAIL_PASSWORD'] = decoded_string_pass
 app.config['MAIL_DEFAULT_SENDER'] = ('Admin', 'noreply@example.com')
 
 mail = Mail(app)
