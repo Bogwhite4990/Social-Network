@@ -19,8 +19,8 @@
         const player = {
             x: 100,
             y: canvas.height - 50,
-            width: 30,
-            height: 30,
+            width: 50,
+            height: 50,
             velocityY: 0,
             jumping: false,
         };
@@ -31,9 +31,23 @@
         let gameOver = false;
         let obstacleSpawnInterval = 2000; // Initial obstacle spawn interval
 
+        // Load player images
+        const playerImage1 = new Image();
+        playerImage1.src = 'https://lh3.googleusercontent.com/d/1bSLZ68ODsCZfCVr2KupMpMN3nEsyL71N';
+
+        const playerImage2 = new Image();
+        playerImage2.src = 'https://lh3.googleusercontent.com/d/1V4tHGAsRyh91CKB_5EL8IqpzQASGyuHf';
+
+        let currentImage = playerImage1;
+
         function drawPlayer() {
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.clearRect(player.x, player.y, player.width, player.height);
+            ctx.drawImage(currentImage, player.x, player.y, player.width, player.height);
+        }
+
+        function animatePlayer() {
+            currentImage = (currentImage === playerImage1) ? playerImage2 : playerImage1;
+            setTimeout(animatePlayer, 100); // Switch image every 100ms (adjust as needed for faster animation)
         }
 
         function drawObstacles() {
@@ -159,6 +173,8 @@
                 obstacles.push(obstacle);
             }
         }, obstacleSpawnInterval);
+
+        animatePlayer(); // Start the player image animation
 
         update();
     </script>
