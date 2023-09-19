@@ -10,7 +10,14 @@
 <div class="navbar">
     <span>Welcome, <span class="username" onclick="window.location.href='{{ url_for('profile') }}'">{{ username }}</span>! </span>
     <button class="friends-button" onclick="window.location.href='{{ url_for('friends') }}'" title="Friends Page">👪</button>
-    <button class="game-button" onclick="window.location.href='{{ url_for('trivia_game') }}'" title="Game Page">🎮</button>
+    <div class="game-dropdown">
+        <button class="game-button" id="game-icon" title="Game Page">🎮</button>
+        <div class="game-dropdown-content">
+            <a href="{{ url_for('trivia_game') }}">Trivia ❓</a>
+            <a href="">Game 1</a>
+            <a href="">Game 2</a>
+        </div>
+    </div>
     <button class="shop-button" onclick="window.location.href='{{ url_for('shop') }}'" title="Shop Page">🛒</button>
         <!-- Add the conditional rendering of the "Admin" button -->
     {% if user_id == 1 %}
@@ -105,6 +112,32 @@
 <input type="file" id="upload-photo" style="display: none;" accept="image/jpeg,image/png" onchange="handleImageUpload(this)">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    // JavaScript to handle the game dropdown
+document.addEventListener("DOMContentLoaded", function() {
+    const gameIcon = document.getElementById("game-icon");
+    const gameDropdown = document.querySelector(".game-dropdown-content");
+
+    // Toggle the dropdown when clicking on the game icon
+    gameIcon.addEventListener("click", function(event) {
+        event.stopPropagation(); // Prevent the click event from propagating to document
+
+        // Toggle the visibility of the dropdown content
+        if (gameDropdown.style.display === "block") {
+            gameDropdown.style.display = "none";
+        } else {
+            gameDropdown.style.display = "block";
+        }
+    });
+
+    // Close the dropdown when clicking outside of it
+    document.addEventListener("click", function(event) {
+        if (gameDropdown.style.display === "block" && !event.target.closest(".game-dropdown")) {
+            gameDropdown.style.display = "none";
+        }
+    });
+});
+
+
     function convertUtcToLocal(utcTimestamp) {
         const utcDate = new Date(utcTimestamp);
         const localDate = new Date(utcDate.toLocaleString("en-US", { timeZone: "Europe/Bucharest" })); // Replace "Europe/Bucharest" with the correct user's time zone

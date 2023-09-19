@@ -487,6 +487,38 @@
   background-color: green; /* Change the background color on hover */
 }
 
+/* CSS for the game dropdown */
+.game-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #333; /* Grey background color */
+    min-width: 100px; /* Adjust the width as needed */
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.game-dropdown-content a {
+    padding: 5px 5px; /* Adjust the padding as needed */
+    text-decoration: none;
+    display: block;
+    color: #fff; /* Text color */
+    font-size: 12px; /* Adjust the font size to make it smaller */
+    text-align: left;
+}
+
+.game-dropdown-content a:hover {
+     background-color: green; /* Green background color on hover */
+     color: #fff; /* White text color on hover */
+}
+
+/* Adjust the font size and line height as needed */
+.game-dropdown:hover .game-dropdown-content {
+    display: block;
+}
+
+
+
+
 /* Add CSS for the modal */
  .modal {
      display: none;
