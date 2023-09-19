@@ -1057,10 +1057,25 @@ def update_coins():
 
 
 # Define the game route
-@app.route('/endless-runner')
+@app.route('/endless-runner', methods=['GET', 'POST'])
 @login_required
 def endless_runner():
+    if request.method == 'POST':
+        # Get the score from the request (you may need to adjust how the score is sent from the game)
+        score = request.form.get('score')
+
+        # Update the user's coins based on the score
+        current_user.coins += int(score)
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Return a response (you can customize this)
+        return 'Score updated successfully'
+
+    # Your route logic here (render the game page)
     return render_template('endless-runner.html')
+
 
 # Shop functionality
 @app.route('/shop')

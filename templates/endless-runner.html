@@ -168,6 +168,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             if (gameOver) {
+
                 // Display "Game Over" message
                 ctx.font = '40px Arial';
                 ctx.fillStyle = 'black';
@@ -205,17 +206,17 @@
                 drawObstacles();
 
                 // Collision detection
-for (const obstacle of obstacles) {
-    if (
-        player.x < obstacle.x + obstacle.width &&
-        player.x + player.width > obstacle.x &&
-        player.y < obstacle.y + obstacle.height &&
-        player.y + player.height > obstacle.y
-    ) {
-        // Collision with any obstacle, game over
-        gameOver = true;
-    }
-}
+                for (const obstacle of obstacles) {
+                    if (
+                        player.x < obstacle.x + obstacle.width &&
+                        player.x + player.width > obstacle.x &&
+                        player.y < obstacle.y + obstacle.height &&
+                        player.y + player.height > obstacle.y
+                    ) {
+                        // Collision with any obstacle, game over
+                        gameOver = true;
+                    }
+                }
 
                 // Increase score
                 ctx.font = '20px Arial';
@@ -301,6 +302,55 @@ for (const obstacle of obstacles) {
         animatePlayer(); // Start the player image animation
 
         update();
+
+        // Add this function to send the score to the server
+        function sendScoreToServer() {
+            // Check if the game is over
+            if (gameOver) {
+                // Create a FormData object to send data to the server
+                const formData = new FormData();
+                formData.append('score', score); // Add the score to the form data
+
+                // Make an HTTP POST request to your Flask route
+                fetch('/endless-runner', {
+                    method: 'POST',
+                    body: formData, // Send the form data
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Score updated successfully');
+                        // You can add additional logic here, such as displaying a success message
+                    } else {
+                        console.error('Failed to update score');
+                        // Handle the error, display an error message, or retry the request
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle network errors here
+                });
+            }
+        }
+
+        // Call sendScoreToServer when the game is over (e.g., collision)
+        function gameOverLogic() {
+            gameOver = true;
+            sendScoreToServer();
+            console.log('Game Over. Score:', score);
+        }
+
+        // Add this event listener to call gameOverLogic when the game is over
+        function checkGameOver() {
+            if (gameOver) {
+                gameOverLogic();
+            }
+        }
+
+        // Add this event listener to call checkGameOver when the game is over
+        canvas.addEventListener('click', function () {
+            jump();
+            checkGameOver();
+        });
     </script>
 </body>
 </html>
