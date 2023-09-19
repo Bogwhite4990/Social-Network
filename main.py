@@ -565,9 +565,11 @@ def upload_photo():
     if current_user:
         # Increment the uploaded_photo_count
         current_user.uploaded_photo_count += 1
+        current_user.coins += 1
         db.session.commit()
     else:
         current_user.uploaded_photo_count -= 1
+        current_user.coins -= 1
         db.session.commit()
 
 
@@ -900,6 +902,7 @@ def give_reputation():
                 if receiver_user:
                     # Update the reputation count for the receiver
                     receiver_user.reputation += 1  # Increase the reputation count by 1
+                    current_user.coins += 1
                     db.session.commit()
 
                     # Mark that the giver has given reputation to the receiver
