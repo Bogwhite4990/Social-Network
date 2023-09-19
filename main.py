@@ -462,6 +462,10 @@ def logout():
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
+    # Check if the user already has a profile photo, and if not, set a default one
+    if not current_user.profile_photo:
+        current_user.profile_photo = "placeholder.png"  # Set the default profile photo
+
     if request.method == "POST":
         name = request.form["name"]
         email = request.form["email"]
@@ -856,6 +860,9 @@ def get_messages(recipient_id):
 @app.route('/user_profile/<username>')
 @login_required
 def user_profile(username):
+    # Check if the user already has a profile photo, and if not, set a default one
+    if not current_user.profile_photo:
+        current_user.profile_photo = "placeholder.png"  # Set the default profile photo
     # Fetch the user's profile information based on the username
     user = User.query.filter_by(username=username).first()
 
