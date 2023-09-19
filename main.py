@@ -1064,17 +1064,22 @@ def endless_runner():
         # Get the score from the request (you may need to adjust how the score is sent from the game)
         score = request.form.get('score')
 
-        # Update the user's coins based on the score
-        current_user.coins += int(score)
+        # Debugging: Print the score to the server console
+        print("Received score:", score)
 
-        # Commit the changes to the database
-        db.session.commit()
-
-        # Return a response (you can customize this)
-        return 'Score updated successfully'
+        try:
+            # Attempt to convert score to an integer and update user's coins
+            score = int(score)
+            current_user.coins += score
+            db.session.commit()
+            return 'Score updated successfully'
+        except ValueError as e:
+            print("Error converting score to integer:", e)
+            return 'Invalid score format'
 
     # Your route logic here (render the game page)
     return render_template('endless-runner.html')
+
 
 
 # Shop functionality

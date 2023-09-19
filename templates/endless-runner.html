@@ -215,6 +215,9 @@
                     ) {
                         // Collision with any obstacle, game over
                         gameOver = true;
+                        // Send the score to the server
+                        sendScoreToServer(score);
+                        console.log('Game Over. Score:', score);
                     }
                 }
 
