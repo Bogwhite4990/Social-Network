@@ -1058,7 +1058,8 @@ def update_coins():
 
 # Define the game route
 @app.route('/endless-runner')
-def game():
+@login_required
+def endless_runner():
     return render_template('endless-runner.html')
 
 # Shop functionality

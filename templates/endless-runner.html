@@ -5,47 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Endless Runner Game</title>
     <style>
-        canvas {
-            border: 1px solid black;
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #131516;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        body {
-        margin: 0;
-        overflow: hidden;
-    }
+        canvas {
+            border: 1px solid black;
+            background-image: url('https://lh3.googleusercontent.com/d/180iWjOjHzlMaEbHGT01FdhjzFRVt_3nV');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            color: white;
+        }
 
-    #game-canvas {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        background-image: url('https://lh3.googleusercontent.com/d/180iWjOjHzlMaEbHGT01FdhjzFRVt_3nV'); /* Replace 'background-image-url.jpg' with the URL of your background image */
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-    }
+        #game-canvas {
+            display: block;
+        }
 
-    #ground {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 100px; /* Adjust the height of the ground as needed */
-        background-image: url('https://art.pixilart.com/bcff74a8a6252d8.png'); /* Replace 'ground-image-url.jpg' with the URL of your ground image */
-        background-repeat: repeat-x;
-        background-position: left bottom;
-    }
+        #ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background-image: url('https://art.pixilart.com/bcff74a8a6252d8.png');
+            background-repeat: repeat-x;
+            background-position: left bottom;
+        }
+
+        .dashboard-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            transform: translate(490%, 120%);
+            text-align: center;
+        }
+
+        .dashboard-button a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .dashboard-button a:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            /* Adjust styles for tablets and smaller screens */
+            .dashboard-button {
+                top: 10px;
+                left: 10px;
+                transform: translate(0%, 0%);
+            }
+            canvas {
+                width: 100%; /* Set canvas width to 100% for tablets */
+                height: auto; /* Allow canvas height to adjust proportionally */
+            }
+        }
+
+        @media (max-width: 576px) {
+            /* Adjust styles for mobile phones */
+            .dashboard-button {
+                top: 10px;
+                left: 10px;
+                transform: translate(0%, 0%);
+            }
+            canvas {
+                width: 100%; /* Set canvas width to 100% for mobile phones */
+                height: auto; /* Allow canvas height to adjust proportionally */
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="dashboard-button">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a> <!-- Replace "dashboard.html" with the URL of your dashboard page -->
+    </div>
     <canvas id="game-canvas" width="800" height="430"></canvas>
     <script>
         const canvas = document.getElementById('game-canvas');
         const ctx = canvas.getContext('2d');
 
         const player = {
-            x: 100,
+            x: 200,
             y: canvas.height - 50,
             width: 70,
             height: 70,
