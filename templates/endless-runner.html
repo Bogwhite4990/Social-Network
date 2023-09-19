@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endless Runner Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="game-canvas" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+
+        const player = {
+            x: 100,
+            y: canvas.height - 50,
+            width: 30,
+            height: 30,
+            velocityY: 0,
+            jumping: false,
+        };
+
+        const obstacles = [];
+
+        let score = 0;
+        let gameOver = false;
+        let obstacleSpawnInterval = 2000; // Initial obstacle spawn interval
+
+        function drawPlayer() {
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        function drawObstacles() {
+            ctx.fillStyle = 'red';
+            for (const obstacle of obstacles) {
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            }
+        }
+
+        function updateObstacleSpeed() {
+            if (score >= 100 && obstacleSpawnInterval !== 1500) {
+                obstacleSpawnInterval = 1500; // Update the obstacle spawn interval to a faster value at score +100
+            } else if (score >= 200 && obstacleSpawnInterval !== 1000) {
+                obstacleSpawnInterval = 1000; // Update the obstacle spawn interval to an even faster value at score +200
+            }
+        }
+
+        function update() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (gameOver) {
+                // Display "Game Over" message
+                ctx.font = '40px Arial';
+                ctx.fillStyle = 'black';
+                ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2 - 20);
+                ctx.font = '20px Arial';
+                ctx.fillText('Your Score: ' + score, canvas.width / 2 - 40, canvas.height / 2 + 20);
+                ctx.fillText('Press Space or Click to Play Again', canvas.width / 2 - 120, canvas.height / 2 + 60);
+            } else {
+                // Gravity
+                player.y += player.velocityY;
+                player.velocityY += 1;
+                if (player.y >= canvas.height - player.height) {
+                    player.y = canvas.height - player.height;
+                    player.velocityY = 0;
+                    player.jumping = false;
+                }
+
+                // Draw player
+                drawPlayer();
+
+                // Move obstacles
+                for (const obstacle of obstacles) {
+                    obstacle.x -= 5;
+                }
+
+                // Remove off-screen obstacles
+                obstacles.forEach((obstacle, index) => {
+                    if (obstacle.x + obstacle.width < 0) {
+                        obstacles.splice(index, 1);
+                        score += 1;
+                    }
+                });
+
+                // Draw obstacles
+                drawObstacles();
+
+                // Collision detection
+                for (const obstacle of obstacles) {
+                    if (
+                        player.x < obstacle.x + obstacle.width &&
+                        player.x + player.width > obstacle.x &&
+                        player.y < obstacle.y + obstacle.height &&
+                        player.y + player.height > obstacle.y
+                    ) {
+                        // Collision detected
+                        gameOver = true;
+                    }
+                }
+
+                // Increase score
+                ctx.font = '20px Arial';
+                ctx.fillStyle = 'black';
+                ctx.fillText('Score: ' + score, 10, 30);
+
+                // Update obstacle spawn speed based on score
+                updateObstacleSpeed();
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function jump() {
+            if (!player.jumping && !gameOver) {
+                player.velocityY = -15;
+                player.jumping = true;
+            } else if (gameOver) {
+                // Restart the game when space or click is pressed after game over
+                resetGame();
+            }
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.code === 'Space') {
+                jump();
+            }
+        });
+
+        canvas.addEventListener('click', function () {
+            jump();
+        });
+
+        function resetGame() {
+            player.y = canvas.height - 50;
+            player.velocityY = 0;
+            player.jumping = false;
+            obstacles.length = 0;
+            score = 0;
+            gameOver = false;
+            obstacleSpawnInterval = 2000; // Reset the obstacle spawn interval to the initial value
+        }
+
+        // Generate obstacles with the specified spawn interval
+        setInterval(function () {
+            if (!gameOver) {
+                const obstacle = {
+                    x: canvas.width,
+                    y: canvas.height - Math.random() * 100,
+                    width: 20,
+                    height: 20 + Math.random() * 30,
+                };
+                obstacles.push(obstacle);
+            }
+        }, obstacleSpawnInterval);
+
+        update();
+    </script>
+</body>
+</html>

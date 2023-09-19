@@ -1056,6 +1056,11 @@ def update_coins():
         return jsonify({'error': 'Failed to update user coins'}), 500
 
 
+# Define the game route
+@app.route('/endless-runner')
+def game():
+    return render_template('endless-runner.html')
+
 # Shop functionality
 @app.route('/shop')
 @login_required
