@@ -466,6 +466,7 @@ def profile():
         name = request.form["name"]
         email = request.form["email"]
         new_password = request.form["password"]
+        user_balance = current_user.coins
 
         if (
                 len(new_password) >= 6
@@ -499,7 +500,7 @@ def profile():
                 db.session.commit()
 
     return render_template(
-        "profile.html", username=current_user.username, current_user=current_user
+        "profile.html", username=current_user.username, current_user=current_user, user_balance=current_user.coins
     )
 
 
