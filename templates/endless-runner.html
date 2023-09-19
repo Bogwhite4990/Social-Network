@@ -40,6 +40,16 @@
 
         let currentImage = playerImage1;
 
+        // Load obstacle images (placeholders)
+        const rockImage = new Image();
+        rockImage.src = 'https://lh3.googleusercontent.com/d/1hQpKpPzt3jM7yVFt55Qn-UTZz8yFgPWX';
+
+        const treeImage = new Image();
+        treeImage.src = 'https://lh3.googleusercontent.com/d/16N2krlshWqIkYFa5LldNmxCuQcwAfUZO';
+
+        const birdImage = new Image();
+        birdImage.src = 'https://via.placeholder.com/70x20.png';
+
         function drawPlayer() {
             ctx.clearRect(player.x, player.y, player.width, player.height);
             ctx.drawImage(currentImage, player.x, player.y, player.width, player.height);
@@ -51,9 +61,15 @@
         }
 
         function drawObstacles() {
-            ctx.fillStyle = 'red';
             for (const obstacle of obstacles) {
-                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                // Draw obstacle based on its type (rock, tree, or bird)
+                if (obstacle.type === 'rock') {
+                    ctx.drawImage(rockImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                } else if (obstacle.type === 'tree') {
+                    ctx.drawImage(treeImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                } else if (obstacle.type === 'bird') {
+                    ctx.drawImage(birdImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                }
             }
         }
 
@@ -107,17 +123,17 @@
                 drawObstacles();
 
                 // Collision detection
-                for (const obstacle of obstacles) {
-                    if (
-                        player.x < obstacle.x + obstacle.width &&
-                        player.x + player.width > obstacle.x &&
-                        player.y < obstacle.y + obstacle.height &&
-                        player.y + player.height > obstacle.y
-                    ) {
-                        // Collision detected
-                        gameOver = true;
-                    }
-                }
+for (const obstacle of obstacles) {
+    if (
+        player.x < obstacle.x + obstacle.width &&
+        player.x + player.width > obstacle.x &&
+        player.y < obstacle.y + obstacle.height &&
+        player.y + player.height > obstacle.y
+    ) {
+        // Collision with any obstacle, game over
+        gameOver = true;
+    }
+}
 
                 // Increase score
                 ctx.font = '20px Arial';
@@ -164,12 +180,38 @@
         // Generate obstacles with the specified spawn interval
         setInterval(function () {
             if (!gameOver) {
+                // Randomly select the type of obstacle (rock, tree, or bird)
+                const obstacleType = Math.random() < 0.33 ? 'rock' : Math.random() < 0.66 ? 'tree' : 'bird';
+
+                let obstacleHeight;
+                let obstacleWidth;
+                let obstacleY;
+
+                if (obstacleType === 'bird') {
+                    // Bird should spawn above the player's head with a fixed height and width
+                    obstacleHeight = 20; // Set a fixed height for the bird
+                    obstacleWidth = 70;  // Set the width of the bird to 70
+                    obstacleY = (player.y - 30) - obstacleHeight; // Position the bird above the player's head
+                } else if (obstacleType === 'rock') {
+                    // Rock should have a fixed size of 20x20
+                    obstacleHeight = 20;
+                    obstacleWidth = 20;
+                    obstacleY = canvas.height - obstacleHeight;
+                } else {
+                    // Tree should have a height of 60
+                    obstacleHeight = 60;
+                    obstacleWidth = 40;
+                    obstacleY = canvas.height - obstacleHeight;
+                }
+
                 const obstacle = {
                     x: canvas.width,
-                    y: canvas.height - Math.random() * 100,
-                    width: 20,
-                    height: 20 + Math.random() * 30,
+                    y: obstacleY,
+                    width: obstacleWidth,
+                    height: obstacleHeight,
+                    type: obstacleType,
                 };
+
                 obstacles.push(obstacle);
             }
         }, obstacleSpawnInterval);
