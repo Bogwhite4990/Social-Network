@@ -1222,7 +1222,7 @@ def modify_user():
                 flash('Please provide a user ID for deletion', 'danger')
 
     # Clear the session after processing the request
-    session.pop('found_user', None)
+    session.pop('found_user_id', None)
 
     return render_template('admin.html', found_user=found_user, found_user_id=session.get('found_user_id'))
 
@@ -1284,6 +1284,8 @@ def dashboard():
     c.execute("SELECT * FROM comments ORDER BY id DESC")
     comments = c.fetchall()
     user_uploaded_photos = Photo.query.filter_by(user_id=current_user.id).all()
+    # Get the current user's ID
+    user_id = current_user.id if current_user else None
 
     for user in users:
         photo_filenames = user.profile_photos.split(",")
@@ -1318,6 +1320,7 @@ def dashboard():
                     thresholds_and_icons=thresholds_and_icons,
                     user_uploaded_photos=user_uploaded_photos,
                     user=current_user, # Pass the user's uploaded photos
+                    user_id=user_id,  # Pass the user's ID
                 )  # Pass the comments to the template
 
     return render_template(
@@ -1330,6 +1333,7 @@ def dashboard():
         thresholds_and_icons=thresholds_and_icons,
         user_uploaded_photos=user_uploaded_photos,
         user=current_user, # Pass the user's uploaded photos
+        user_id=user_id,  # Pass the user's ID
     )  # Pass the comments to the template
 
 if __name__ == "__main__":

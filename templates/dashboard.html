@@ -12,6 +12,10 @@
     <button class="friends-button" onclick="window.location.href='{{ url_for('friends') }}'">Friends</button>
     <button class="game-button" onclick="window.location.href='{{ url_for('trivia_game') }}'">Game</button>
     <button class="shop-button" onclick="window.location.href='{{ url_for('shop') }}'">Shop</button>
+        <!-- Add the conditional rendering of the "Admin" button -->
+    {% if user_id == 1 %}
+        <button class="admin-button" onclick="window.location.href='/admin'">Admin</button>
+    {% endif %}
     <div class="centered-content">
         <button class="upload-button" onclick="document.getElementById('upload-photo').click()">Upload</button>
     </div>

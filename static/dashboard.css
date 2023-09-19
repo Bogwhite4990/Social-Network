@@ -474,6 +474,11 @@
      display: flex;
      margin-left: 10px;
 }
+
+.admin-button {
+    display: flex;
+     margin-left: 10px;
+}
 /* Add CSS for the modal */
  .modal {
      display: none;
