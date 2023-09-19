@@ -185,6 +185,7 @@
      .friends-button{
          display: flex;
          margin-left: 0px;
+
     }
 }
 /* Browser CSS ---------------------------------------------- */
@@ -466,19 +467,26 @@
  .user-profile-link {
      color: #7393B3;
 }
- .game-button{
-     display: flex;
-     margin-left: 10px;
-}
- .shop-button{
-     display: flex;
-     margin-left: 10px;
+
+.game-button,
+.shop-button,
+.admin-button,
+.friends-button {
+  display: flex;
+  margin-left: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  transition: background-color 0.3s;
 }
 
-.admin-button {
-    display: flex;
-     margin-left: 10px;
+.game-button:hover,
+.shop-button:hover,
+.admin-button:hover,
+.friends-button:hover {
+  background-color: green; /* Change the background color on hover */
 }
+
 /* Add CSS for the modal */
  .modal {
      display: none;
