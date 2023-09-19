@@ -8,10 +8,38 @@
         canvas {
             border: 1px solid black;
         }
+
+        body {
+        margin: 0;
+        overflow: hidden;
+    }
+
+    #game-canvas {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        background-image: url('https://lh3.googleusercontent.com/d/180iWjOjHzlMaEbHGT01FdhjzFRVt_3nV'); /* Replace 'background-image-url.jpg' with the URL of your background image */
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    #ground {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px; /* Adjust the height of the ground as needed */
+        background-image: url('https://art.pixilart.com/bcff74a8a6252d8.png'); /* Replace 'ground-image-url.jpg' with the URL of your ground image */
+        background-repeat: repeat-x;
+        background-position: left bottom;
+    }
     </style>
 </head>
 <body>
-    <canvas id="game-canvas" width="800" height="400"></canvas>
+    <canvas id="game-canvas" width="800" height="430"></canvas>
     <script>
         const canvas = document.getElementById('game-canvas');
         const ctx = canvas.getContext('2d');
@@ -19,8 +47,8 @@
         const player = {
             x: 100,
             y: canvas.height - 50,
-            width: 50,
-            height: 50,
+            width: 70,
+            height: 70,
             velocityY: 0,
             jumping: false,
         };
@@ -48,7 +76,7 @@
         treeImage.src = 'https://lh3.googleusercontent.com/d/16N2krlshWqIkYFa5LldNmxCuQcwAfUZO';
 
         const birdImage = new Image();
-        birdImage.src = 'https://via.placeholder.com/70x20.png';
+        birdImage.src = 'https://lh3.googleusercontent.com/d/1vDsBg8P3qsqtEVYHfmhNS49FvBKc90xe';
 
         function drawPlayer() {
             ctx.clearRect(player.x, player.y, player.width, player.height);
@@ -200,7 +228,7 @@ for (const obstacle of obstacles) {
                 } else {
                     // Tree should have a height of 60
                     obstacleHeight = 60;
-                    obstacleWidth = 40;
+                    obstacleWidth = 20;
                     obstacleY = canvas.height - obstacleHeight;
                 }
 
