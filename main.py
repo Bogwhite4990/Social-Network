@@ -1024,6 +1024,26 @@ def trivia_game():
                                current_question_index=current_question_index + 1, feedback=feedback,
                                next_question=next_question, completed=completed)
 
+@app.route('/update_coins', methods=['POST'])
+@login_required
+def update_coins():
+    try:
+        data = request.get_json()
+        action = data['action']
+
+        # Ensure the action is 'decrease' before updating coins
+        if action == 'decrease':
+            # Decrease the user's coins here
+            current_user.coins -= 1
+            db.session.commit()
+            return jsonify({'message': 'User coins decreased successfully'}), 200
+        else:
+            return jsonify({'error': 'Invalid action'}), 400
+    except Exception as e:
+        print("Error updating user coins:", str(e))
+        db.session.rollback()  # Rollback changes in case of an error
+        return jsonify({'error': 'Failed to update user coins'}), 500
+
 
 # Shop functionality
 @app.route('/shop')

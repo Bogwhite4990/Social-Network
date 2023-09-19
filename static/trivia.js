@@ -20,7 +20,7 @@
 
         // Function to start the timer for 10 seconds (fixed)
         function startTimer() {
-            var seconds = 10;
+            var seconds = 30;
             updateTimerDisplay(seconds);
 
             timer = setInterval(function () {
@@ -103,50 +103,93 @@
         }
 
         // Function to check the selected answer
-        function checkAnswer() {
-            var selectedAnswer = document.querySelector('input[name="user_answer"]:checked');
-            if (!selectedAnswer) {
-                // Deduct 1 point if timer runs out and you haven't answered
-                score--;
-                scoreElement.textContent = score;
-                return; // Don't proceed if no answer is selected
-            } else {
-                var userAnswerText = selectedAnswer.value;
-                var correctAnswerElement = document.querySelector(`label[for="${userAnswerText}"]`);
-                var correctAnswerText = correctAnswerElement.textContent;
-                var correctAnswer = currentQuestionData.results[0].correct_answer;
+function checkAnswer() {
+    var selectedAnswer = document.querySelector('input[name="user_answer"]:checked');
+    if (!selectedAnswer) {
+        // Deduct 1 point if timer runs out and you haven't answered
+        score--;
+        scoreElement.textContent = score;
+        return; // Don't proceed if no answer is selected
+    } else {
+        var userAnswerText = selectedAnswer.value;
+        var correctAnswerElement = document.querySelector(`label[for="${userAnswerText}"]`);
+        var correctAnswerText = correctAnswerElement.textContent;
+        var correctAnswer = currentQuestionData.results[0].correct_answer;
 
-                // Display feedback for each answer
-                if (userAnswerText === correctAnswer) {
-                    feedbackElement.innerHTML = `Correct! The answer "${correctAnswerText}" is correct.`;
-                    feedbackElement.style.color = "#4CAF50"; // Green for correct answers
-                    correctAnswers++;
-                    score++;
-                } else {
-                    feedbackElement.innerHTML = `Wrong! The correct answer was "${correctAnswer}". You selected "${correctAnswerText}".`;
-                    feedbackElement.style.color = "#FF5733"; // Red for incorrect answers
-                    score--;
+        // Display feedback for each answer
+        if (userAnswerText === correctAnswer) {
+            feedbackElement.innerHTML = `Correct! The answer "${correctAnswerText}" is correct.`;
+            feedbackElement.style.color = "#4CAF50"; // Green for correct answers
+            correctAnswers++;
+            score++;
+
+            // Make an API request to update the user's coins when the answer is correct
+            fetch('/update_coins', {
+                method: 'POST',
+                body: JSON.stringify({ action: 'increase' }), // You can send additional data if needed
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            }
-
-            // Update the score
-            scoreElement.textContent = score;
-
-            // Disable radio buttons after selection
-            var answerRadios = document.querySelectorAll('input[name="user_answer"]');
-            answerRadios.forEach(radio => {
-                radio.disabled = true;
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Handle a successful response
+                    console.log('User coins increased successfully');
+                } else {
+                    // Handle errors
+                    console.error('Failed to increase user coins');
+                }
+            })
+            .catch(error => {
+                console.error('Error while updating user coins:', error);
             });
+        } else {
+            feedbackElement.innerHTML = `Wrong! The correct answer was "${correctAnswer}". You selected "${correctAnswerText}".`;
+            feedbackElement.style.color = "#FF5733"; // Red for incorrect answers
+            score--;
 
-            currentQuestionNumber++;
-
-            // Automatically go to the next question after displaying feedback or finish the game
-            if (currentQuestionNumber >= totalQuestions) {
-                finishGame();
-            } else {
-                fetchNextQuestion();
-            }
+            // Make an API request to update the user's coins when the answer is wrong
+            fetch('/update_coins', {
+                method: 'POST',
+                body: JSON.stringify({ action: 'decrease' }), // You can send additional data if needed
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Handle a successful response
+                    console.log('User coins decreased successfully');
+                } else {
+                    // Handle errors
+                    console.error('Failed to decrease user coins');
+                }
+            })
+            .catch(error => {
+                console.error('Error while updating user coins:', error);
+            });
         }
+    }
+
+    // Update the score
+    scoreElement.textContent = score;
+
+    // Disable radio buttons after selection
+    var answerRadios = document.querySelectorAll('input[name="user_answer"]');
+    answerRadios.forEach(radio => {
+        radio.disabled = true;
+    });
+
+    currentQuestionNumber++;
+
+    // Automatically go to the next question after displaying feedback or finish the game
+    if (currentQuestionNumber >= totalQuestions) {
+        finishGame();
+    } else {
+        fetchNextQuestion();
+    }
+}
+
 
         // Function to finish the game
         function finishGame() {
