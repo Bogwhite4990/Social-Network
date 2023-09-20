@@ -262,6 +262,7 @@ class User(db.Model, UserMixin):
     uploaded_photo_count = db.Column(db.Integer, default=0)  # Initialize with 0
     trivia_score = db.Column(db.Integer, default=0)  # Add this line to store the trivia score
     has_purchased_border_width = db.Column(db.Boolean, default=False)
+    selected_border_width = db.Column(db.Integer, default=1)  # Default border width is 1px
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     reset_token = db.Column(db.String(100), nullable=True)
     followers = db.relationship('User', secondary='followers', primaryjoin='User.id==followers.c.followee_id',
@@ -1138,7 +1139,8 @@ def buy_item(item_id):
         user.selected_username_comment = random_comment_color
 
     elif item['name'] == 'Border Width':
-        user.selected_border_width = 2
+        user.selected_border_width = 4
+        user.has_purchased_border_width = True
 
 
     # Save user
@@ -1148,6 +1150,24 @@ def buy_item(item_id):
 
     return redirect(url_for("shop"))
 
+@app.route('/update_border_width', methods=['POST'])
+@login_required
+def update_border_width():
+    data = request.json
+    new_border_width = data.get('border_width')
+
+    # Check if the user has purchased the "Border Width" item
+    if current_user.has_purchased_border_width:  # Add this attribute to your User model
+        if new_border_width is not None:
+            # Update the user's selected border width
+            current_user.selected_border_width = new_border_width
+            db.session.commit()
+
+            return jsonify({"success": True}), 200
+        else:
+            return jsonify({"success": False, "error": "Invalid border width value"}), 400
+    else:
+        return jsonify({"success": False, "error": "You have not purchased the 'Border Width' item"}), 403
 
 @app.route('/get_balance')
 def get_balance():
