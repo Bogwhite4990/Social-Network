@@ -132,7 +132,9 @@ def generate_random_color():
 shop_items = [
     {"id": 1, "name": "Photo Border", "price": 100, "border_color": None, "image_url": "/static/images/item1.jpg"},
     {"id": 2, "name": "Color Name", "price": 500, "image_url": "/static/images/item2.jpg"},
-    {"id": 3, "name": "Color Comment", "price": 9999, "image_url": "/static/images/item3.jpg"},
+    {"id": 3, "name": "Test", "price": 0, "image_url": "/static/images/item3.jpg"},
+    {"id": 4, "name": "Border Width", "price": 800, "image_url": "/static/images/item4.jpg"},
+
 ]
 
 # ---------------------
@@ -195,6 +197,7 @@ class Photo(db.Model):
     likes = db.relationship("Like", backref="photo", lazy=True, cascade="all, delete-orphan")
     comments = db.relationship("Comment", backref="photo_ref", lazy=True, cascade="all, delete-orphan")
     border_color = db.Column(db.String(20))  # Store the border color associated with the photo
+    border_width = db.Column(db.Integer)
 
 
 class Friendship(db.Model):
@@ -562,17 +565,6 @@ def register():
 @app.route("/upload_photo", methods=["POST"])
 @login_required
 def upload_photo():
-    if current_user:
-        # Increment the uploaded_photo_count
-        current_user.uploaded_photo_count += 1
-        current_user.coins += 1
-        db.session.commit()
-    else:
-        current_user.uploaded_photo_count -= 1
-        current_user.coins -= 1
-        db.session.commit()
-
-
     if "photo" not in request.files:
         flash("No file part")
         return redirect(request.url)
@@ -592,9 +584,16 @@ def upload_photo():
         # Create a new Photo instance and associate it with the current user
         new_photo = Photo(user_id=current_user.id, filename=filename)
 
-        # Retrieve the user's selected border color from the database
-        selected_border_color = current_user.selected_border_color
-        new_photo.border_color = selected_border_color
+        # Check if the user has purchased the border width feature
+        user_has_border_width = current_user.has_purchased_border_width
+
+        # Set the has_border_width field based on user's purchase status
+        new_photo.has_border_width = user_has_border_width
+
+        # If the user has purchased the border width, set the border color
+        if user_has_border_width:
+            selected_border_color = current_user.selected_border_color
+            new_photo.border_color = selected_border_color
 
         db.session.add(new_photo)
         db.session.commit()
@@ -604,6 +603,8 @@ def upload_photo():
 
     flash("Invalid file format. Only JPEG and PNG files are allowed.")
     return redirect(request.url)
+
+
 
 
 def allowed_file(filename):
@@ -1134,6 +1135,10 @@ def buy_item(item_id):
 
         # Set the selected username color for the current user
         user.selected_username_comment = random_comment_color
+
+    elif item['name'] == 'Border Width':
+        user.selected_border_width = 2
+
 
     # Save user
     db.session.commit()

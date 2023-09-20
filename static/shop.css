@@ -6,12 +6,22 @@ body {
     background-color: #131516; /* Maintain the same background color as the dashboard */
 }
 
-.shop-items {
+.shop-item-pair {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 20px; /* Add space between item pairs */
+}
+
+.shop-item {
+    background-color: #222;
+    border: 1px solid gold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    max-width: 300px;
+    flex: 1; /* Equal width for each item in a pair */
+    margin: 0 5px; /* Add space between items in a pair */
 }
 
 

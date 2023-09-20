@@ -1,73 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop</title>
     <!-- Include any CSS or stylesheets here -->
     <link rel="stylesheet" type="text/css" href="static/shop.css">
-  </head>
-  <body>
-    <div class="navbar">
-      <span>Welcome, <span class="username" id="user-username" data-selected-color="{{ current_user.selected_color }}" onclick="window.location.href='{{ url_for('profile') }}'">{{ current_user.username }}</span>! </span>
-      <h1 class="shop-title">Shop</h1>
-      <button class="dashboard-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Dashboard</button>
-    </div>
-    <br>
-    <p>Your Balance: <span id="user-balance-display">{{ user_balance }}</span> coins </p>
-    <br>
-    <button id="info-button" class="info-button">Info</button>
-    <!-- Hidden popup div -->
-    <div id="info-popup" class="popup">
-      <span class="popup-content">
+</head>
+<body>
+<div class="navbar">
+    <span>Welcome, <span class="username" id="user-username"
+                        data-selected-color="{{ current_user.selected_color }}"
+                        onclick="window.location.href='{{ url_for('profile') }}'">{{ current_user.username }}</span>!
+    </span>
+    <h1 class="shop-title">Shop</h1>
+    <button class="dashboard-button" onclick="window.location.href='{{ url_for('dashboard') }}'">Dashboard</button>
+</div>
+<br>
+<p>Your Balance: <span id="user-balance-display">{{ user_balance }}</span> coins </p>
+<br>
+<button id="info-button" class="info-button">Info</button>
+<!-- Hidden popup div -->
+<div id="info-popup" class="popup">
+    <span class="popup-content">
         <!-- Add your information text here -->
-        Each account get 10 points,
+        Each account gets 10 points,
         For each like you get 1 point, for each photo you get 1 point, for trivia question 1 point, for reputation 1 point.
-      </span>
-      <button id="close-popup">Close</button>
+    </span>
+    <button id="close-popup">Close</button>
+</div>
+<div class="shop-items">
+    <div class="shop-item-pair">
+        {% for item in shop_items %}
+        <div class="shop-item">
+            <img src="{{ item.image_url }}" alt="{{ item.name }}" class="shop-item-image">
+            <h3>{{ item.name }}</h3>
+            <p>Price: {{ item.price }} coins</p>
+            <button onclick="buyItem({{ item.id }}, {{ item.price }})">Buy</button>
+        </div>
+        {% if loop.index % 2 == 0 or loop.last %}
     </div>
-    <div class="shop-items"> {% for item in shop_items %} <div class="shop-item">
-        <img src="{{ item.image_url }}" alt="{{ item.name }}" class="shop-item-image">
-        <h3>{{ item.name }}</h3>
-        <p>Price: {{ item.price }} coins</p>
-        <button onclick="buyItem({{ item.id }}, {{ item.price }})">Buy</button>
-      </div> {% endfor %}
-      <!-- Add a condition to display the "Color Comment" item --> {% if 'Color Comment' not in shop_items|map(attribute='name') %} <div class="shop-item">
-        <img src="path_to_color_comment_image.jpg" alt="Color Comment" class="shop-item-image">
-        <h3>Color Comment</h3>
-        <p>Price: 10 coins</p>
-        <button onclick="buyItem(3, 10)" disabled>Buy</button>
-      </div> {% endif %}
+    <div class="shop-item-pair">
+        {% endif %}
+        {% endfor %}
     </div>
-    <!-- Include any other HTML content here -->
+</div>
+<!-- Include any other HTML content here -->
 
 <script>
     // Add this JavaScript code to show/hide the popup
-const infoButton = document.getElementById('info-button');
-const infoPopup = document.getElementById('info-popup');
-const closePopupButton = document.getElementById('close-popup');
+    const infoButton = document.getElementById('info-button');
+    const infoPopup = document.getElementById('info-popup');
+    const closePopupButton = document.getElementById('close-popup');
 
-// Function to show the popup
-function showPopup() {
-    infoPopup.style.display = 'block';
-}
-
-// Function to hide the popup
-function hidePopup() {
-    infoPopup.style.display = 'none';
-}
-
-// Event listeners
-infoButton.addEventListener('click', showPopup);
-closePopupButton.addEventListener('click', hidePopup);
-
-    const shop_items = {{ shop_items|tojson|safe }};
-
-    // Function to generate a random color
-    function getRandomColor() {
-        const colors = ["red", "blue", "green", "orange", "purple"]; // Add more colors as needed
-        return colors[Math.floor(Math.random() * colors.length)];
+    // Function to show the popup
+    function showPopup() {
+        infoPopup.style.display = 'block';
     }
+
+    // Function to hide the popup
+    function hidePopup() {
+        infoPopup.style.display = 'none';
+    }
+
+    // Event listeners
+    infoButton.addEventListener('click', showPopup);
+    closePopupButton.addEventListener('click', hidePopup);
+
+    // Initialize the 2px Border purchase status
+    let is2pxBorderPurchased = false;
 
     // Function to handle the purchase of items
     function buyItem(itemId, itemPrice) {
@@ -109,6 +110,12 @@ closePopupButton.addEventListener('click', hidePopup);
                         // Apply the new comment color
                         applyCommentColor();
                     }
+                    // Check if the purchased item is "2px Border"
+                    else if (itemId === 4) {
+                        // Update the 2px Border purchase status
+                        is2pxBorderPurchased = true;
+                        sessionStorage.setItem('is2pxBorderPurchased', 'true');
+                    }
                 } else {
                     alert('Purchase failed.');
                 }
@@ -116,6 +123,12 @@ closePopupButton.addEventListener('click', hidePopup);
         } else {
             alert('Insufficient coins.');
         }
+    }
+
+    // Function to generate a random color
+    function getRandomColor() {
+        const colors = ["red", "blue", "green", "orange", "purple"]; // Add more colors as needed
+        return colors[Math.floor(Math.random() * colors.length)];
     }
 
     // Function to apply the comment color from the data attribute
