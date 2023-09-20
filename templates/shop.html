@@ -115,6 +115,7 @@
                         // Update the 2px Border purchase status
                         is2pxBorderPurchased = true;
                         sessionStorage.setItem('is2pxBorderPurchased', 'true');
+                        console.log(`is2pxBorderPurchased: ${is2pxBorderPurchased}`);
                     }
                 } else {
                     alert('Purchase failed.');
@@ -146,6 +147,7 @@
     window.addEventListener('load', () => {
         applyCommentColor();
     });
+
 </script>
 </body>
 </html>

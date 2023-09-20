@@ -261,6 +261,7 @@ class User(db.Model, UserMixin):
     selected_username_comment = db.Column(db.String(7)) # Store color for comment
     uploaded_photo_count = db.Column(db.Integer, default=0)  # Initialize with 0
     trivia_score = db.Column(db.Integer, default=0)  # Add this line to store the trivia score
+    has_purchased_border_width = db.Column(db.Boolean, default=False)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     reset_token = db.Column(db.String(100), nullable=True)
     followers = db.relationship('User', secondary='followers', primaryjoin='User.id==followers.c.followee_id',

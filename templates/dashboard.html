@@ -307,23 +307,6 @@ function openModal(imageSrc) {
         applyUsernameColor();
     });
 
-    // Function to apply the border width from the data attribute
-function applyBorderWidth() {
-    const uploadedImages = document.querySelectorAll('.uploaded-image');
-    uploadedImages.forEach(image => {
-        const borderWidth = image.getAttribute('data-border-width');
-        if (borderWidth) {
-            image.style.borderWidth = borderWidth + 'px'; // Set the border width
-        }
-    });
-}
-
-// Call this function when the dashboard page loads
-window.addEventListener('load', () => {
-    applyBorderWidth();
-});
-
-
 
 </script>
 </body>
