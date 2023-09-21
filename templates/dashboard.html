@@ -23,6 +23,18 @@
          {% if user_id == 1 %}
          <button class="admin-button" onclick="window.location.href='/admin'" title="Admin Page">🛠️</button>
          {% endif %}
+         <!-- HTML template with bell icon -->
+<span id="notification-icon" class="notification-icon">🔔</span>
+<!-- Notification popup/modal -->
+<div id="notification-popup" class="notification-popup">
+    <!-- Notifications will be displayed here -->
+</div>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <div id="notification-list">
+            <!-- Notifications will be added here dynamically -->
+        </div>
+    </div>
+</li>
          <div class="centered-content">
             <button class="upload-button" onclick="document.getElementById('upload-photo').click()">Upload</button>
          </div>
@@ -339,6 +351,48 @@ window.addEventListener('load', () => {
     applyBorderWidth();
 });
 
+function showNotifications() {
+    // Fetch notifications using AJAX
+    fetch('/get_notifications')
+        .then(response => response.json())
+        .then(data => {
+            const notificationPopup = document.getElementById('notification-popup');
+            notificationPopup.innerHTML = '';
+
+            if (data.length === 0) {
+                notificationPopup.innerHTML = 'No new notifications.';
+                // Keep the bell icon when there are no notifications
+                document.getElementById('notification-icon').textContent = '🔔';
+            } else {
+                data.forEach(notification => {
+                    const notificationItem = document.createElement('div');
+                    notificationItem.textContent = notification.content;
+                    notificationPopup.appendChild(notificationItem);
+
+                    // Mark the notification as read
+                    markNotificationAsRead(notification.id);
+
+                    // Change the icon to the envelope when there are notifications
+                    document.getElementById('notification-icon').textContent = '📩';
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching notifications:', error));
+}
+
+
+    function markNotificationAsRead(notificationId) {
+        // Send a request to mark the notification as read
+        fetch(`/mark_notification_as_read/${notificationId}`, { method: 'POST' })
+            .catch(error => console.error('Error marking notification as read:', error));
+    }
+   // Add this code to the existing JavaScript
+window.addEventListener('load', function () {
+    const notificationPopup = document.getElementById('notification-popup');
+    notificationPopup.innerHTML = ''; // Clear notifications on page load/refresh
+});
+
+   setInterval(showNotifications, 6000); // Check every 6 seconds for new notifications
 
 
 

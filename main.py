@@ -138,6 +138,13 @@ shop_items = [
 ]
 
 # ---------------------
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    read = db.Column(db.Boolean, default=False)
+
 
 # Add this model for tracking likes
 class Like(db.Model):
@@ -639,6 +646,12 @@ def like_photo(photo_id):
     user = current_user
     like = Like.query.filter_by(user_id=user.id, photo_id=photo.id).first()
 
+    if photo and photo.user_id != current_user.id:
+        notification_content = f"{current_user.username} liked your photo."
+        notification = Notification(user_id=photo.user_id, content=notification_content)
+        db.session.add(notification)
+        db.session.commit()
+
     if like:
         # User has already liked the photo, remove the like
         db.session.delete(like)
@@ -657,6 +670,26 @@ def like_photo(photo_id):
     # Return the updated like count
     like_count = len(photo.likes)
     return jsonify({"like_count": like_count})
+
+@app.route('/get_notifications')
+@login_required  # Ensure the user is logged in
+def get_notifications():
+    notifications = Notification.query.filter_by(user_id=current_user.id, read=False).order_by(Notification.timestamp.desc()).all()
+    return jsonify([{
+        'id': notification.id,
+        'content': notification.content
+    } for notification in notifications])
+
+
+@app.route('/mark_notification_as_read/<int:notification_id>', methods=['POST'])
+@login_required
+def mark_notification_as_read(notification_id):
+    notification = Notification.query.get(notification_id)
+    if notification and notification.user_id == current_user.id:
+        notification.read = True
+        db.session.commit()
+    return 'Notification marked as read'
+
 
 
 # Create a new route to add comments

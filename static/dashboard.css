@@ -473,7 +473,7 @@
 .admin-button,
 .friends-button {
   display: flex;
-  margin-left: 10px;
+  margin-left: 2px;
   background-color: transparent;
   border: none;
   font-size: 18px;
@@ -571,4 +571,20 @@
 .user-status.offline {
     color: grey; /* You can customize this as needed */
 }
+
+/* Add this to your CSS file */
+.small-text {
+    font-size: 14px; /* Adjust the font size as needed */
+}
+
+/* Make the text smaller for the specific elements */
+.notification-popup, .notification-popup div {
+    font-size: 9px; /* Adjust the font size as needed */
+}
+
+.notification-icon {
+     padding-left: 5px;
+}
+
+
 
