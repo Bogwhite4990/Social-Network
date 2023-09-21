@@ -657,6 +657,7 @@ def like_photo(photo_id):
         db.session.delete(like)
         # Increment user's coins by 1
         user.coins -= 1
+        # Notification for unlike the photo
         notification_content = f"{current_user.username} unlike your photo."
         notification = Notification(user_id=photo.user_id, content=notification_content)
         db.session.add(notification)
@@ -665,6 +666,7 @@ def like_photo(photo_id):
         # User hasn't liked the photo, add a like
         new_like = Like(user=user, photo=photo)
         db.session.add(new_like)
+        # Notification for like the photo
         notification_content = f"{current_user.username} liked your photo."
         notification = Notification(user_id=photo.user_id, content=notification_content)
         db.session.add(notification)
@@ -712,6 +714,17 @@ def add_comment():
         new_comment = Comment(text=comment_text, user=current_user, photo_id=photo_id)
         db.session.add(new_comment)
         db.session.commit()
+
+        # Retrieve the photo that the comment was posted on
+        photo = Photo.query.get(photo_id)
+
+        if photo:
+            # Create a notification for the owner of the photo
+            notification_content = f"{current_user.username} commented on your photo."
+            notification = Notification(user_id=photo.user_id, content=notification_content)
+            db.session.add(notification)
+            db.session.commit()
+
 
     return redirect(url_for("dashboard"))
 
