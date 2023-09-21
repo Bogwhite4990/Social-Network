@@ -1139,7 +1139,7 @@ def buy_item(item_id):
         user.selected_username_comment = random_comment_color
 
     elif item['name'] == 'Border Width':
-        user.selected_border_width = 4
+        user.selected_border_width = 5
         user.has_purchased_border_width = True
 
 
