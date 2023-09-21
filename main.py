@@ -623,7 +623,7 @@ def allowed_file(filename):
 @app.route('/photo/<int:photo_id>')
 @login_required
 def view_photo(photo_id):
-    # Retrieve the photo from the database based on the photo_id
+    # Retrieve the photo from the database based on the photo_id.
     photo = Photo.query.get(photo_id)
     if photo:
         # You can also fetch comments, likes, or any other relevant data associated with the photo
