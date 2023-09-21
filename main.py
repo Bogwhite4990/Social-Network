@@ -646,21 +646,29 @@ def like_photo(photo_id):
     user = current_user
     like = Like.query.filter_by(user_id=user.id, photo_id=photo.id).first()
 
-    if photo and photo.user_id != current_user.id:
-        notification_content = f"{current_user.username} liked your photo."
-        notification = Notification(user_id=photo.user_id, content=notification_content)
-        db.session.add(notification)
-        db.session.commit()
+    # if photo and photo.user_id != current_user.id:
+    #     notification_content = f"{current_user.username} liked your photo."
+    #     notification = Notification(user_id=photo.user_id, content=notification_content)
+    #     db.session.add(notification)
+    #     db.session.commit()
 
     if like:
         # User has already liked the photo, remove the like
         db.session.delete(like)
         # Increment user's coins by 1
         user.coins -= 1
+        notification_content = f"{current_user.username} unlike your photo."
+        notification = Notification(user_id=photo.user_id, content=notification_content)
+        db.session.add(notification)
+        db.session.commit()
     else:
         # User hasn't liked the photo, add a like
         new_like = Like(user=user, photo=photo)
         db.session.add(new_like)
+        notification_content = f"{current_user.username} liked your photo."
+        notification = Notification(user_id=photo.user_id, content=notification_content)
+        db.session.add(notification)
+        db.session.commit()
 
         # Increment user's coins by 1
         user.coins += 1
