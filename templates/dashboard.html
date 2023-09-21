@@ -352,33 +352,68 @@ window.addEventListener('load', () => {
 });
 
 function showNotifications() {
-    // Fetch notifications using AJAX
-    fetch('/get_notifications')
-        .then(response => response.json())
-        .then(data => {
-            const notificationPopup = document.getElementById('notification-popup');
-            notificationPopup.innerHTML = '';
+  // Fetch notifications using AJAX
+  fetch('/get_notifications')
+    .then((response) => response.json())
+    .then((data) => {
+      const notificationPopup = document.getElementById('notification-popup');
+      notificationPopup.innerHTML = '';
 
-            if (data.length === 0) {
-                notificationPopup.innerHTML = 'No new notifications.';
-                // Keep the bell icon when there are no notifications
-                document.getElementById('notification-icon').textContent = '🔔';
-            } else {
-                data.forEach(notification => {
-                    const notificationItem = document.createElement('div');
-                    notificationItem.textContent = notification.content;
-                    notificationPopup.appendChild(notificationItem);
+      if (data.length === 0) {
+        notificationPopup.innerHTML = 'No new notifications.';
+        // Keep the bell icon when there are no notifications
+        document.getElementById('notification-icon').textContent = '🔔';
+      } else {
+        // Sort notifications by type and content for collapsing
+        data.sort((a, b) => (a.type + a.content).localeCompare(b.type + b.content));
 
-                    // Mark the notification as read
-                    markNotificationAsRead(notification.id);
+        // Initialize variables for collapsed notifications
+        let currentNotification = null;
+        let count = 0;
 
-                    // Change the icon to the envelope when there are notifications
-                    document.getElementById('notification-icon').textContent = '📩';
-                });
+        // Function to display a notification
+        function displayNotification(notification) {
+          const notificationItem = document.createElement('div');
+          notificationItem.textContent = `${count}x ${notification.content}`;
+          notificationPopup.appendChild(notificationItem);
+        }
+
+        // Iterate through the sorted notifications
+        data.forEach((notification) => {
+          if (
+            currentNotification === null ||
+            notification.type !== currentNotification.type ||
+            notification.content !== currentNotification.content
+          ) {
+            // Display the previous collapsed notification, if any
+            if (currentNotification !== null) {
+              displayNotification(currentNotification);
             }
-        })
-        .catch(error => console.error('Error fetching notifications:', error));
+
+            // Start counting a new notification
+            currentNotification = { ...notification };
+            count = 1;
+          } else {
+            // Continue counting the current notification
+            count++;
+          }
+        });
+
+        // Display the last collapsed notification, if any
+        if (currentNotification !== null) {
+          displayNotification(currentNotification);
+        }
+
+        // Mark notifications as read and change the icon to the envelope
+        data.forEach((notification) => {
+          markNotificationAsRead(notification.id);
+          document.getElementById('notification-icon').textContent = '📩';
+        });
+      }
+    })
+    .catch((error) => console.error('Error fetching notifications:', error));
 }
+
 
 
     function markNotificationAsRead(notificationId) {
