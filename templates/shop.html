@@ -48,135 +48,105 @@
 <!-- Include any other HTML content here -->
 
 <script>
-// Add this JavaScript code to show/hide the popup and handle item purchases
-const infoButton = document.getElementById('info-button');
-const infoPopup = document.getElementById('info-popup');
-const closePopupButton = document.getElementById('close-popup');
+    // Add this JavaScript code to show/hide the popup
+    const infoButton = document.getElementById('info-button');
+    const infoPopup = document.getElementById('info-popup');
+    const closePopupButton = document.getElementById('close-popup');
 
-// Function to show the popup
-function showPopup() {
-    infoPopup.style.display = 'block';
-}
+    // Function to show the popup
+    function showPopup() {
+        infoPopup.style.display = 'block';
+    }
 
-// Function to hide the popup
-function hidePopup() {
-    infoPopup.style.display = 'none';
-}
+    // Function to hide the popup
+    function hidePopup() {
+        infoPopup.style.display = 'none';
+    }
 
-// Event listeners
-infoButton.addEventListener('click', showPopup);
-closePopupButton.addEventListener('click', hidePopup);
+    // Event listeners
+    infoButton.addEventListener('click', showPopup);
+    closePopupButton.addEventListener('click', hidePopup);
 
-// Initialize the 2px Border purchase status
-let is2pxBorderPurchased = false;
+    // Initialize the 2px Border purchase status
+    let is2pxBorderPurchased = false;
 
-// Function to handle the purchase of items
-function buyItem(itemId, itemPrice) {
-    const userBalanceDisplay = document.getElementById('user-balance-display');
-    let userBalance = parseInt(userBalanceDisplay.textContent);
+    // Function to handle the purchase of items
+    function buyItem(itemId, itemPrice) {
+        const userBalanceDisplay = document.getElementById('user-balance-display');
+        let userBalance = parseInt(userBalanceDisplay.textContent);
 
-    // Check if the user has already purchased the item
-    const hasPurchased = checkIfItemPurchased(itemId);
+        if (userBalance >= itemPrice) {
+            fetch(`/buy_item/${itemId}`, {
+                method: 'POST',
+            }).then(response => {
+                if (response.ok) {
+                    userBalance -= itemPrice;
+                    userBalanceDisplay.textContent = userBalance;
+                    alert('Purchase successful!');
 
-    if (hasPurchased) {
-        alert('You have already purchased this item.');
-    } else if (userBalance >= itemPrice) {
-        fetch(`/buy_item/${itemId}`, {
-            method: 'POST',
-        }).then(response => {
-            if (response.ok) {
-                userBalance -= itemPrice;
-                userBalanceDisplay.textContent = userBalance;
-                alert('Purchase successful!');
+                    // Check if the purchased item is "Color Name"
+                    if (itemId === 2) {
+                        // Generate a random color
+                        const randomColor = getRandomColor();
 
-                // Update the purchased status using localStorage
-                markItemAsPurchased(itemId);
+                        // Change the username color
+                        const usernameElement = document.getElementById('user-username');
+                        usernameElement.style.color = randomColor;
 
-                // Disable the "Buy" button
-                const buyButton = document.querySelector(`button[data-item-id="${itemId}"]`);
-                buyButton.disabled = true;
-                buyButton.textContent = 'Purchased';
+                        // Update the data attribute with the selected color
+                        usernameElement.setAttribute('data-selected-color', randomColor);
+                    }
+                    // Check if the purchased item is "Color Comment"
+                    else if (itemId === 3) {
+                        // Generate a random comment color
+                        const randomCommentColor = getRandomColor();
 
-                // Rest of your code...
+                        // Update the data attribute with the selected comment color
+                        const commentTextElements = document.querySelectorAll('.comment-text');
+                        commentTextElements.forEach(commentTextElement => {
+                            commentTextElement.setAttribute('data-comment-color', randomCommentColor);
+                        });
 
-                // Check if the purchased item is "Color Name"
-                if (itemId === 2) {
-                    // Generate a random color
-                    const randomColor = getRandomColor();
-
-                    // Change the username color
-                    const usernameElement = document.getElementById('user-username');
-                    usernameElement.style.color = randomColor;
-
-                    // Update the data attribute with the selected color
-                    usernameElement.setAttribute('data-selected-color', randomColor);
+                        // Apply the new comment color
+                        applyCommentColor();
+                    }
+                    // Check if the purchased item is "2px Border"
+                    else if (itemId === 4) {
+                        // Update the 2px Border purchase status
+                        is2pxBorderPurchased = true;
+                        sessionStorage.setItem('is2pxBorderPurchased', 'true');
+                        console.log(`is2pxBorderPurchased: ${is2pxBorderPurchased}`);
+                    }
+                } else {
+                    alert('Purchase failed.');
                 }
-                // Check if the purchased item is "Color Comment"
-                else if (itemId === 3) {
-                    // Generate a random comment color
-                    const randomCommentColor = getRandomColor();
+            });
+        } else {
+            alert('Insufficient coins.');
+        }
+    }
 
-                    // Update the data attribute with the selected comment color
-                    const commentTextElements = document.querySelectorAll('.comment-text');
-                    commentTextElements.forEach(commentTextElement => {
-                        commentTextElement.setAttribute('data-comment-color', randomCommentColor);
-                    });
+    // Function to generate a random color
+    function getRandomColor() {
+        const colors = ["red", "blue", "green", "orange", "purple"]; // Add more colors as needed
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
 
-                    // Apply the new comment color
-                    applyCommentColor();
-                }
-                // Check if the purchased item is "2px Border"
-                else if (itemId === 4) {
-                    // Update the 2px Border purchase status
-                    is2pxBorderPurchased = true;
-                    sessionStorage.setItem('is2pxBorderPurchased', 'true');
-                    console.log(`is2pxBorderPurchased: ${is2pxBorderPurchased}`);
-                }
-            } else {
-                alert('Purchase failed.');
+    // Function to apply the comment color from the data attribute
+    function applyCommentColor() {
+        const commentTextElements = document.querySelectorAll('.comment-text');
+        commentTextElements.forEach(commentTextElement => {
+            const commentColor = commentTextElement.getAttribute('data-comment-color');
+            if (commentColor) {
+                commentTextElement.style.color = commentColor; // Set the comment text color
             }
         });
-    } else {
-        alert('Insufficient coins.');
     }
-}
 
-// Function to check if an item has been purchased using localStorage
-function checkIfItemPurchased(itemId) {
-    // Use localStorage to check if the item with itemId has been purchased.
-    const purchasedItemKey = `item_${itemId}_purchased`;
-    return localStorage.getItem(purchasedItemKey) === 'true';
-}
-
-// Function to mark an item as purchased using localStorage
-function markItemAsPurchased(itemId) {
-    // Use localStorage to mark the item as purchased.
-    const purchasedItemKey = `item_${itemId}_purchased`;
-    localStorage.setItem(purchasedItemKey, 'true');
-}
-
-// Function to generate a random color
-function getRandomColor() {
-    const colors = ["red", "blue", "green", "orange", "purple"]; // Add more colors as needed
-    return colors[Math.floor(Math.random() * colors.length)];
-}
-
-// Function to apply the comment color from the data attribute
-function applyCommentColor() {
-    const commentTextElements = document.querySelectorAll('.comment-text');
-    commentTextElements.forEach(commentTextElement => {
-        const commentColor = commentTextElement.getAttribute('data-comment-color');
-        if (commentColor) {
-            commentTextElement.style.color = commentColor; // Set the comment text color
-        }
+    // Call these functions when the shop page loads
+    window.addEventListener('load', () => {
+        applyCommentColor();
     });
-}
-
-// Call these functions when the shop page loads
-window.addEventListener('load', () => {
-    applyCommentColor();
-});
-
 
 </script>
 </body>

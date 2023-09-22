@@ -132,7 +132,7 @@ def generate_random_color():
 shop_items = [
     {"id": 1, "name": "Photo Border", "price": 100, "border_color": None, "image_url": "/static/images/item1.jpg"},
     {"id": 2, "name": "Color Name", "price": 500, "image_url": "/static/images/item2.jpg"},
-    {"id": 3, "name": "Test", "price": 0, "image_url": "/static/images/item3.jpg"},
+    {"id": 3, "name": "Remove Border Width", "price": 0, "image_url": "/static/images/item3.jpg"},
     {"id": 4, "name": "Border Width", "price": 800, "image_url": "/static/images/item4.jpg"},
 
 ]
@@ -1185,7 +1185,7 @@ def buy_item(item_id):
         # Set the selected username color for the current user
         user.selected_username_color = random_username_color
 
-    elif item['name'] == 'Color Comment':
+    elif item['name'] == 'Remove Border Width':
         # Generate a random comment color
         random_comment_color = generate_random_color()
 
