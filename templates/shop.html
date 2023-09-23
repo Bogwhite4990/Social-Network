@@ -98,17 +98,12 @@
                     }
                     // Check if the purchased item is "Color Comment"
                     else if (itemId === 3) {
-                        // Generate a random comment color
-                        const randomCommentColor = getRandomColor();
-
-                        // Update the data attribute with the selected comment color
-                        const commentTextElements = document.querySelectorAll('.comment-text');
-                        commentTextElements.forEach(commentTextElement => {
-                            commentTextElement.setAttribute('data-comment-color', randomCommentColor);
-                        });
-
-                        // Apply the new comment color
-                        applyCommentColor();
+                        // Set the border width to the default value (1px)
+                        // Update the 2px Border purchase status to false
+                        is2pxBorderPurchased = false;
+                        sessionStorage.setItem('is2pxBorderPurchased', 'false');
+                        buyButton.style.borderWidth = '1px';
+                        console.log(`is2pxBorderPurchased: ${is2pxBorderPurchased}`);
                     }
                     // Check if the purchased item is "2px Border"
                     else if (itemId === 4) {
