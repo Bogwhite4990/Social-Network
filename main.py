@@ -1396,7 +1396,7 @@ def dashboard():
     for user in users:
         photo_filenames = user.profile_photos.split(",")
         for filename in photo_filenames:
-            photos.append(Photo(filename=filename, user=user))  # Append Photo objects
+            photos.append(Photo(filename=filename, user=user))  # Append Photo objects.
 
     # Sort the photos in reverse order based on the upload timestamp
     photos.sort(
