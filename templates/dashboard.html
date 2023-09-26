@@ -340,7 +340,7 @@ function applyBorderWidth() {
             const is2pxBorderPurchased = sessionStorage.getItem('is2pxBorderPurchased');
             if (is2pxBorderPurchased === 'true') {
                 // Apply the 2px border width
-                image.style.borderWidth = '5px';
+                image.style.borderWidth = '4px'; // Set it to 4px as you've defined
             } else {
                 // Apply the regular border width from the data attribute
                 image.style.borderWidth = borderWidth + 'px';
@@ -354,6 +354,7 @@ function applyBorderWidth() {
 window.addEventListener('load', () => {
     applyBorderWidth();
 });
+
 
 function showNotifications() {
   // Fetch notifications using AJAX

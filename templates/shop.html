@@ -98,11 +98,15 @@
                     }
                     // Check if the purchased item is "Color Comment"
                     else if (itemId === 3) {
+                        const uploadedImages = document.querySelectorAll('.uploaded-image');
+                        uploadedImages.forEach(image => {
+                        image.style.borderWidth = '1px';
+                        });
+
                         // Set the border width to the default value (1px)
                         // Update the 2px Border purchase status to false
                         is2pxBorderPurchased = false;
                         sessionStorage.setItem('is2pxBorderPurchased', 'false');
-                        buyButton.style.borderWidth = '1px';
                         console.log(`is2pxBorderPurchased: ${is2pxBorderPurchased}`);
                     }
                     // Check if the purchased item is "2px Border"
