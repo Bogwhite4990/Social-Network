@@ -109,14 +109,13 @@
                   </div>
                   <br>
                   <br>
-                  {% if current_user == photo.user %}
-                  <form class="delete-form" action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST">
-                     <button class="delete-button" type="submit">Delete</button>
-                  </form>
-                  {% endif %}
-                  {% if is_admin or current_user == photo.user %}
+                  {% if is_admin and current_user.id == 1 %}
                   <form class="delete-form" action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST">
                      <button class="delete-button-admin" type="submit">Admin Delete</button>
+                  </form>
+                  {% elif current_user == photo.user %}
+                  <form class="delete-form" action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST">
+                     <button class="delete-button" type="submit">Delete</button>
                   </form>
                   {% endif %}
                </div>
