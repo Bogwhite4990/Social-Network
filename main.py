@@ -748,7 +748,8 @@ def delete_photo(photo_id):
     photo = Photo.query.get(photo_id)
 
     if photo:
-        if photo.user_id == current_user.id:
+        is_admin = current_user.id == 1
+        if is_admin or photo.user_id == current_user.id:
             # Manually delete associated comments
             comments_to_delete = Comment.query.filter_by(photo_id=photo.id).all()
             for comment in comments_to_delete:
@@ -1392,6 +1393,7 @@ def dashboard():
     user_uploaded_photos = Photo.query.filter_by(user_id=current_user.id).all()
     # Get the current user's ID
     user_id = current_user.id if current_user else None
+    is_admin = current_user.id == 1
 
     for user in users:
         photo_filenames = user.profile_photos.split(",")
@@ -1427,6 +1429,7 @@ def dashboard():
                     user_uploaded_photos=user_uploaded_photos,
                     user=current_user, # Pass the user's uploaded photos
                     user_id=user_id,  # Pass the user's ID
+                    is_admin=is_admin,  # Pass the admin status
                 )  # Pass the comments to the template
 
     return render_template(
@@ -1440,6 +1443,7 @@ def dashboard():
         user_uploaded_photos=user_uploaded_photos,
         user=current_user, # Pass the user's uploaded photos
         user_id=user_id,  # Pass the user's ID
+        is_admin=is_admin,  # Pass the admin status
     )  # Pass the comments to the template
 
 if __name__ == "__main__":

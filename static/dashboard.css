@@ -586,5 +586,14 @@
      padding-left: 5px;
 }
 
+.delete-button-admin {
+    font-size: 8px; /* Adjust the font size to make the button smaller */
+     background-color: red;
+     border: none;
+     margin-right: 10px;
+     cursor: pointer;
+     margin-top: 10px;
+}
+
 
 
