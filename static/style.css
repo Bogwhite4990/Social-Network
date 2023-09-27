@@ -1,28 +1,96 @@
-
-
 body {
-    background-color: #131516;
-    color: white;
-    font-family: Arial, sans-serif;
+    background: radial-gradient(circle, #d1c8ff, #96b5ff);
     margin: 0;
     padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+    overflow: hidden;
 }
 
 .container {
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(to bottom, #d1c8ff, #96b5ff); /* Purple light gradient */
+    border: 2px solid #d1c8ff; /* Purple light border */
     padding: 20px;
+    border-radius: 10px;
     width: 300px;
     text-align: center;
+    margin: 0 auto; /* Center horizontally */
+    margin-top: 50px; /* Add top margin for vertical centering */
+    transition: background 0.3s; /* Smooth gradient color transition */
 }
+
+/* Bubble Styles */
+.bubble-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.bubble {
+    width: 372px; /* Double the width */
+    height: 372px; /* Double the height */
+    border-radius: 50%;
+    position: absolute;
+    background: purple;
+    border: 2px solid lightpurple;
+    overflow: hidden;
+    animation: bubble 3s infinite, pop 4s forwards;
+}
+
+.bubble img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+@keyframes bubble {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-372px); /* Adjusted for double size */
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* Add your existing CSS styles below */
+.password-toggle {
+    position: relative;
+}
+
+.password-toggle .password-input {
+    padding-right: 0;
+}
+
+.password-toggle .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Add any other existing CSS styles you have */
+
 
 form {
     margin: 0;
     padding: 0;
+    margin-bottom: 5px;
 }
 
 label {
