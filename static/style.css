@@ -51,21 +51,65 @@ input[type="password"] {
     color: white;
 }
 
+/* Login button */
+/* Define a keyframe animation for sliding in from right to left */
+@keyframes slideFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 input[type="submit"] {
     width: 100%;
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
     color: white;
     font-weight: bold;
     cursor: pointer;
-    margin-top: 10px; /* Add margin to separate from previous input */
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 16px;
+    outline: none;
+    position: relative; /* Add relative positioning to create the gradient overlay */
+    overflow: hidden; /* Hide the overflowing gradient */
+    z-index: 1; /* Place the button content above the gradient */
+    background: none; /* Remove the background color */
+    /* Add a linear gradient as a background image */
+    background-image: linear-gradient(to right, #007bff, #00408d);
+    /* Set the background size to 200% so the gradient spans the entire button width */
+    background-size: 200% 100%;
+    /* Add a transition to smoothly change the background position */
+    transition: background-position 0.3s ease;
 }
 
-input[type="submit"]:hover {
-    background-color: #0056b3;
+/* Apply the slide-in animation when the button is clicked */
+input[type="submit"]:active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #007bff, #00408d);
+    animation: slideFromRight 0.5s ease;
+    z-index: -1;
 }
+
+/* On hover, change the background position to create a slide-in effect */
+input[type="submit"]:hover {
+    background-position: -100% 0;
+}
+
+
+/* ---------------------------------------------------*/
+
 
 .small-text {
     font-size: 12px;
@@ -97,6 +141,10 @@ input[type="submit"]:hover {
     margin: 0;
     display: inline-block;
     list-style: none;
+}
+
+.login-button {
+    color: red;
 }
 
 
