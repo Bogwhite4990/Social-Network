@@ -218,16 +218,68 @@
          margin-left: 0px;
     }
 }
- body, h1, h2, h3, p, ul, li {
+h1, h2, h3, p, ul, li {
      margin: 0;
      padding: 0;
      color: white;
 }
 /* Style for the entire page */
- body {
-     font-family: Arial, sans-serif;
-     background-color: #131516;
+body {
+    background: radial-gradient(circle, #d1c8ff, #96b5ff);
 }
+
+.photo-box uploaded-photo {
+    background: red;
+}
+
+/* Bubble Styles */
+.bubble-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.bubble {
+    width: 372px; /* Double the width */
+    height: 372px; /* Double the height */
+    border-radius: 50%;
+    position: absolute;
+    background: purple;
+    border: 2px solid lightpurple;
+    overflow: hidden;
+    animation: bubble 3s infinite, pop 4s forwards;
+}
+
+.bubble img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+@keyframes bubble {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-372px); /* Adjusted for double size */
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
 /* dashboard.css */
  .navbar {
      background-color: black;
@@ -283,7 +335,16 @@
     /* Change color on hover */
 }
  .dashboard-content {
-     padding: 20px;
+    z-index: 1;
+    background: linear-gradient(to bottom, #d1c8ff, #96b5ff);
+    border: 2px solid #d1c8ff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 800px;
+    text-align: center;
+    transition: background 0.3s;
+    opacity: 1; /* Set opacity to 1 (fully opaque) */
+    box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5); /* Add shadow on the right side */
 }
  .back-button {
      color: white;
@@ -359,11 +420,9 @@
 /* Style for photo boxes */
  .photo-box {
      display: flex;
-     background-color: #131516;
      margin: 20px 0;
      border: 1px solid #white;
      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-     border: 1px solid #090A0B;
 }
 /* Style for comment section on the left of the photo */
  .comment-section {
