@@ -22,6 +22,7 @@
             transform: translateY(-50%);
             cursor: pointer;
         }
+
     </style>
 </head>
 <body>
@@ -49,8 +50,13 @@
         <br>
         <p class="small-text">
     <a class="custom-link" href="{{ url_for('register') }}">Register</a> |
-    <a class="custom-link" href="{{ url_for('forgot_password') }}">Reset Password</a>
-</p>
+    <a class="custom-link" href="{{ url_for('forgot_password') }}">Reset Password</a><br>
+        <div class="footer">
+        <footer>
+            &copy; Pixiopic <span class="copyright-year" id="currentYearPlaceholder"></span>
+        </footer>
+        </div>
+        </p>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -86,8 +92,12 @@
             <p class="logout-msg">{{ logout_msg }}</p>
         {% endif %}
     </div>
-
 <script>
+        // JavaScript to display the current year
+    const currentYearPlaceholder = document.getElementById("currentYearPlaceholder");
+    const currentYear = new Date().getFullYear();
+    currentYearPlaceholder.textContent = currentYear;
+
     // JavaScript to toggle password visibility
     const togglePassword = document.querySelector('#togglePassword');
     const passwordInput = document.querySelector('#password');

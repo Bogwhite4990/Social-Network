@@ -1,3 +1,66 @@
+/* Add media queries for tablet and mobile resolutions */
+@media (max-width: 768px) {
+    body {
+        align-items: flex-start; /* Adjust vertical alignment for mobile and tablet */
+    }
+
+    .container {
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
+
+    .phones-container {
+        display: none;
+    }
+
+    .phone-image:nth-child(2) {
+        animation: none; /* Disable the animation for smaller screens */
+    }
+}
+
+/* Add media queries for mobile resolutions */
+@media (max-width: 576px) {
+    h1 {
+        font-size: 16px; /* Further reduce font size for mobile */
+    }
+
+    .container {
+        border-radius: 0; /* Remove border-radius for mobile */
+    }
+
+    .button-separator {
+        margin: 5px 0; /* Reduce margin for mobile */
+    }
+
+    .bubble {
+        width: 200px; /* Adjust bubble size for mobile */
+        height: 200px; /* Adjust bubble size for mobile */
+        border-width: 1px; /* Thin border for mobile */
+    }
+
+    .phone-screen {
+        top: 45px; /* Adjust top position for mobile */
+        left: 10px; /* Adjust left position for mobile */
+    }
+
+    .phone-screen-android img {
+        top: 5px; /* Adjust top position for mobile */
+        left: 5px; /* Adjust left position for mobile */
+    }
+
+    input[type="submit"] {
+        margin-top: 20px; /* Increase margin-top for mobile */
+    }
+
+    .small-text,
+    .error,
+    .register-link,
+    .logout-message,
+    .logout-msg,
+    .login-button {
+        margin-top: 10px; /* Adjust margin-top for mobile */
+    }
+}
+
 /* Center the .container and .phones-container horizontally and vertically */
 body {
     background: radial-gradient(circle, #d1c8ff, #96b5ff);
@@ -14,6 +77,20 @@ h1 {
     font-size: 20px; /* Adjust the desired font size */
     font-family: 'Courier New', sans-serif; /* Specify the desired font family */
 }
+
+/* Style for the footer */
+.footer {
+    text-align: center;
+    font-size: 10px; /* Adjust the font size as needed */
+    margin-top: 15px; /* Adjust the margin as needed */
+    margin-right: 15px;
+}
+
+/* Style for the copyright year */
+.copyright-year {
+    font-weight: bold; /* Add bold to the year */
+}
+
 
 
 /* Update CSS for the Left Container */

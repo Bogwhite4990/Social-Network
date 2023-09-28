@@ -1,13 +1,33 @@
+/* Center the .container and .phones-container horizontally and vertically */
 body {
-    background-color: #131516;
-    color: #333;
-    font-family: Arial, sans-serif;
+    background: radial-gradient(circle, #d1c8ff, #96b5ff);
     margin: 0;
     padding: 0;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Ensure the body takes the full viewport height */
+}
+
+h1 {
+    font-size: 20px; /* Adjust the desired font size */
+    font-family: 'Courier New', sans-serif; /* Specify the desired font family */
+}
+
+
+/* Update CSS for the Left Container */
+.container {
+    z-index: 1;
+    background: linear-gradient(to bottom, #d1c8ff, #96b5ff);
+    border: 2px solid #d1c8ff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    transition: background 0.3s;
+    opacity: 1; /* Set opacity to 1 (fully opaque) */
+    box-shadow: 5px 0px 10px rgba(0, 0, 0, 0.5); /* Add shadow on the right side */
 }
 
 #email {
@@ -24,7 +44,7 @@ body {
 
 .title {
     font-size: 24px;
-    color: #007bff;
+    color: black;
     margin-bottom: 15px;
 }
 
@@ -52,8 +72,8 @@ body {
     margin-bottom: 15px;
     border: none;
     border-radius: 5px;
-    background-color: #333;
-    color: white;
+    background-color: white;
+    color: black;
 }
 
 .reset-button,
@@ -75,20 +95,108 @@ body {
     background-color: #0056b3; /* Change color on hover */
 }
 
-/* Style for the Back button */
 .back-button {
-    display: block;
-    margin-top: 20px;
-    text-decoration: none;
-    background-color: #007bff;
-    color: white;
-    padding: 2px 2px;
-    border-radius: 5px;
-    width: fit-content; /* Adjust the width based on content */
-    text-align: center;
+    text-decoration: underline;
     font-weight: bold;
+    color: darkpurple; /* Light purple link color */
+    cursor: pointer;
+    transition: color 0.3s; /* Add a smooth color transition on hover */
+    font-size: 12px;
 }
 
 .back-button:hover {
-    background-color: #0056b3;
+    color: purple; /* Change link color to a slightly different shade of light purple on hover */
+}
+
+
+
+/* Bubble Styles */
+.bubble-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.bubble {
+    width: 372px; /* Double the width */
+    height: 372px; /* Double the height */
+    border-radius: 50%;
+    position: absolute;
+    background: purple;
+    border: 2px solid lightpurple;
+    overflow: hidden;
+    animation: bubble 3s infinite, pop 4s forwards;
+}
+
+.bubble img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+@keyframes bubble {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-372px); /* Adjusted for double size */
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+.reset-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 16px;
+    outline: none;
+    position: relative; /* Add relative positioning to create the gradient overlay */
+    overflow: hidden; /* Hide the overflowing gradient */
+    z-index: 1; /* Place the button content above the gradient */
+    background: none; /* Remove the background color */
+    /* Add a linear gradient as a background image */
+    background-image: linear-gradient(to right, #007bff, #00408d);
+    /* Set the background size to 200% so the gradient spans the entire button width */
+    background-size: 200% 100%;
+    /* Add a transition to smoothly change the background position */
+    transition: background-position 0.3s ease;
+}
+
+/* Apply the slide-in animation when the button is clicked */
+.reset-button:active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #007bff, #00408d);
+    animation: slideFromRight 0.5s ease;
+    z-index: -1;
+}
+
+/* On hover, change the background position to create a slide-in effect */
+.reset-button:hover {
+    background-position: -100% 0;
 }

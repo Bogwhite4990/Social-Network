@@ -25,6 +25,7 @@
     </style>
 </head>
 <body>
+    <div class="bubble-container"></div>
     <div class="container">
         <h1>Register</h1>
         {% if error %}
@@ -43,6 +44,7 @@
             <input type="submit" value="Register">
         </form>
     </div>
+    <div class="bubble-container"></div>
     <script src="{{ url_for('static', filename='register.js') }}"></script>
     <script>
         function togglePasswordVisibility(inputId) {
@@ -59,6 +61,60 @@
         eyeIcon.classList.add("hide-password");
     }
 }
+
+            // JavaScript for the bubble effect (put this script after the bubble container)
+    function createBubble() {
+        const bubbleContainer = document.querySelector(".bubble-container");
+
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+
+        // Generate random position
+        const randomX = Math.random() * (window.innerWidth - 186); // Adjusted for bubble size
+        const randomY = Math.random() * (window.innerHeight - 186); // Adjusted for bubble size
+
+        bubble.style.top = randomY + "px";
+        bubble.style.left = randomX + "px";
+
+        // Generate a random gradient background color
+        const randomColor = getRandomGradientColor();
+        bubble.style.background = randomColor;
+
+        // Generate random bubble size (small or large)
+        const isSmall = Math.random() < 0.5; // 50% chance of being small
+        if (isSmall) {
+            bubble.classList.add("small-bubble");
+        }
+
+        bubbleContainer.appendChild(bubble);
+
+        // Remove the bubble after animation completes
+        bubble.addEventListener("animationiteration", () => {
+            bubble.remove();
+        });
+    }
+
+    // Generate a random gradient background color
+    function getRandomGradientColor() {
+        const colors = [
+            'linear-gradient(45deg, lightpurple, lightblue)',
+            'linear-gradient(45deg, fuchsia, lightpink)',
+            'linear-gradient(45deg, lavender, lightskyblue)',
+            'linear-gradient(45deg, thistle, powderblue)',
+            'linear-gradient(45deg, plum, deepskyblue)',
+            'linear-gradient(45deg, violet, lightcyan)',
+            'linear-gradient(45deg, orchid, azure)',
+            'linear-gradient(45deg, mediumorchid, lightsteelblue)',
+            'linear-gradient(45deg, hotpink, aliceblue)',
+            'linear-gradient(45deg, deeppink, lavenderblush)',
+            // Add more gradient colors as needed
+        ];
+        const randomIndex = Math.floor(Math.random() * colors.length);
+        return colors[randomIndex];
+    }
+
+    // Create random bubbles at regular intervals
+    setInterval(createBubble, 2000); // Adjust the interval as needed
 
     </script>
 </body>
