@@ -187,22 +187,57 @@ h1 {
 
 
 /* Add your existing CSS styles below */
+/* Set a fixed width for the password input */
 .password-toggle {
     position: relative;
+    width: 100%; /* You can adjust this width as needed */
 }
 
+/* Ensure the toggle-eye span remains visible */
+.password-toggle .toggle-eye::before {
+    content: "👁"; /* Unicode for the eye icon */
+    font-family: "Font Awesome"; /* You may need to change this to the appropriate icon font family */
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    top: -6px;
+    /* Add any other styling as needed */
+}
+
+
+
+/* Set a fixed width for the password input */
 .password-toggle .password-input {
-    padding-right: 0;
+    width: 100%; /* Set the width to 100% to match other input fields */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #eee;
+    color: #333;
+    box-sizing: border-box; /* Ensure padding doesn't affect the width */
 }
 
-.password-toggle .toggle-password {
+
+/* Set a fixed width for the toggle button */
+.password-toggle .toggle-eye {
     position: absolute;
-    top: 39% !important; /* Use !important to prioritize this adjustment */
+    top: 50%;
     right: 10px;
+    width: 40px; /* Set a fixed width for the toggle button */
     transform: translateY(-50%);
     cursor: pointer;
 }
 
+/* Initial style for the eye icon (hidden) */
+.password-toggle .toggle-eye.hide-password::before {
+    content: "🫣"; /* Unicode for a crossed-out eye icon (hidden) */
+}
+
+/* Style for the eye icon when password is visible */
+.password-toggle .toggle-eye.show-password::before {
+    content: "👀"; /* Unicode for an open eye icon (visible) */
+}
 
 
 /* Add any other existing CSS styles you have */
@@ -220,17 +255,28 @@ label {
 }
 
 /* Update CSS for input fields */
+/* Style all input fields to have the same width */
 input[type="text"],
-input[type="password"],
-input[type="email"]  {
-    width: 90%;
+input[type="email"] {
+    width: 90%; /* Set the width to 100% to make them all the same width */
     padding: 10px;
     margin-bottom: 15px;
     border: none;
     border-radius: 5px;
-    background-color: #eee; /* Set the background color to light grey */
-    color: #333; /* Set text color */
+    background-color: #eee;
+    color: #333;
 }
+
+input[type="password"] {
+    width: 93%; /* Set the width to 100% to make them all the same width */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #eee;
+    color: #333;
+}
+
 
 /* Style the placeholders (username and password text) */
 input[type="text"]::placeholder,
@@ -363,8 +409,3 @@ input[type="submit"]:hover {
 .login-button {
     color: red;
 }
-
-
-
-
-

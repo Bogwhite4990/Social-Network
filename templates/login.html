@@ -28,23 +28,29 @@
         <!-- Add the bubble container here -->
     <div class="bubble-container"></div>
     <div class="container">
-        <h1>Login</h1>
+
+        <h1>Pixiopic💗</h1>
         {% if error %}
             <p class="error">{{ error }}</p>
         {% endif %}
-        <form method="POST">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password" class="password-toggle">Password:
-                <input type="password" id="password" name="password" class="password-input" required>
-                <!-- Add the eye icon for toggling password visibility -->
-                <i class="toggle-password far fa-eye" id="togglePassword"></i>
-            </label>
+<form method="POST">
+    <input type="text" id="username" name="username" required placeholder="Username">
+    <label for="password" class="password-toggle">
+        <div class="password-input">
+            <input type="password" id="password" name="password" required placeholder="Password">
+            <!-- Add the eye icon for toggling password visibility -->
+            <i class="toggle-password far fa-eye" id="togglePassword"></i>
+        </div>
+    </label>
             <input type="submit" value="Login">
         </form>
         <br>
-        <p class="small-text">Don't have an account? <a class="register-link" href="{{ url_for('register') }}">Register here</a></p>
-        <p class="small-text">Forgot your password? <a href="{{ url_for('forgot_password') }}">Reset it here</a></p>
+        <div class="button-separator"></div>
+        <br>
+        <p class="small-text">
+    <a class="custom-link" href="{{ url_for('register') }}">Register</a> |
+    <a class="custom-link" href="{{ url_for('forgot_password') }}">Reset Password</a>
+</p>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -53,6 +59,23 @@
             {% endfor %}
           {% endif %}
         {% endwith %}
+    </div>
+                <!-- Right Container for Phones Images -->
+    <div class="phones-container">
+        <div class="phone-image">
+            <img src="/static/phones/phone1.png" alt="Phone 1">
+            <div class="phone-screen-android">
+        <!-- Images to be displayed on Phone 1 -->
+        <img src="/static/images/image1.jpg" alt="Conversation">
+    </div>
+        </div>
+        <div class="phone-image">
+            <img src="/static/phones/phone2.png" alt="Phone 2">
+            <div class="phone-screen">
+        <!-- Images to be displayed on Phone 2 -->
+        <img src="/static/images/image2.jpg" alt="Page">
+    </div>
+        </div>
     </div>
 
     <!-- Add the bubble container here -->
@@ -128,11 +151,19 @@
 
     // Create random bubbles at regular intervals
     setInterval(createBubble, 4000); // Adjust the interval as needed
+
+        // JavaScript for changing phone images
+    const phoneImages = document.querySelectorAll('.phone-image img');
+    let currentImageIndex = 0;
+
+    function changePhoneImage() {
+        phoneImages[currentImageIndex].classList.remove('visible');
+        currentImageIndex = (currentImageIndex + 1) % phoneImages.length;
+        phoneImages[currentImageIndex].classList.add('visible');
+    }
+
+    // Change phone image every 3-4 seconds (adjust the interval as needed)
+    setInterval(changePhoneImage, 3000);
 </script>
-
-
-
-
-
 </body>
 </html>
