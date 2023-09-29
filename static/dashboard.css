@@ -598,6 +598,7 @@ body {
     position: relative;
     overflow: hidden;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-bottom: 10px;
 }
 
 .like-button::before {
