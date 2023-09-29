@@ -244,6 +244,7 @@ body {
     border: 2px solid lightpurple;
     overflow: hidden;
     animation: bubble 3s infinite, pop 4s forwards;
+    z-index: -1;
 }
 
 .bubble img {
@@ -406,6 +407,7 @@ body {
 /* Style for the photo section */
  .photo-section {
      text-align: center;
+     z-index: 1
 }
 /* Style for photo boxes */
  .photo-box {
@@ -418,33 +420,139 @@ body {
  .comment-section {
      width: 300px;
      padding: 10px;
+     z-index: 1;
 }
-/* Style for comment input form */
- .comment-form {
-     display: flex;
-     flex-wrap: wrap;
-     gap: 5px;
-     align-items: center;
+
+/* Style for the image and comments section */
+.image-and-comments {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center-align all elements */
+    gap: 20px; /* Add space between image and comments */
 }
- .delete-comment-button {
-     padding_right: 100px;
+
+/* Style for the photo content (photo and like section) */
+.photo-content {
+    flex-grow: 1;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center-align all elements */
 }
- .comment-form input[type="text"] {
-     flex-grow: 1;
-     padding: 5px;
-     border: 1px solid #ddd;
-     border-radius: 3px;
+
+
+/* Style for the delete-comment-button class */
+/* Style for the delete-comment-button class */
+.delete-comment-button {
+    /* Gradient background */
+    background: linear-gradient(90deg, red, purple); /* Adjust the gradient colors as needed */
+    border: none;
+    cursor: pointer;
+    font-size: 8px; /* Adjust the font size as needed */
+    color: white; /* Text color (white for visibility on gradient background) */
+    padding: 2px 2px; /* Adjust padding to control button size */
+    margin-right: 5px; /* Adjust margin for positioning */
+    margin-top: -3px; /* Move the button up slightly */
 }
- .comment-form button[type="submit"] {
-     background-color: #4caf50;
-     color: #fff;
-     border: none;
-     padding: 5px 10px;
-     cursor: pointer;
+
+
+
+/* Style for the comment input form */
+.comment-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    width: 100%; /* Make the form full width */
+    background: linear-gradient(to right, #d1c8ff, #96b5ff); /* Gradient background */
+    padding: 10px; /* Add padding to separate it visually from the comments */
+    border-radius: 5px; /* Add rounded corners */
+    animation: fadeInUp 0.5s ease; /* Cool fade-in animation */
 }
- .comment-form input[type="text"], .comment-form button[type="submit"] {
-     margin-right: 5px;
+
+.comment-form input[type="text"] {
+    flex-grow: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 12px; /* Adjust the font size to make it smaller */
+    height: 20px; /* Make the input field shorter */
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+    transition: background-color 0.3s;
 }
+
+.comment-form input[type="text"]:focus {
+    background-color: white; /* Change the background color on focus */
+}
+
+.comment-form button[type="submit"] {
+    background: linear-gradient(to right, #9d52f5, #2f80ed); /* Gradient background for the button */
+    color: white;
+    border: none;
+    padding: 3px 6px; /* Make the button smaller */
+    cursor: pointer;
+    font-size: 12px; /* Adjust the font size to make it smaller */
+    transition: background-color 0.3s, transform 0.3s ease;
+    border-radius: 3px; /* Add rounded corners to the button */
+    animation: pulse 1s infinite; /* Add a cool pulsing animation */
+}
+
+.comment-form button[type="submit"]:hover {
+    background-color: #45a049; /* Cool hover effect */
+    transform: scale(1.05); /* Enlarge the button on hover */
+    animation: none; /* Remove animation on hover */
+}
+
+/* Cool fade-in animation */
+@keyframes fadeInUp {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+/* Style for the comments section */
+.comments {
+    max-height: 200px; /* Set a maximum height to prevent overflow */
+    overflow-y: auto;
+    padding: 10px;
+    overflow-x: hidden;
+    font-size: 12px; /* Adjust the font size to make it smaller */
+}
+
+.comment-text {
+    flex-grow: 1;
+    margin-right: 120px;
+    background: linear-gradient(to right, #d1c8ff, #96b5ff); /* Gradient background */
+    border-radius: 5px; /* Add rounded corners */
+    padding: 5px; /* Add padding */
+    color: white; /* Set text color to white */
+    word-wrap: break-word;
+    white-space: nowrap;
+}
+
+/* Add cool effects to individual comments */
+.comment {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    border-radius: 5px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.comment:hover {
+    transform: scale(1.02); /* Enlarge the comment on hover */
+}
+
+
 /* Style for the photo content (photo and like section) */
  .photo-content {
      flex-grow: 1;
@@ -462,9 +570,9 @@ body {
      position: relative;
 }
  .uploaded-image {
-     width: 323px;
+     width: 400px;
     /* Set the desired width */
-     height: 308px;
+     height: 400px;
     /* Set the desired height */
 }
 /* CSS for custom border color */
@@ -473,23 +581,65 @@ body {
     /* Default border color */
 }
 /* Style for the like section */
- .like-section {
-     text-align: right;
+.like-section {
+    display: flex; /* Display like button and like count on the same line */
+    align-items: center; /* Center items vertically */
+    justify-content: flex-end; /* Align items to the right */
+    position: relative; /* For adding the light effect */
 }
- .like-button {
-     background-color: #24a0ed;
-     border: none;
-     padding: 5px 10px;
-     margin-right: 10px;
-     cursor: pointer;
+
+.like-button {
+    background: linear-gradient(135deg, #9d52f5, #2f80ed);
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
+.like-button::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, #9d52f5 10%, transparent 20%);
+    opacity: 0.6;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.like-button:hover {
+    background-color: #9d52f5;
+    transform: scale(1.1);
+}
+
+.like-button:hover::before {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+}
+
+.like-count {
+    color: #9d52f5;
+    font-weight: bold;
+    font-size: 18px;
+    position: relative;
+    z-index: 1; /* Ensure the count is above the light effect */
+}
+
+
  .delete-button {
      background-color: red;
      border: none;
      padding: 5px 10px;
      margin-right: 10px;
      cursor: pointer;
-     margin-top: 10px;
+     margin-top: 30px;
     /* Add margin-top to move the button lower */
 }
 /* Add any additional styles for like button and count as needed */
@@ -498,16 +648,7 @@ body {
      max-height: 100%;
      overflow-y: auto;
 }
-/* Style for individual comments */
- .comment {
-     display: flex;
-     align-items: left;
-     margin: 5px 0;
-}
- .comment-text {
-     flex-grow: 1;
-     margin-right: 120px;
-}
+
  .comment-actions {
     /* Add any additional styles for comment actions here */
 }
@@ -599,25 +740,147 @@ body {
 .view-photo-button {
     top: 0;
     right: 0;
-    /* Add other styles as needed */
-    padding: 3px 6px; /* Adjust the padding to make the button smaller */
+    padding: 3px 6px; /* Make the button smaller */
     font-size: 9px; /* Adjust the font size to make the text smaller */
-    background-color: #007BFF;
+    background: linear-gradient(to right, #6e65a3, #4b439e); /* Updated gradient background for a darker look */
     color: white;
     border: none;
-    padding: 5px 10px;
     cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s ease;
+    border-radius: 3px; /* Add rounded corners to the button */
+    animation: pulse 1s infinite; /* Add a cool pulsing animation */
+}
+
+.view-photo-button:hover {
+    background-color: #4b439e; /* Updated hover effect background color */
+    transform: scale(1.05); /* Enlarge the button on hover */
+    animation: none; /* Remove animation on hover */
+}
+
+/* Style for the delete button in delete-form */
+.delete-form button[type="submit"] {
+    background: linear-gradient(to right, #6e65a3, #4b439e); /* Updated gradient background for a darker look */
+    color: white;
+    border: none;
+    padding: 2px 4px; /* Make the button smaller */
+    cursor: pointer;
+    font-size: 10px; /* Adjust the font size to make it smaller */
+    transition: background-color 0.3s, transform 0.3s ease;
+    border-radius: 3px; /* Add rounded corners to the button */
+    animation: pulse 1s infinite; /* Add a cool pulsing animation */
+}
+
+.delete-form button[type="submit"]:hover {
+    background-color: #4b439e; /* Updated hover effect background color */
+    transform: scale(1.05); /* Enlarge the button on hover */
+    animation: none; /* Remove animation on hover */
+}
+
+
+
+/* Cool fade-in animation */
+@keyframes fadeInUp {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Cool pulsing animation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* Style for online status */
+/* Style for online status */
 .user-status.online {
     color: green; /* You can customize this as needed */
+    font-weight: bold;
+    position: relative;
 }
 
-/* Style for offline status */
-.user-status.offline {
-    color: grey; /* You can customize this as needed */
+.user-status.online::before {
+    content: "Online";
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background-color: #007BFF;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 3px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s, transform 0.3s;
 }
+
+.user-status.online:hover::before {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Style for the "Uploaded by" and username */
+.user-info {
+    position: relative;
+    transition: transform 0.3s;
+}
+
+.user-info::after {
+    content: "Uploaded by";
+    position: absolute;
+    top: -20px;
+    left: -30px;
+    background-color: #007BFF;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 3px;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.user-info:hover::after {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Style for the username link */
+.user-profile-link.username-color {
+    color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }};
+    text-decoration: underline; /* Add underline to the text */
+    transition: color 0.3s; /* Add a transition effect for the color change */
+}
+
+.user-profile-link.username-color:hover {
+    color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'lightgray' }};
+    /* Change color on hover */
+}
+
+/* Add a cool pulsing animation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 
 /* Add this to your CSS file */
 .small-text {
@@ -639,7 +902,7 @@ body {
      border: none;
      margin-right: 10px;
      cursor: pointer;
-     margin-top: 10px;
+     margin-top: 30px;
 }
 
 

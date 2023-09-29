@@ -41,6 +41,7 @@
          </div>
          <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
       </div>
+      <div class="bubble-container"></div>
       <div class="dashboard-content">
          <div class="photo-section">
             <center>
@@ -92,16 +93,16 @@
                         <!-- Display all comments for each photo -->
                         {% for comment in photo.comments %}
                         <div class="comment">
-                           <div class="comment-text" data-comment-color="{{ comment.user.selected_comment_color }}">
-                              <p>
-                                 <strong>{{ comment.user.username }}:</strong> {{ comment.text }}
-                              </p>
-                           </div>
                            {% if current_user == comment.user %}
                            <form action="{{ url_for('delete_comment', comment_id=comment.id) }}" method="post">
                               <button type="submit" class="delete-comment-button">x</button>
                            </form>
                            {% endif %}
+                           <div class="comment-text" data-comment-color="{{ comment.user.selected_comment_color }}">
+                              <p>
+                                 <strong>{{ comment.user.username }}:</strong> {{ comment.text }}
+                              </p>
+                           </div>
                         </div>
                         {% endfor %}
                      </div>
@@ -488,6 +489,12 @@ window.addEventListener('load', function () {
 
     // Create random bubbles at regular intervals
     setInterval(createBubble, 4000); // Adjust the interval as needed
+
+   // Prevent bubble interference with comment input field
+const commentInput = document.querySelector("input[name='text']");
+commentInput.addEventListener("click", function (event) {
+    event.stopPropagation(); // Prevent the click event from reaching the bubbles
+});
 
 
 </script>
