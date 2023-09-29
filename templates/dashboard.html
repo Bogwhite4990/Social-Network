@@ -24,18 +24,20 @@
          {% if user_id == 1 %}
          <button class="admin-button" onclick="window.location.href='/admin'" title="Admin Page">🛠️</button>
          {% endif %}
-         <!-- HTML template with bell icon -->
+<!-- HTML template with bell icon -->
 <span id="notification-icon" class="notification-icon">🔔</span>
-<!-- Notification popup/modal -->
-<div id="notification-popup" class="notification-popup">
-    <!-- Notifications will be displayed here -->
-</div>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <div id="notification-list">
+
+<!-- Dropdown container -->
+<div class="dropdown-container">
+    <!-- Notification popup/modal -->
+    <div id="notification-popup" class="notification-popup">
+        <!-- Notifications will be displayed here -->
+        <div id="notification-list" class="notification-list">
             <!-- Notifications will be added here dynamically -->
         </div>
     </div>
-</li>
+</div>
+
          <div class="centered-content">
             <button class="upload-button" onclick="document.getElementById('upload-photo').click()">Upload</button>
          </div>
@@ -137,6 +139,22 @@
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
+
+   // Function to toggle the notification dropdown
+function toggleNotificationDropdown() {
+    const notificationPopup = document.getElementById('notification-popup');
+    if (notificationPopup.style.display === 'block') {
+        notificationPopup.style.display = 'none';
+    } else {
+        notificationPopup.style.display = 'block';
+        // You can load and display notifications here dynamically
+    }
+}
+
+// Add a click event listener to the bell icon
+const notificationIcon = document.getElementById('notification-icon');
+notificationIcon.addEventListener('click', toggleNotificationDropdown);
+
 
     // JavaScript to handle the game dropdown
 document.addEventListener("DOMContentLoaded", function() {
