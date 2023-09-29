@@ -228,10 +228,6 @@ body {
     background: radial-gradient(circle, #d1c8ff, #96b5ff);
 }
 
-.photo-box uploaded-photo {
-    background: red;
-}
-
 /* Bubble Styles */
 .bubble-container {
     position: absolute;
@@ -338,6 +334,7 @@ body {
     z-index: 1;
     background: linear-gradient(to bottom, #d1c8ff, #96b5ff);
     border: 2px solid #d1c8ff;
+    margin: 20px auto;
     padding: 20px;
     border-radius: 10px;
     width: 800px;
@@ -405,14 +402,7 @@ body {
      background-color: #0056b3;
 }
 /* Style for the dashboard content */
- .dashboard-content {
-     max-width: 800px;
-     margin: 20px auto;
-     padding: 20px;
-     background-color: #131516;
-     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-     border: 1px solid #white;
-}
+
 /* Style for the photo section */
  .photo-section {
      text-align: center;
@@ -476,7 +466,6 @@ body {
     /* Set the desired width */
      height: 308px;
     /* Set the desired height */
-     border: 1px solid gold;
 }
 /* CSS for custom border color */
  .custom-border {

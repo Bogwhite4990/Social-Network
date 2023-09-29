@@ -130,10 +130,10 @@ def generate_random_color():
 
 # List of available items in the shop
 shop_items = [
-    {"id": 1, "name": "Photo Border", "price": 100, "border_color": None, "image_url": "/static/images/item1.jpg"},
+    {"id": 1, "name": "Photo Border [NO]", "price": 99999, "border_color": None, "image_url": "/static/images/item1.jpg"},
     {"id": 2, "name": "Color Name", "price": 500, "image_url": "/static/images/item2.jpg"},
     {"id": 3, "name": "Remove Border Width", "price": 0, "image_url": "/static/images/item3.jpg"},
-    {"id": 4, "name": "Border Width", "price": 800, "image_url": "/static/images/item4.jpg"},
+    {"id": 4, "name": "Border Width [NO]", "price": 99999, "image_url": "/static/images/item4.jpg"},
 
 ]
 
@@ -1194,7 +1194,7 @@ def buy_item(item_id):
         user.selected_username_comment = random_comment_color
 
     elif item['name'] == 'Border Width':
-        user.selected_border_width = 5
+        user.selected_border_width = 2
         user.has_purchased_border_width = True
 
 
