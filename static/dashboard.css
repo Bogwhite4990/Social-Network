@@ -3,6 +3,8 @@ h1, h2, h3, p, ul, li {
      padding: 0;
      color: white;
 }
+
+
 /* Style for the entire page */
 body {
     background: radial-gradient(circle, #d1c8ff, #96b5ff);
@@ -591,6 +593,7 @@ body {
     transition: background-color 0.3s ease, transform 0.3s ease;
     margin-bottom: 10px;
 }
+
 
 .like-button::before {
     content: "";

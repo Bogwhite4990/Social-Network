@@ -130,7 +130,7 @@ def generate_random_color():
 
 # List of available items in the shop
 shop_items = [
-    {"id": 1, "name": "Photo Border [NO]", "price": 99999, "border_color": None, "image_url": "/static/images/item1.jpg"},
+    {"id": 1, "name": "Photo Border [NO]", "price": 0, "border_color": None, "image_url": "/static/images/item1.jpg"},
     {"id": 2, "name": "Color Name", "price": 500, "image_url": "/static/images/item2.jpg"},
     {"id": 3, "name": "Remove Border Width", "price": 0, "image_url": "/static/images/item3.jpg"},
     {"id": 4, "name": "Border Width [NO]", "price": 99999, "image_url": "/static/images/item4.jpg"},
