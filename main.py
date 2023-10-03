@@ -102,7 +102,7 @@ thresholds_and_icons = [
     (1, '🌟'),          # Emoji for 100 photos
     (1, '💎'),         # Emoji for 250 photos
     (1, '👑'),         # Emoji for 500 photos
-    (1, '💯'),        # Emoji for 1000 photos
+    (22, '💯'),        # Emoji for 1000 photos
 ]
 
 # ---------------------- Reputation
