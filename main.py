@@ -650,7 +650,7 @@ def like_photo(photo_id):
     #     notification_content = f"{current_user.username} liked your photo."
     #     notification = Notification(user_id=photo.user_id, content=notification_content)
     #     db.session.add(notification)
-    #     db.session.commit()
+    #     db.session.commit() ??
 
     if like:
         # User has already liked the photo, remove the like
