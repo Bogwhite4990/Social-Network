@@ -660,6 +660,46 @@ body {
     z-index: 1; /* Ensure the count is above the light effect */
 }
 
+/* Heart animation when like button is clicked */
+.like-button.clicked::before {
+    animation: heartAnimation 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) both;
+}
+
+/* Falling hearts animation */
+/* Falling hearts animation */
+.heart-fall {
+    animation: fallingHearts 1s linear infinite;
+    opacity: 0; /* Initially invisible */
+    font-size: 20px;
+    position: absolute; /* Set to absolute position */
+    color: #ff1493; /* Pink color, you can adjust */
+}
+
+
+/* Keyframes for the heart animation */
+@keyframes heartAnimation {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Keyframes for the falling hearts animation */
+@keyframes fallingHearts {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(300px); /* Adjust the falling distance */
+    }
+}
+
+
 
  .delete-button {
      background-color: red;

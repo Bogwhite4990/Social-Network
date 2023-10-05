@@ -68,7 +68,7 @@
                            <!-- Display icons based on uploaded_photo_count -->
                            {% for threshold, emoji in thresholds_and_icons %}
                            {% if photo.user.uploaded_photo_count >= threshold %}
-                           <span title="{% if threshold == 1 %}1 Photo{% else %}{{ threshold }} Photos{% endif %}">{{ emoji }}</span>
+                           <span class="user-info" title="{% if threshold == 1 %}1 Photo{% else %}{{ threshold }} Photos{% endif %}">{{ emoji }}</span>
                            {% endif %}
                            {% endfor %}
                         </p>
