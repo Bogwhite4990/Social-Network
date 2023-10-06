@@ -903,6 +903,7 @@ body {
 .user-info {
     position: relative;
     transition: transform 0.3s;
+    z-index: 1000; /* Adjust the z-index value as needed */
 }
 
 .user-info::after {
@@ -917,12 +918,14 @@ body {
     transform: scale(0);
     opacity: 0;
     transition: transform 0.3s, opacity 0.3s;
+    z-index: 1001; /* Make sure this value is higher than the z-index of .user-info */
 }
 
 .user-info:hover::after {
     transform: scale(1);
     opacity: 1;
 }
+
 
 /* Style for the username link */
 .user-profile-link.username-color {
