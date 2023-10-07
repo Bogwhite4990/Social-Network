@@ -245,27 +245,63 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // JavaScript to handle like button clicks
-    const likeButtons = document.querySelectorAll('.like-button');
-    likeButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const photoId = button.getAttribute('data-photo-id');
-            const liked = button.getAttribute('data-liked') === 'true';
-            const likeCount = button.nextElementSibling; // Item displaying the number of likes
-            // Send an AJAX request to the server to update the like
-            const response = await fetch(`/like_photo/${photoId}`, {
-                method: 'POST',
-            });
-            if (response.ok) {
-                const data = await response.json();
-                // Update the number of likes with the value received from the server
-                likeCount.textContent = data.like_count;
-                // Change the button emoji according to the current state (liked)
-                button.textContent = liked ? '❤️' : '❤️';
-                button.setAttribute('data-liked', !liked);
-            }
+// JavaScript to handle like button clicks
+const likeButtons = document.querySelectorAll('.like-button');
+likeButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+        const photoId = button.getAttribute('data-photo-id');
+        const liked = button.getAttribute('data-liked') === 'true';
+        const likeCount = button.nextElementSibling; // Item displaying the number of likes
+        // Send an AJAX request to the server to update the like
+        const response = await fetch(`/like_photo/${photoId}`, {
+            method: 'POST',
         });
+        if (response.ok) {
+            const data = await response.json();
+            // Update the number of likes with the value received from the server
+            likeCount.textContent = data.like_count;
+
+            // Change the button emoji according to the current state (liked/unliked)
+            if (liked) {
+                button.textContent = '💔'; // Change to broken heart emoji
+            } else {
+                button.textContent = '❤️'; // Change to heart emoji
+            }
+            button.setAttribute('data-liked', !liked);
+
+            // Create and append falling hearts (or broken hearts)
+            for (let i = 0; i < 5; i++) {
+                createFallingHeart(button, liked);
+            }
+        }
     });
+});
+
+// Function to create and append a falling heart (or broken heart) element
+function createFallingHeart(button, liked) {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+
+    // Position the heart at the button's position
+    const buttonRect = button.getBoundingClientRect();
+    heart.style.left = buttonRect.left + 'px';
+    heart.style.top = buttonRect.top + 'px';
+
+    // Set the appropriate background image based on liked/unliked
+    if (liked) {
+        heart.style.backgroundImage = 'url("path/to/broken_heart.png")';
+    } else {
+        heart.style.backgroundImage = 'url("path/to/heart.png")';
+    }
+
+    document.body.appendChild(heart);
+
+    // Remove the heart element after the animation completes
+    heart.addEventListener('animationend', () => {
+        heart.remove();
+    });
+}
+
 
     // Function to handle image uploads (if needed)
     function handleImageUpload(input) {

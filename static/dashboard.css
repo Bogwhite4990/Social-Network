@@ -74,6 +74,33 @@ body {
     position: relative; /* Add position relative for stacking purposes */
 }
 
+@keyframes heartFall {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(300px);
+    opacity: 0;
+  }
+}
+
+.heart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transform: rotate(-45deg);
+  animation: heartFall 2s ease-out;
+}
+
+.heart::before {
+  content: "❤️"; /* Use the heart emoji here */
+  display: block;
+  font-size: 20px; /* Adjust the font size to match your desired size */
+  color: red; /* You can change the color as needed */
+}
+
+
 
 .centered-content {
     display: flex;
