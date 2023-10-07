@@ -107,8 +107,6 @@
                         {% endfor %}
                      </div>
                   </div>
-                  <br>
-                  <br>
                   {% if is_admin and current_user.id == 1 %}
                   <form class="delete-form" action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST">
                      <button class="delete-button-admin" type="submit">Admin Delete</button>
