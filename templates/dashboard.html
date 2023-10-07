@@ -245,17 +245,19 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-// JavaScript to handle like button clicks
 const likeButtons = document.querySelectorAll('.like-button');
+
 likeButtons.forEach(button => {
     button.addEventListener('click', async () => {
         const photoId = button.getAttribute('data-photo-id');
         const liked = button.getAttribute('data-liked') === 'true';
         const likeCount = button.nextElementSibling; // Item displaying the number of likes
+
         // Send an AJAX request to the server to update the like
         const response = await fetch(`/like_photo/${photoId}`, {
             method: 'POST',
         });
+
         if (response.ok) {
             const data = await response.json();
             // Update the number of likes with the value received from the server
@@ -273,9 +275,21 @@ likeButtons.forEach(button => {
             for (let i = 0; i < 5; i++) {
                 createFallingHeart(button, liked);
             }
+
+            // Store the like state in localStorage
+            localStorage.setItem(`like_state_${photoId}`, !liked);
         }
     });
+
+    // Check and set the initial like state from localStorage
+    const photoId = button.getAttribute('data-photo-id');
+    const likedInStorage = localStorage.getItem(`like_state_${photoId}`);
+    if (likedInStorage !== null) {
+        button.setAttribute('data-liked', likedInStorage === 'true');
+        button.textContent = likedInStorage === 'true' ? '❤️' : '💔';
+    }
 });
+
 
 // Function to create and append a falling heart (or broken heart) element
 function createFallingHeart(button, liked) {
