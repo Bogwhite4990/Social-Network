@@ -74,6 +74,7 @@ body {
     position: relative; /* Add position relative for stacking purposes */
 }
 
+
 .centered-content {
     display: flex;
     justify-content: center; /* Center horizontally */
@@ -295,6 +296,7 @@ body {
     z-index: 2;
     display: none; /* Hidden by default */
 }
+
 
 /* Stylish notification list */
 #notification-list {
