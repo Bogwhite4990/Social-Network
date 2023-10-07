@@ -927,6 +927,7 @@ body {
 }
 
 
+
 /* Style for the username link */
 .user-profile-link.username-color {
     color: {{ photo.user.selected_username_color if photo.user.selected_username_color else 'white' }};
