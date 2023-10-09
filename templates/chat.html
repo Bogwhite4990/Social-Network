@@ -126,6 +126,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     // Update the last displayed timestamp to the sent message's timestamp
                     lastDisplayedTimestamp = timestamp;
+
+                    // Refresh the page after 1 second
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
                 } else {
                     console.error("Error sending message:", data.error);
                 }
