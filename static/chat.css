@@ -1,16 +1,14 @@
-/* Import the common styles from dashboard.css */
-@import url("dashboard.css");
-
-/* Additional styles for the Chat page */
+/* chat.css */
 body {
-    background-color: #131516; /* Same background color as the dashboard and shop */
+    background: radial-gradient(circle, #d1c8ff, #96b5ff);
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif; /* Use the same font as in friend.css */
 }
 
-/* Style the navbar */
 .navbar {
-    background-color: black;
+    background: linear-gradient(90deg, #4b439e, #6e65a3);
+    /* Replace the colors with your preferred gradient colors */
     color: white;
     padding: 10px;
     display: flex;
@@ -19,6 +17,7 @@ body {
     font-weight: bold;
     border-bottom: 2px solid gold;
     text-align: right;
+    position: relative; /* Add position relative for stacking purposes */
 }
 
 .navbar .username {
@@ -35,8 +34,13 @@ body {
     cursor: pointer;
 }
 
+/* Add hover effect for the dashboard button */
 .navbar .dashboard-button:hover {
     background-color: #45a049;
+}
+
+.chat-name-username {
+    margin-bottom: 25px;
 }
 
 /* Center the entire content */
@@ -49,16 +53,17 @@ body {
     margin-top: -100px; /* Offset the navbar's top border */
 }
 
-h1 {
-    font-size: 1.5rem; /* Adjust heading font size */
-    color: gold;
-    margin: 20px 0;
+h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+    color: linear-gradient(135deg, #9300d4, #1a004c); /* Dark purple gradient text color */
 }
 
+/* Style the chat container */
 #chat-container {
     width: 80%; /* Adjust the width as needed */
     max-width: 900px; /* Set a maximum width for the chat container */
-    background-color: #222;
+    background: linear-gradient(135deg, #9300d4, #1a004c); /* Light purple gradient background color */
     border: 1px solid gold;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -67,17 +72,18 @@ h1 {
     max-height: 400px; /* Set a maximum height for the chat container */
 }
 
+/* Style messages */
 .message {
     display: flex;
-    flex-direction: column; /* Stack message text and timestamp vertically */
+    flex-direction: column;
     margin-bottom: 5px;
-    position: relative; /* Add relative positioning to .message */
+    position: relative;
 
-    /* Add a gold line using ::after pseudo-element */
+    /* Add a gold line */
     &::after {
         content: '';
         background-color: gold;
-        height: 1px; /* Adjust the line thickness as needed */
+        height: 1px;
         width: 100%;
         position: absolute;
         bottom: 0;
@@ -86,35 +92,23 @@ h1 {
 }
 
 .message-timestamp {
-    font-size: 0.8rem; /* Adjust timestamp font size */
-    color: #555; /* Adjust timestamp text color for better visibility */
-    text-align: right; /* Right-align the timestamp text */
+    font-size: 0.8rem;
+    color: #555;
+    text-align: right;
 }
 
-/* Style "You" in green */
 .message strong:first-child {
     color: green;
 }
 
-/* Style the username ({{ friend.username }}) in gold */
 .message strong:nth-child(2) {
     color: gold;
 }
 
-
-
-/* Style the message container */
-#chat-container {
-    /* Existing styles... */
-
-    /* Add word-wrap property to allow text to wrap to the next line */
-    word-wrap: break-word; /* This will break words to the next line if needed */
-}
-
-
+/* Style the chat form */
 #chat-form {
-    width: 80%; /* Adjust the width as needed */
-    max-width: 600px; /* Set a maximum width for the chat form */
+    width: 80%;
+    max-width: 600px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -126,15 +120,17 @@ h1 {
     margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    background: linear-gradient(135deg, #9300d4, #1a004c); /* Dark purple gradient background */
+    color: white;
 }
 
 #message-input:focus {
     outline: none;
-    border-color: #007bff; /* Highlight input on focus */
+    border-color: #007bff;
 }
 
 button[type="submit"] {
-    background-color: #007bff;
+    background: linear-gradient(135deg, #9300d4, #1a004c); /* Dark purple gradient background */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -142,5 +138,6 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3; /* Button color on hover */
+    background: linear-gradient(135deg, #9300d4, #1a004c); /* Dark purple gradient background */
+    color: white;
 }
