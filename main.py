@@ -134,7 +134,6 @@ shop_items = [
     {"id": 2, "name": "Color Name", "price": 500, "image_url": "/static/images/item2.jpg"},
     {"id": 3, "name": "Remove Border Width", "price": 0, "image_url": "/static/images/item3.jpg"},
     {"id": 4, "name": "Border Width [NO]", "price": 99999, "image_url": "/static/images/item4.jpg"},
-
 ]
 
 # ---------------------
@@ -299,7 +298,7 @@ class User(db.Model, UserMixin):
         ).first()
         return friendship is not None
 
-    def generate_reset_token(self, expires_sec=1800):
+    def generate_reset_token(self):
         s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         self.reset_token = s.dumps({'user_id': self.id}, salt='reset')
 
@@ -482,7 +481,6 @@ def profile():
         name = request.form["name"]
         email = request.form["email"]
         new_password = request.form["password"]
-        user_balance = current_user.coins
 
         if (
                 len(new_password) >= 6
