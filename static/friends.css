@@ -1,18 +1,34 @@
 /* friends.css */
-h2, p, li {
+h1, h2, h3, p, ul {
+    margin: 0;
+    padding: 0;
     color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
+    transition: color 0.3s, text-shadow 0.3s; /* Add smooth transition effects */
+}
+
+li {
+    margin-bottom: 10px;
+    color: black; /* Set the text color to black */
+}
+
+
+/* Add hover effect to change text color and shadow */
+h1:hover, h2:hover, h3:hover, p:hover, ul:hover, li:hover {
+    color: linear-gradient(135deg, #1a004c, #9300d4); /* Invert gradient on hover */
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8); /* Increase shadow on hover */
 }
 
 
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #131516;
+    background: radial-gradient(circle, #d1c8ff, #96b5ff);
 }
 
 /* Navbar Styles */
 .navbar {
-    background-color: black;
+    background: linear-gradient(90deg, #4b439e, #6e65a3);
+    /* Replace the colors with your preferred gradient colors */
     color: white;
     padding: 10px;
     display: flex;
@@ -21,6 +37,7 @@ body {
     font-weight: bold;
     border-bottom: 2px solid gold;
     text-align: right;
+    position: relative; /* Add position relative for stacking purposes */
 }
 
 .navbar .username {
@@ -29,20 +46,29 @@ body {
 }
 
 .navbar .friends-button {
-    background-color: #24a0ed;
-    color: #fff;
+    display: flex;
+    margin-left: 2px;
+    background-color: transparent;
     border: none;
-    padding: 5px 10px;
-    margin-right: 10px;
+    font-size: 18px;
+    transition: background-color 0.3s;
     cursor: pointer;
+}
 }
 
 .navbar .logout-button {
     background-color: #f44336;
-    color: #fff;
+    color: white;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s ease;
+    border-radius: 5px;
+}
+
+.navbar .logout-button:hover {
+    background-color: #ff5345;
+    transform: scale(1.05);
 }
 
 /* Friends Content Styles */
@@ -50,9 +76,14 @@ body {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #131516;
+    background: linear-gradient(to bottom, #e6e6ff, #cc99ff); /* Gradient light purple background */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s; /* Smooth background color transition */
+    color: transparent; /* Make text transparent */
+    -webkit-background-clip: text; /* Clip text to background */
+    background-clip: text; /* Clip text to background */
 }
+
 
 /* Search User Section Styles */
 .search-user-section {
@@ -71,19 +102,26 @@ body {
 .search-user-section input[type="text"] {
     flex-grow: 1;
     padding: 10px;
-    border: 2px solid gold;
-    border-radius: 5px;
-    background-color: #222;
+    background: linear-gradient(90deg, #4b439e, #6e65a3);
     color: white;
+    transition: background 0.3s, color 0.3s; /* Add smooth transitions for background and text color */
 }
 
 .search-user-section button[type="submit"] {
-    background-color: #4caf50;
+    background: linear-gradient(135deg, #e0aaff, #a57bca); /* Light purple gradient background */
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+    margin-left: 5px;
+    transition: background 0.3s, color 0.3s; /* Add smooth transitions for background and text color */
 }
+
+.search-user-section button[type="submit"]:hover {
+    background: linear-gradient(135deg, #a57bca, #e0aaff); /* Invert gradient on hover */
+    color: #fff; /* Keep text color white on hover */
+}
+
 
 /* User Listing Section Styles */
 .user-listing-section {
@@ -103,13 +141,38 @@ body {
     margin-bottom: 10px;
 }
 
-.add-friend-button {
-    background-color: #24a0ed;
+.add-friend-button:hover {
+    background-color: #24a0ed; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition on hover */
+}
+
+.remove-friend-button {
+    background: linear-gradient(135deg, #ff0000, #cc0000); /* Gradient red background */
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+    transition: background 0.3s; /* Add a smooth transition for the background color */
 }
+
+.remove-friend-button:hover {
+    background: linear-gradient(135deg, #cc0000, #ff0000); /* Invert gradient on hover */
+}
+
+.chat-button {
+    background: linear-gradient(135deg, #00ff00, #009900); /* Gradient green background */
+    color: #fff;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: background 0.3s; /* Add a smooth transition for the background color */
+}
+
+.chat-button:hover {
+    background: linear-gradient(135deg, #009900, #00ff00); /* Invert gradient on hover */
+}
+
 
 /* Chat Section Styles */
 .chat-section {
@@ -163,12 +226,19 @@ body {
 
 /* Go Back Button Styles */
 .back-button {
-    background-color: #24a0ed;
+    background: linear-gradient(135deg, #24a0ed, #1a4a85); /* Dark blue gradient background similar to dashboard */
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s; /* Add a smooth transition for the background color */
 }
+
+.back-button:hover {
+    background: linear-gradient(135deg, #1a4a85, #24a0ed); /* Invert gradient on hover */
+}
+
 
 .username {
     color: gold;
@@ -179,6 +249,7 @@ body {
     color: white;
     text-decoration: none;
     transition: color 0.3s; /* Add transition effect for color change */
+    background: red;
 }
 
 .logout-button:hover {
