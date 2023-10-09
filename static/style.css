@@ -4,12 +4,22 @@
         align-items: flex-start; /* Adjust vertical alignment for mobile and tablet */
     }
 
-    .container {
-        padding: 10px; /* Reduce padding for smaller screens */
+     .container {
+        width: auto; /* Allow content to determine width */
+        margin: 10px; /* Add margin for spacing */
+        padding: 10px; /* Adjust padding */
     }
 
+    /* Update CSS for the Right Container with Phones Images (.phones-container) for Mobile */
     .phones-container {
-        display: none;
+        position: relative; /* Change to relative positioning */
+        top: 0; /* Remove top positioning */
+        transform: none; /* Remove transform */
+        margin-left: 0; /* Remove margin-left */
+        width: auto; /* Allow content to determine width */
+        height: auto; /* Allow content to determine height */
+        display: block; /* Ensure block display for stacking */
+        clear: both; /* Clear floats to stack above the container */
     }
 
     .phone-image:nth-child(2) {
@@ -24,7 +34,9 @@
     }
 
     .container {
-        border-radius: 0; /* Remove border-radius for mobile */
+        width: auto; /* Allow content to determine width */
+        margin: 10px; /* Add margin for spacing */
+        padding: 10px; /* Adjust padding */
     }
 
     .button-separator {
@@ -58,6 +70,17 @@
     .logout-msg,
     .login-button {
         margin-top: 10px; /* Adjust margin-top for mobile */
+    }
+
+    .phones-container {
+        position: relative; /* Change to relative positioning */
+        top: 0; /* Remove top positioning */
+        transform: none; /* Remove transform */
+        margin-left: 0; /* Remove margin-left */
+        width: auto; /* Allow content to determine width */
+        height: auto; /* Allow content to determine height */
+        display: block; /* Ensure block display for stacking */
+        clear: both; /* Clear floats to stack above the container */
     }
 }
 
