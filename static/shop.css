@@ -1,9 +1,18 @@
 /* Import the common styles from dashboard.css */
 @import url("dashboard.css");
 
+h1, h2, h3, p, ul, li {
+     margin: 0;
+     padding: 0;
+     color: white;
+}
+
 /* Additional styles for the Shop page */
 body {
-    background-color: #131516; /* Maintain the same background color as the dashboard */
+    background: radial-gradient(circle, #d1c8ff, #96b5ff);
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif; /* Use the same font as in friend.css */
 }
 
 .shop-item-pair {
@@ -11,30 +20,24 @@ body {
     justify-content: center; /* Center items horizontally */
     align-items: center; /* Center items vertically */
     margin-bottom: 20px; /* Add space between item pairs */
+    margin-top: 20px;
 }
 
 .shop-item {
-    background-color: #222;
-    border: 1px solid gold;
+    background: radial-gradient(circle, #d1c8ff, #96b5ff);
+    border: 1px solid purple;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
     text-align: center;
     max-width: 300px;
     flex: 1; /* Equal width for each item in a pair */
     margin: 0 5px; /* Add space between items in a pair */
+    transition: transform 0.2s ease-in-out; /* Cool transform effect */
 }
 
-
-.shop-item {
-    background-color: #222; /* Background color for each shop item */
-    border: 1px solid gold;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin: 10px;
-    padding: 20px;
-    text-align: center;
-    max-width: 300px;
+.shop-item:hover {
+    transform: scale(1.05); /* Scale up on hover */
 }
-
 
 .shop-item img {
     max-width: 50%;
@@ -44,7 +47,7 @@ body {
 
 .shop-item h3 {
     font-size: 1.5rem; /* Adjust heading font size */
-    color: gold;
+    color: purple;
 }
 
 .shop-item p {
@@ -53,29 +56,32 @@ body {
 }
 
 .shop-item button {
-    background-color: #24a0ed; /* Button color */
+    background-color: #ff9a9e; /* Button color */
     border: none;
     padding: 10px 20px;
     color: white;
     cursor: pointer;
     margin-top: 10px;
+    transition: background-color 0.3s ease-in-out; /* Color change effect */
 }
 
 .shop-item button:hover {
-    background-color: #007bff; /* Button color on hover */
+    background-color: #ff6b6b; /* Button color on hover */
 }
+
 
 /* Style the navbar */
 .navbar {
-    background-color: black;
+    background: linear-gradient(90deg, #4b439e, #6e65a3);
+    /* Replace the colors with your preferred gradient colors */
     color: white;
-    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-weight: bold;
     border-bottom: 2px solid gold;
     text-align: right;
+    position: relative; /* Add position relative for stacking purposes */
 }
 
 .navbar .username {
@@ -83,36 +89,30 @@ body {
     text-decoration: underline;
 }
 
+/* Style the dashboard button */
 .navbar .dashboard-button {
-    background-color: #4caf50;
+    background: linear-gradient(135deg, #9300d4, #1a004c);
     color: #fff;
     border: none;
     padding: 5px 10px;
     margin-right: 10px;
     cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s; /* Add transition for background color and box shadow */
 }
 
+/* Add hover effect for the dashboard button */
 .navbar .dashboard-button:hover {
-    background-color: #45a049;
+    background: linear-gradient(135deg, #00dbde, #fc00ff); /* Gradient background on hover */
+    color: #fff; /* Text color on hover */
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.5); /* Add a colorful and dynamic shadow on hover */
+    transform: scale(1.05); /* Scale up the button on hover */
 }
 
 /* Style user balance and page title */
 #user-balance,
 #user-balance-display,
-h1,
 p {
-    color: white;
-    text-align: center;
-    margin: 20px;
-    font-size: 1.2rem; /* Adjust font size */
-}
-
-/* Style user balance and page title */
-#user-balance,
-#user-balance-display,
-h1,
-p {
-    color: white;
+    color: black;
     text-align: center;
     margin: 0; /* Remove margin */
     padding: 0; /* Remove padding */
@@ -131,38 +131,74 @@ p {
 .popup {
     display: none;
     position: fixed;
-    top: 10%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: black;
+    background: radial-gradient(ellipse at center, #e0c3fc 0%, #a76be7 100%);
+    border-radius: 50%;
+    width: 300px;
+    height: 200px;
     padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
     z-index: 1000;
+    animation: popup-fade 0.5s ease-in-out;
+    overflow: hidden;
 }
 
 .popup-content {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #333;
+    font-size: 18px;
+    text-align: center;
 }
 
 #close-popup {
-    display: block;
-    margin-top: 10px;
-    background-color: #007bff;
+    position: absolute; /* Position the close button */
+    top: 200px;
+    right: 135px;
+    background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 10px 20px;
+    border-radius: 25px;
     cursor: pointer;
+    transition: background 0.3s ease-in-out;
 }
+
+#close-popup:hover {
+    background: linear-gradient(45deg, #ff6b6b 0%, #ffa0a0 100%);
+}
+
+@keyframes popup-fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 
 /* Style for the Info button */
 .info-button {
     display: block;
     margin: 0 auto;
-    background-color: #007bff;
+    background: linear-gradient(45deg, #a76be7 0%, #e0c3fc 100%);
     color: white;
     border: none;
-    padding: 5px 10px;
+    border-radius: 25px;
+    padding: 10px 20px;
     cursor: pointer;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.info-button:hover {
+    background: linear-gradient(45deg, #e0c3fc 0%, #a76be7 100%);
+    transform: scale(1.05); /* Add a slight scale effect on hover */
 }
 
 /* The rest of your CSS for the popup remains the same */
