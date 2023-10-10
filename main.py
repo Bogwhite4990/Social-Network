@@ -1428,7 +1428,7 @@ def dashboard():
                     user=current_user, # Pass the user's uploaded photos
                     user_id=user_id,  # Pass the user's ID
                     is_admin=is_admin,  # Pass the admin status
-                )  # Pass the comments to the template
+                )
 
     return render_template(
         "dashboard.html",
@@ -1442,7 +1442,7 @@ def dashboard():
         user=current_user, # Pass the user's uploaded photos
         user_id=user_id,  # Pass the user's ID
         is_admin=is_admin,  # Pass the admin status
-    )  # Pass the comments to the template
+    )
 
 if __name__ == "__main__":
     login_manager.init_app(app)
