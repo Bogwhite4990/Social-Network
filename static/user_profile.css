@@ -1,101 +1,31 @@
-/* Media query for tablets (e.g., iPad) */
- @media (max-width: 768px) {
-     body {
-         font-size: 14px;
-    }
-     .container {
-         width: 90%;
-    }
-    /* Add more specific styles for tablet layout if needed */
-     .like-button {
-         margin-right: 10px;
-    }
-     .like-count {
-         padding-left: 5px;
-    }
-    /* Style the Friends button */
-     .friends-button {
-         background-color: gray;
-         color: #fff;
-         border: none;
-         padding: 5px 10px;
-         margin-right: 10px;
-         cursor: pointer;
-         text-decoration: none;
-    }
-    /* Adjust the space between the Friends button and the text */
-     .navbar .username {
-         margin-right: 10px;
-    }
-    /* Hide the Friends button on tablets */
-     .desktop-friends-button {
-         display: none;
-    }
-    /* Center the Back button */
-     .back-button {
-         margin: 10px auto;
-    }
-}
-/* Media query for mobile devices */
- @media (max-width: 480px) {
-     body {
-         font-size: 12px;
-    }
-     .container {
-         width: 100%;
-         padding: 10px;
-    }
-    /* Adjust other styles for mobile layout */
-     .like-button {
-         margin-right: 5px;
-    }
-     .like-count {
-         padding-left: 3px;
-    }
-    /* Style the Friends button */
-     .friends-button {
-         background-color: gray;
-         color: #fff;
-         border: none;
-         padding: 5px 10px;
-         margin-right: 10px;
-         cursor: pointer;
-         text-decoration: none;
-    }
-    /* Adjust the space between the Friends button and the text */
-     .navbar .username {
-         margin-right: 10px;
-    }
-    /* Hide the Friends button on mobile */
-     .desktop-friends-button {
-         display: none;
-    }
-    /* Center the Back button */
-     .back-button {
-         margin: 10px auto;
-    }
-}
 /* user_profile.css */
- body {
-     background-color: #131516;
+body {
+    background: radial-gradient(circle, #d1c8ff, #96b5ff);
 }
- h1, h2 {
+
+h1, h2, h3, p, ul, li {
+     margin: 0;
+     padding: 0;
      color: white;
 }
+
  #reputation-message {
      color: white;
 }
- .navbar {
-     background-color: black;
-     color: white;
-     padding: 10px;
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     font-weight: bold;
-     border-bottom: 2px solid gold;
-     text-align: right;
+.navbar {
+    background: linear-gradient(90deg, #4b439e, #6e65a3);
+    /* Replace the colors with your preferred gradient colors */
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-bottom: 2px solid gold;
+    text-align: right;
+    position: relative; /* Add position relative for stacking purposes */
 }
+
  .navbar .username {
      cursor: pointer;
      text-decoration: underline;
