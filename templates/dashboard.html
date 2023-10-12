@@ -50,7 +50,6 @@
                <div class="photo-box uploaded-photo">
                   <div class="image-and-comments">
                      <div class="image-container">
-                        <!-- Add a custom data attribute to store the username color -->
                         <!-- Add an onclick event to open the modal when the image is clicked -->
                         <img class="uploaded-image" src="{{ url_for('static', filename='uploads/' ~ photo.filename) }}" alt="Uploaded Photo"
                         data-username-color="{{ photo.user.selected_username_color }}"
