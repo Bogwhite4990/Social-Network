@@ -46,6 +46,7 @@ import smtplib
 import logging
 
 
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 UPLOAD_FOLDER = "static/uploads"
