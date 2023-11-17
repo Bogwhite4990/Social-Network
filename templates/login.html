@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Login</title>
     <style>
-        /* Add some CSS for the eye icon */
+        /* Your existing styles */
         .password-toggle {
             position: relative;
         }
+
         .password-toggle .password-input {
             padding-right: 0;
         }
+
         .password-toggle .toggle-password {
             position: absolute;
             top: 50%;
@@ -23,68 +25,114 @@
             cursor: pointer;
         }
 
+        .move-area {
+            position: fixed;
+            top: 0;
+            left: 50;
+            pointer-events: none;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999; /* Ensure it's above other elements */
+        }
+
+        .container {
+            width: 50% auto;
+            position: relative;
+            z-index: 1; /* Ensure it's below the eyes */
+        }
+
+        .eye {
+            position: absolute;
+            display: inline-block;
+            border-radius: 50%;
+            height: 30px;
+            width: 30px;
+            background: white;
+            pointer-events: all;
+        }
+
+        .eye.left {
+            right: 50%;
+            transform: translateX(-50%);
+        }
+
+        .eye.right {
+            left: 50%;
+            transform: translateX(50%);
+        }
+
+        .eye:after {
+            position: absolute;
+            bottom: 17px;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            background: #000;
+            border-radius: 50%;
+            content: " ";
+        }
     </style>
 </head>
 <body>
-        <!-- Add the bubble container here -->
     <div class="bubble-container"></div>
     <div class="container">
-
         <h1>Pixiopic💗</h1>
         {% if error %}
             <p class="error">{{ error }}</p>
         {% endif %}
-<form method="POST">
-    <input type="text" id="username" name="username" required placeholder="Username">
-    <label for="password" class="password-toggle">
-        <div class="password-input">
-            <input type="password" id="password" name="password" required placeholder="Password">
-            <!-- Add the eye icon for toggling password visibility -->
-            <i class="toggle-password far fa-eye" id="togglePassword"></i>
-        </div>
-    </label>
+        <form method="POST">
+            <input type="text" id="username" name="username" required placeholder="Username">
+            <label for="password" class="password-toggle">
+                <div class="password-input">
+                    <input type="password" id="password" name="password" required placeholder="Password">
+                    <i class="toggle-password far fa-eye" id="togglePassword"></i>
+                </div>
+            </label>
             <input type="submit" value="Login">
         </form>
         <br>
         <div class="button-separator"></div>
         <br>
         <p class="small-text">
-    <a class="custom-link" href="{{ url_for('register') }}">Register</a> |
-    <a class="custom-link" href="{{ url_for('forgot_password') }}">Reset Password</a><br>
-        <div class="footer">
-        <footer>
-            &copy; Pixiopic <span class="copyright-year" id="currentYearPlaceholder"></span>
-        </footer>
-        </div>
+            <a class="custom-link" href="{{ url_for('register') }}">Register</a> |
+            <a class="custom-link" href="{{ url_for('forgot_password') }}">Reset Password</a><br>
+            <div class="footer">
+                <footer>
+                    &copy; Pixiopic <span class="copyright-year" id="currentYearPlaceholder"></span>
+                </footer>
+            </div>
         </p>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <p class="logout-msg" style="color: red; text-align:center;">{{ message }}</p>
-            {% endfor %}
-          {% endif %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="logout-msg" style="color: red; text-align:center;">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
     </div>
-                <!-- Right Container for Phones Images -->
+
+    <!-- Eye-moving section -->
+    <div class="move-area">
+        <div class='eye left'></div>
+        <div class='eye right'></div>
+    </div>
+
     <div class="phones-container">
         <div class="phone-image">
             <img src="/static/phones/phone1.png" alt="Phone 1">
             <div class="phone-screen-android">
-        <!-- Images to be displayed on Phone 1 -->
-        <img src="/static/images/image1.jpg" alt="Conversation">
-    </div>
+                <img src="/static/images/image1.jpg" alt="Conversation">
+            </div>
         </div>
         <div class="phone-image">
             <img src="/static/phones/phone2.png" alt="Phone 2">
             <div class="phone-screen">
-        <!-- Images to be displayed on Phone 2 -->
-        <img src="/static/images/image2.jpg" alt="Page">
-    </div>
+                <img src="/static/images/image2.jpg" alt="Page">
+            </div>
         </div>
     </div>
 
-    <!-- Add the bubble container here -->
     <div class="bubble-container"></div>
 
     <div class="logout-message">
@@ -92,88 +140,88 @@
             <p class="logout-msg">{{ logout_msg }}</p>
         {% endif %}
     </div>
-<script>
-        // JavaScript to display the current year
-    const currentYearPlaceholder = document.getElementById("currentYearPlaceholder");
-    const currentYear = new Date().getFullYear();
-    currentYearPlaceholder.textContent = currentYear;
 
-    // JavaScript to toggle password visibility
-    const togglePassword = document.querySelector('#togglePassword');
-    const passwordInput = document.querySelector('#password');
+    <script>
+        const currentYearPlaceholder = document.getElementById("currentYearPlaceholder");
+        const currentYear = new Date().getFullYear();
+        currentYearPlaceholder.textContent = currentYear;
 
-    togglePassword.addEventListener('click', function() {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        this.classList.toggle('fa-eye-slash');
-    });
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#password');
 
-    // JavaScript for the bubble effect (put this script after the bubble container)
-    function createBubble() {
-        const bubbleContainer = document.querySelector(".bubble-container");
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
 
-        const bubble = document.createElement("div");
-        bubble.className = "bubble";
+        const eyes = document.querySelectorAll('.eye');
+        document.addEventListener('mousemove', function (event) {
+            eyes.forEach((eye) => {
+                const x = eye.offsetLeft + eye.offsetWidth / 2;
+                const y = eye.offsetTop + eye.offsetHeight / 2;
+                const rad = Math.atan2(event.pageX - x, event.pageY - y);
+                const rot = (rad * (180 / Math.PI) * -1) + 180;
+                eye.style.transform = 'rotate(' + rot + 'deg)';
+            });
+        });
 
-        // Generate random position
-        const randomX = Math.random() * (window.innerWidth - 186); // Adjusted for bubble size
-        const randomY = Math.random() * (window.innerHeight - 186); // Adjusted for bubble size
+        function createBubble() {
+            const bubbleContainer = document.querySelector(".bubble-container");
 
-        bubble.style.top = randomY + "px";
-        bubble.style.left = randomX + "px";
+            const bubble = document.createElement("div");
+            bubble.className = "bubble";
 
-        // Generate a random gradient background color
-        const randomColor = getRandomGradientColor();
-        bubble.style.background = randomColor;
+            const randomX = Math.random() * (window.innerWidth - 186);
+            const randomY = Math.random() * (window.innerHeight - 186);
 
-        // Generate random bubble size (small or large)
-        const isSmall = Math.random() < 0.5; // 50% chance of being small
-        if (isSmall) {
-            bubble.classList.add("small-bubble");
+            bubble.style.top = randomY + "px";
+            bubble.style.left = randomX + "px";
+
+            const randomColor = getRandomGradientColor();
+            bubble.style.background = randomColor;
+
+            const isSmall = Math.random() < 0.5;
+            if (isSmall) {
+                bubble.classList.add("small-bubble");
+            }
+
+            bubbleContainer.appendChild(bubble);
+
+            bubble.addEventListener("animationiteration", () => {
+                bubble.remove();
+            });
         }
 
-        bubbleContainer.appendChild(bubble);
+        function getRandomGradientColor() {
+            const colors = [
+                'linear-gradient(45deg, lightpurple, lightblue)',
+                'linear-gradient(45deg, fuchsia, lightpink)',
+                'linear-gradient(45deg, lavender, lightskyblue)',
+                'linear-gradient(45deg, thistle, powderblue)',
+                'linear-gradient(45deg, plum, deepskyblue)',
+                'linear-gradient(45deg, violet, lightcyan)',
+                'linear-gradient(45deg, orchid, azure)',
+                'linear-gradient(45deg, mediumorchid, lightsteelblue)',
+                'linear-gradient(45deg, hotpink, aliceblue)',
+                'linear-gradient(45deg, deeppink, lavenderblush)',
+            ];
+            const randomIndex = Math.floor(Math.random() * colors.length);
+            return colors[randomIndex];
+        }
 
-        // Remove the bubble after animation completes
-        bubble.addEventListener("animationiteration", () => {
-            bubble.remove();
-        });
-    }
+        setInterval(createBubble, 4000);
 
-    // Generate a random gradient background color
-    function getRandomGradientColor() {
-        const colors = [
-            'linear-gradient(45deg, lightpurple, lightblue)',
-            'linear-gradient(45deg, fuchsia, lightpink)',
-            'linear-gradient(45deg, lavender, lightskyblue)',
-            'linear-gradient(45deg, thistle, powderblue)',
-            'linear-gradient(45deg, plum, deepskyblue)',
-            'linear-gradient(45deg, violet, lightcyan)',
-            'linear-gradient(45deg, orchid, azure)',
-            'linear-gradient(45deg, mediumorchid, lightsteelblue)',
-            'linear-gradient(45deg, hotpink, aliceblue)',
-            'linear-gradient(45deg, deeppink, lavenderblush)',
-            // Add more gradient colors as needed
-        ];
-        const randomIndex = Math.floor(Math.random() * colors.length);
-        return colors[randomIndex];
-    }
+        const phoneImages = document.querySelectorAll('.phone-image img');
+        let currentImageIndex = 0;
 
-    // Create random bubbles at regular intervals
-    setInterval(createBubble, 4000); // Adjust the interval as needed
+        function changePhoneImage() {
+            phoneImages[currentImageIndex].classList.remove('visible');
+            currentImageIndex = (currentImageIndex + 1) % phoneImages.length;
+            phoneImages[currentImageIndex].classList.add('visible');
+        }
 
-        // JavaScript for changing phone images
-    const phoneImages = document.querySelectorAll('.phone-image img');
-    let currentImageIndex = 0;
-
-    function changePhoneImage() {
-        phoneImages[currentImageIndex].classList.remove('visible');
-        currentImageIndex = (currentImageIndex + 1) % phoneImages.length;
-        phoneImages[currentImageIndex].classList.add('visible');
-    }
-
-    // Change phone image every 3-4 seconds (adjust the interval as needed)
-    setInterval(changePhoneImage, 3000);
-</script>
+        setInterval(changePhoneImage, 3000);
+    </script>
 </body>
 </html>
