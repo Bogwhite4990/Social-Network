@@ -374,7 +374,9 @@ class User(db.Model, UserMixin):
         return self.reset_token
 
 
-db.create_all()  # Create database tables if they don't exist
+with app.app_context():
+    db.create_all()
+
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
@@ -1597,21 +1599,26 @@ def dashboard():
     # Retrieve all users who have uploaded photos
     users_with_photos = User.query.filter(User.profile_photo.isnot(None)).all()
 
-    # For AJAX requests, return the next set of photos
-    if request.method == "POST" and request.headers.get("X-Requested-With") == "XMLHttpRequest":
-        offset = int(request.form.get("offset", 0))
-        limit = int(request.form.get("limit", 5))  # Adjust the limit as needed
+    if request.method == "POST":
+        if "photo" in request.files:
+            photo = request.files["photo"]
+            if photo.filename != "":
+                filename = secure_filename(photo.filename)
+                photo_path = os.path.join("static", "uploads", filename)
+                photo.save(photo_path)  # Save the uploaded file
 
-        # Fetch the next set of photos based on the offset and limit
-        next_photos = photos[offset : offset + limit]
-
-        # Convert photos to a format that can be easily sent to the client (e.g., JSON)
-        photos_data = [
-            {"filename": photo.filename, "user": {"username": photo.user.username}}
-            for photo in next_photos
-        ]
-
-        return jsonify(photos_data)
+                return render_template(
+                    "dashboard.html",
+                    username=current_user.username,
+                    users_with_photos=users_with_photos,
+                    photos=photos,
+                    comments=comments,
+                    thresholds_and_icons=thresholds_and_icons,
+                    user_uploaded_photos=user_uploaded_photos,
+                    user=current_user,  # Pass the user's uploaded photos
+                    user_id=user_id,  # Pass the user's ID
+                    is_admin=is_admin,  # Pass the admin status
+                )
 
     return render_template(
         "dashboard.html",
